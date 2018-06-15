@@ -4,32 +4,39 @@ import io.reactivex.FlowableTransformer
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
+
+interface ViewState
+
+interface Command
+
+interface Result
+
+interface ScreenComponent
+
+
 interface UiEvent
 
 interface UiCommand
 interface UiResult
 
-
-sealed class UiState {
+interface UiState /*{
     class PartialViewState : UiState()
     class ScreenViewState : UiState()
+}*/
+
+interface UiActor<C : UiCommand, R : UiResult> {
+
+    fun processCommands(commands: Observable<C>)
+
+    fun produceResults(): Observable<R>
 }
 
-interface UiActor {
+interface UiRenderer<S : UiState> {
 
-    fun processCommands(commands: Observable<UiCommand>)
-
-    fun produceResults(): Observable<UiResult>
+    fun render(): Observable<S>
 }
 
-interface UiRenderer {
-
-    fun render(): Observable<UiState>
-
-    fun asTransformer(): ObservableTransformer<UiResult, UiState>
-}
-
-interface UiComponent : UiActor, UiRenderer
+interface UiComponent<C : UiCommand, R : UiResult, S : UiState> : UiActor<C, R>, UiRenderer<S>
 
 interface UiView {
 
@@ -44,4 +51,5 @@ interface UiViewModel {
 
     fun processEvents(events: Observable<UiEvent>)
 }
+
 
