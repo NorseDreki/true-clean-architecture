@@ -6,11 +6,11 @@ class PineappleQuestions : UiComponent {
 
     val results = PublishSubject.create<UiResult>()
 
-    override fun processCommands(commands: Observable<UiCommand>) {
+    override fun acceptCommands(commands: Observable<UiCommand>) {
         commands.compose(paProcessor).subscribe(results)
     }
 
-    override fun produceResults(): Observable<UiResult> {
+    override fun publishResults(): Observable<UiResult> {
         return results.publish { shared ->
             Observable.concat(
                 shared,
@@ -20,7 +20,7 @@ class PineappleQuestions : UiComponent {
     }
 
     override fun render(): Observable<UiState> {
-        produceResults().compose(pineappleQuestionsReducer)
+        publishResults().compose(pineappleQuestionsReducer)
     }
 
     override fun asTransformer(): Observable.Transformer<UiResult, UiState> {

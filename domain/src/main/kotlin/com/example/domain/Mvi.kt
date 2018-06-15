@@ -26,9 +26,9 @@ interface UiState /*{
 
 interface UiActor<C : UiCommand, R : UiResult> {
 
-    fun processCommands(commands: Observable<C>)
+    fun acceptCommands(commands: Observable<C>)
 
-    fun produceResults(): Observable<R>
+    fun publishResults(): Observable<R>
 }
 
 interface UiRenderer<S : UiState> {
