@@ -30,6 +30,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                             shared.compose(paAnsweredProcessor)
                     ).doOnNext { println("2222 $it") }
                 }
+                .cast(UiResult::class.java)
 
                 someResults.subscribe(results)
     }

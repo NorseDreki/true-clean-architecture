@@ -21,4 +21,4 @@ class SubmitAllowedSpec : Spek({
             }
         }
     }
-}
+})
