@@ -5,7 +5,6 @@ import com.example.domain.models.ItemOpportunity
 import com.example.domain.models.Proposal
 import com.example.domain.models.Question
 import com.example.domain.submitProposal.ClarifyingQuestions
-import com.example.domain.submitProposal.models.JobDetails
 import io.reactivex.Observable
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
@@ -44,6 +43,7 @@ class ClarifyingQuestionsSpec : Spek({
             val cq = ClarifyingQuestions()
 
             on("component is told to initialize") {
+
                 val questions = listOf(Question("1", "q1"), Question("2", "q1"))
                 val itemOpportunity = ItemOpportunity(
                         ItemDetails("1234", questions),
@@ -52,7 +52,8 @@ class ClarifyingQuestionsSpec : Spek({
                 val commands =
                         Observable.just<ClarifyingQuestions.Command>(
                                 ClarifyingQuestions.Command.INIT(itemOpportunity),
-                                ClarifyingQuestions.Command.UpdateAnswer("1", "answer")
+                                ClarifyingQuestions.Command.UpdateAnswer("1", "answer"),
+                                ClarifyingQuestions.Command.UpdateAnswer("2", "answer")
                         )
 
                 cq.acceptCommands(commands)
@@ -63,14 +64,26 @@ class ClarifyingQuestionsSpec : Spek({
                     cq.publishResults().test().assertValueAt(0, ClarifyingQuestions.Result.Questions(questions))
                 }
 
+
+
                 it("should have answer updated") {
                     cq.publishResults().test().assertValueAt(1, ClarifyingQuestions.Result.Valid("1", "answer"))
                 }
 
-                on("user entered answer for a question") {
-
-
+                it("should mark all questions as valid") {
+                    cq.publishResults().test().assertValueAt(2, ClarifyingQuestions.Result.AllQuestionsAnswered(true))
                 }
+
+                on("user enters empty answer for a question") {
+                    it("should mark that question as invalid") {
+
+                    }
+
+                    it("should mark validation as failed") {
+
+                    }
+                }
+
             }
 
 
