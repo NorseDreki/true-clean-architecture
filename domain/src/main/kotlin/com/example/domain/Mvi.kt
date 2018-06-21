@@ -38,6 +38,15 @@ interface UiRenderer<S : UiState> {
 
 interface UiComponent<C : UiCommand, R : UiResult, S : UiState> : UiActor<C, R>, UiRenderer<S>
 
+
+
+
+interface UiThunk<R1 : UiResult, R2 : UiResult>
+
+
+
+
+
 interface UiView {
 
     fun events(): Observable<UiEvent>
