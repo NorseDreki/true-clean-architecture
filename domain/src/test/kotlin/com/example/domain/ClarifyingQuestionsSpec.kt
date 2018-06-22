@@ -17,6 +17,63 @@ import org.junit.runner.RunWith
 @RunWith(JUnitPlatform::class)
 class ClarifyingQuestionsSpec : Spek({
 
+
+    val cq by memoized {  }
+
+    /*
+
+    feature {
+
+         scenario cq with no questions
+             given cq created
+             when cq is initialized with no questions
+             then it sends result as no questions
+             and generates empty view state
+
+                scenario cq with no questions but then updates with some
+                    given cq created
+                    and cq is initialized with no questions
+                    when questions show up
+                    then it sends result as questions
+                    and generates questions view state
+
+         scenario cq with questions
+             given cq created
+             and there are no answers
+             when cq is initialized with questions
+             then it sends result as questions
+             and sends step validity as false
+             and generates questions view state
+
+                scenario update answer when entered
+                    given cq is initialized with questions
+                    when user enters valid answer
+                    then it sends result as questions AND answers
+                    and sends step validity as true
+                    and generates questions view state WITH answers
+
+                scenario load stored answers
+                    given there are previously saved answers to ALL questions
+                    when cq is initialized with questions
+                    then it sends result as questions AND answers
+                    and sends step validity as true
+                    and generates questions view state WITH answers
+
+                    scenario update answer when cleared
+                        given cq is initialized with questions
+                        and all answers
+                        when user clears an answer
+                        then is sends empty answer
+                        and sends step validity as false
+
+
+
+
+
+    }
+
+     */
+
     given("a ClarifyingQuestions component") {
         context("item details has no questions") {
             val cq = ClarifyingQuestions()
