@@ -1,8 +1,6 @@
 package com.example.domain
 
-import io.reactivex.FlowableTransformer
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 
 
 interface ViewState
@@ -29,6 +27,8 @@ interface UiActor<C : UiCommand, R : UiResult> {
     fun acceptCommands(commands: Observable<C>)
 
     fun publishResults(): Observable<R>
+
+    fun process(commands: Observable<C>): Observable<R>
 }
 
 interface UiRenderer<S : UiState> {

@@ -13,6 +13,20 @@ import io.reactivex.subjects.ReplaySubject
 
 
 class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
+    override fun process(commands: Observable<Command>): Observable<Result> {
+        return commands
+                .doOnNext { println("CMD " + it) }
+                .compose(paProcessor)
+                .doOnNext { println("RES " + it) }
+                .cast(Result::class.java)
+                .publish { shared ->
+                    Observable.concat(
+                            shared,
+                            shared.compose(paAnsweredProcessor)
+                    ).doOnNext { println("2222 $it") }
+                }
+                .replay().autoConnect(0)
+    }
 
     val results = ReplaySubject.create<UiResult>()
 
