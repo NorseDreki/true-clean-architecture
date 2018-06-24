@@ -4,7 +4,6 @@ import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.ReplaySubject
 import org.jetbrains.spek.api.dsl.SpecBody
 import org.jetbrains.spek.api.dsl.context
-import org.jetbrains.spek.api.lifecycle.CachingMode
 
 fun <T: UiActor<*, *>> SpecBody.component(componentCreator: () -> T, body: Component<T>.() -> Unit) =
         Component(this, componentCreator).apply {
@@ -28,14 +27,12 @@ open class Component<T : UiActor<*, *>>(
         componentCreator()
     }*/
 
-    open val deps by specBody.memoized(CachingMode.TEST) {
-        val cmdstr by specBody.memoized {
-            println("cmdstr")
-            ReplaySubject.create<UiCommand>() }
-        val sub by specBody.memoized {
-            println("sub")
+    open val deps by specBody.memoized {
+        println("deps")
+        val cmdstr =
+            ReplaySubject.create<UiCommand>()
+        val sub =
             (componentCreator() as UiActor<UiCommand, UiResult>).process(cmdstr).test()
-        }
         Deps(cmdstr, sub)
     }
 
@@ -60,7 +57,7 @@ class InitializedComponent<T : UiActor<*, *>>(
         val cmd: UiCommand,
         val componentCreator1: () -> T) : Component<T>(specBody1, componentCreator1) {
 
-    override val deps by lazy {
+    override val deps by specBody1.memoized {
         val d = super.deps
         d.cmdstr.onNext(cmd)
         //initialize()
