@@ -23,28 +23,32 @@ class ClarifyingQuestions2Spec : Spek({
             Proposal(0, null)
     )
 
-    group("sdaf") {
+    //group("sdaf") {
 
         component(::ClarifyingQuestions) {
 
             initialized(ClarifyingQuestions.Command.INIT(itemOpportunity2)) {
 
-                on("init2") {
+                /*on("init2") {
                     it("should2") {
                         assertResultAt(0, ClarifyingQuestions.Result.Questions(questions))
                     }
-                }
+                }*/
 
                 on("init3") {
+                    command(ClarifyingQuestions.Command.UpdateAnswer("1", "answer"))
+                    command(ClarifyingQuestions.Command.UpdateAnswer("1", "answer"))
+                    command(ClarifyingQuestions.Command.UpdateAnswer("1", "answer"))
+
                     it("should3") {
-                        assertResultAt(0, ClarifyingQuestions.Result.Questions(questions))
+                        assertResultAt(1, ClarifyingQuestions.Result.Valid("1", "answer"))
                     }
                 }
 
 
             }
         }
-        component(::ClarifyingQuestions) {
+        /*component(::ClarifyingQuestions) {
 
             initialized(ClarifyingQuestions.Command.INIT(itemOpportunity)) {
 
@@ -58,6 +62,6 @@ class ClarifyingQuestions2Spec : Spek({
             }
 
 
-        }
-    }
+        }*/
+    //}
 })
