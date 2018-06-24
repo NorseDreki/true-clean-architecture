@@ -5,6 +5,9 @@ import com.example.domain.models.ItemOpportunity
 import com.example.domain.models.Proposal
 import com.example.domain.models.Question
 import com.example.domain.submitProposal.ClarifyingQuestions
+import com.example.domain.submitProposal.ClarifyingQuestions.Command.INIT
+import com.example.domain.submitProposal.ClarifyingQuestions.Command.UpdateAnswer
+import com.example.domain.submitProposal.ClarifyingQuestions.Result.Valid
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
@@ -23,32 +26,30 @@ class ClarifyingQuestions2Spec : Spek({
             Proposal(0, null)
     )
 
-    //group("sdaf") {
+    group("sdaf") {
 
         component(::ClarifyingQuestions) {
 
-            initialized(ClarifyingQuestions.Command.INIT(itemOpportunity2)) {
+            initialized(INIT(itemOpportunity2)) {
 
-                /*on("init2") {
+                on("init2") {
                     it("should2") {
                         assertResultAt(0, ClarifyingQuestions.Result.Questions(questions))
                     }
-                }*/
+                }
 
                 on("init3") {
-                    command(ClarifyingQuestions.Command.UpdateAnswer("1", "answer"))
-                    command(ClarifyingQuestions.Command.UpdateAnswer("1", "answer"))
-                    command(ClarifyingQuestions.Command.UpdateAnswer("1", "answer"))
+                    command(UpdateAnswer("1", "answer"))
 
                     it("should3") {
-                        assertResultAt(1, ClarifyingQuestions.Result.Valid("1", "answer"))
+                        assertResultAt(1, Valid("1", "answer"))
                     }
                 }
 
 
             }
         }
-        /*component(::ClarifyingQuestions) {
+        component(::ClarifyingQuestions) {
 
             initialized(ClarifyingQuestions.Command.INIT(itemOpportunity)) {
 
@@ -62,6 +63,6 @@ class ClarifyingQuestions2Spec : Spek({
             }
 
 
-        }*/
-    //}
+        }
+    }
 })
