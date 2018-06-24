@@ -15,6 +15,10 @@ import org.jetbrains.spek.api.dsl.on
 //@RunWith(JUnitPlatform::class)
 class ClarifyingQuestionsSpec : Spek({
 
+    component(::ClarifyingQuestions) {
+        this.componentCreator
+    }
+
 
     given("a ClarifyingQuestions component") {
         //val cq by memoized(CachingMode.SCOPE) { ClarifyingQuestions() }
