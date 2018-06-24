@@ -5,20 +5,125 @@ import com.example.domain.models.ItemOpportunity
 import com.example.domain.models.Proposal
 import com.example.domain.models.Question
 import com.example.domain.submitProposal.ClarifyingQuestions
-import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
-import org.junit.platform.runner.JUnitPlatform
-import org.junit.runner.RunWith
 
-@RunWith(JUnitPlatform::class)
+//@RunWith(JUnitPlatform::class)
 class ClarifyingQuestionsSpec : Spek({
 
 
-    val cq by memoized {  }
+    given("a ClarifyingQuestions component") {
+        //val cq by memoized(CachingMode.SCOPE) { ClarifyingQuestions() }
+        /*val cmd
+                by memoized(CachingMode.GROUP) { println("subj");PublishSubject.create<ClarifyingQuestions.Command>() }
+
+        val sub by memoized(CachingMode.GROUP) {
+            val cq = ClarifyingQuestions()
+            println("testing")
+            cq.process(cmd).test()
+        }*/
+
+        /*val cq = ClarifyingQuestions()
+        val sub = cq.process(cmd).test()*/
+
+        context("item details has no questions") {
+            val itemOpportunity = ItemOpportunity(
+                    ItemDetails("1234", null),
+                    Proposal(0, null)
+            )
+            val cmd = PublishSubject.create<ClarifyingQuestions.Command>()
+            val cq = ClarifyingQuestions()
+            val sub = cq.process(cmd).test()
+
+            on("cq is initialized with no questions") {
+                cmd.onNext(ClarifyingQuestions.Command.INIT(itemOpportunity))
+                println("onnext")
+
+                it("sends result as no questions") {
+                    /*cq
+                            .process(cmd)
+                            .test()*/
+                      sub      .assertValue(ClarifyingQuestions.Result.NoQuestions)
+                }
+            }
+
+            context("questions are updated") {
+                val questions = listOf(Question("1", "q1"), Question("2", "q1"))
+                val itemOpportunity = ItemOpportunity(
+                        ItemDetails("1234", questions),
+                        Proposal(0, null)
+                )
+
+                on("but then updates with some") {
+                    cmd.onNext(ClarifyingQuestions.Command.INIT(itemOpportunity))
+                    println("some")
+
+                    it("") {
+                        sub.assertValueAt(1, ClarifyingQuestions.Result.Questions(questions))
+                    }
+
+                }
+            }
+
+        }
+
+        context("some questions") {
+            val cmd = PublishSubject.create<ClarifyingQuestions.Command>()
+            val cq = ClarifyingQuestions()
+            val sub = cq.process(cmd).test()
+
+            val questions = listOf(Question("1", "q1"), Question("2", "q1"))
+            val itemOpportunity = ItemOpportunity(
+                    ItemDetails("1234", questions),
+                    Proposal(0, null)
+            )
+            on("component is told to initialize") {
+                cmd.onNext(ClarifyingQuestions.Command.INIT(itemOpportunity))
+
+                it("should have some questions") {
+
+
+                    sub.assertValueAt(0, ClarifyingQuestions.Result.Questions(questions))
+                }
+            }
+
+            context("user answers questions") {
+                on("client puts a valid answer") {
+                    cmd.onNext(ClarifyingQuestions.Command.UpdateAnswer("1", "answer"))
+
+                    it("should result in valid answer") {
+                        sub.assertValueAt(1, ClarifyingQuestions.Result.Valid("1", "answer"))
+                        println("1")
+                    }
+
+                    /*it("should still have questions as not valid") {
+
+                    }*/
+
+                    cmd.onNext(ClarifyingQuestions.Command.UpdateAnswer("2", "answer2"))
+
+                    it("should result in valid answer 2") {
+                        sub.assertValueAt(2, ClarifyingQuestions.Result.Valid("2", "answer2"))
+
+                        println("2")
+                    }
+                }
+                /*on("client answers all questions correctly") {
+                    cmd.onNext(ClarifyingQuestions.Command.UpdateAnswer("2", "answer2"))
+
+                    it("should result in valid answer") {
+                        sub.assertValueAt(2, ClarifyingQuestions.Result.Valid("2", "answer2"))
+
+                        println("2")
+                    }
+                }*/
+            }
+         }
+    }})
 
     /*
 
@@ -52,19 +157,19 @@ class ClarifyingQuestionsSpec : Spek({
                     and sends step validity as true
                     and generates questions view state WITH answers
 
-                scenario load stored answers
-                    given there are previously saved answers to ALL questions
-                    when cq is initialized with questions
-                    then it sends result as questions AND answers
-                    and sends step validity as true
-                    and generates questions view state WITH answers
+        scenario load stored answers
+            given there are previously saved answers to ALL questions
+            when cq is initialized with questions
+            then it sends result as questions AND answers
+            and sends step validity as true
+            and generates questions view state WITH answers
 
-                    scenario update answer when cleared
-                        given cq is initialized with questions
-                        and all answers
-                        when user clears an answer
-                        then is sends empty answer
-                        and sends step validity as false
+            scenario update answer when cleared
+                given cq is initialized with questions
+                and all answers
+                when user clears an answer
+                then is sends empty answer
+                and sends step validity as false
 
 
 
@@ -74,7 +179,7 @@ class ClarifyingQuestionsSpec : Spek({
 
      */
 
-    given("a ClarifyingQuestions component") {
+    /*given("a ClarifyingQuestions component") {
         context("item details has no questions") {
             val cq = ClarifyingQuestions()
 
@@ -146,5 +251,4 @@ class ClarifyingQuestionsSpec : Spek({
 
         }
     }
-
-})
+*/

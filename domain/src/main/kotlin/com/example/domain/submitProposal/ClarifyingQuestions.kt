@@ -25,7 +25,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                             shared.compose(paAnsweredProcessor)
                     ).doOnNext { println("2222 $it") }
                 }
-                .replay().autoConnect(0)
+                //.share()
     }
 
     val results = ReplaySubject.create<UiResult>()
