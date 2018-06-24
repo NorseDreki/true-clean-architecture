@@ -7,75 +7,67 @@ import org.jetbrains.spek.api.dsl.context
 
 
 @TestDsl
-fun <T: UiActor<*, *>> SpecBody.component(componentCreator: () -> T, body: Component<T>.() -> Unit) =
+fun <C: UiCommand, R: UiResult, T: UiActor<C, R>> SpecBody.component(
+        componentCreator: () -> T,
+        body: Component<C, R, T>.() -> Unit
+) =
         Component(this, componentCreator).apply {
             context("a component ...") {
                 body()
             }
         }
 
-@TestDsl
-fun <T: UiActor<*, *>> Component<T>.initialized(cmd: UiCommand, body: InitializedComponent<T>.() -> Unit) =
-        InitializedComponent(this.specBody, cmd, componentCreator).apply(body)
-
-data class Deps(val cmdstr: ReplaySubject<UiCommand>, val sub: TestObserver<UiResult>)
 
 @TestDsl
-open class Component<T : UiActor<*, *>>(
+fun <C: UiCommand, R: UiResult, T: UiActor<C, R>> Component<C, R, T>.initialized(
+        cmd: C,
+        body: InitializedComponent<C, R, T>.() -> Unit
+) =
+        InitializedComponent(cmd, this).apply(body)
+
+
+data class Deps<C, R>(
+        val cmdstr: ReplaySubject<C>,
+        val sub: TestObserver<R>
+)
+
+@TestDsl
+open class Component<C: UiCommand, R: UiResult, out T : UiActor<C, R>>(
         val specBody: SpecBody,
         val componentCreator: () -> T
 ) {
 
-    /*val component by specBody.memoized {
-        println("memo")
-        componentCreator()
-    }*/
+    protected open val deps by specBody.memoized {
 
-    open val deps by specBody.memoized {
         println("deps")
         val cmdstr =
-            ReplaySubject.create<UiCommand>()
+            ReplaySubject.create<C>()
+
         val sub =
-            (componentCreator() as UiActor<UiCommand, UiResult>).process(cmdstr).test()
+            componentCreator().process(cmdstr).test()
+
         Deps(cmdstr, sub)
     }
 
-    /*val cmdstr by specBody.memoized {
-        println("cmdstr")
-        ReplaySubject.create<UiCommand>() }
-    val sub by specBody.memoized {
-        println("sub")
-        (componentCreator() as UiActor<UiCommand, UiResult>).process(cmdstr).test()
-    }*/
-
-    fun command(command: UiCommand) {
+    fun command(command: C) {
         deps.cmdstr.onNext(command)
     }
 
-    fun assertResultAt(index: Int, result: UiResult): TestObserver<UiResult> {
+    fun assertResultAt(index: Int, result: R): TestObserver<out R> {
         println("assert $result")
         return deps.sub.assertValueAt(index, result)
-
     }
-
 }
 
 @TestDsl
-class InitializedComponent<T : UiActor<*, *>>(
-        val specBody1: SpecBody,
-        val cmd: UiCommand,
-        val componentCreator1: () -> T) : Component<T>(specBody1, componentCreator1) {
+class InitializedComponent<C: UiCommand, R: UiResult, out T: UiActor<C, R>>(
+        cmd: C,
+        component: Component<C, R, T>
+) : Component<C, R, T>(component.specBody, component.componentCreator) {
 
-    override val deps by specBody1.memoized {
+    override val deps by specBody.memoized {
         val d = super.deps
         d.cmdstr.onNext(cmd)
-        //initialize()
         d
     }
-
-    fun initialize() {
-        println("initialize")
-        deps.cmdstr.onNext(cmd)
-    }
-
 }

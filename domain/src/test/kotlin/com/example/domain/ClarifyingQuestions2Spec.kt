@@ -7,7 +7,7 @@ import com.example.domain.models.Question
 import com.example.domain.submitProposal.ClarifyingQuestions
 import com.example.domain.submitProposal.ClarifyingQuestions.Command.INIT
 import com.example.domain.submitProposal.ClarifyingQuestions.Command.UpdateAnswer
-import com.example.domain.submitProposal.ClarifyingQuestions.Result.Valid
+import com.example.domain.submitProposal.ClarifyingQuestions.Result.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
@@ -34,7 +34,7 @@ class ClarifyingQuestions2Spec : Spek({
 
                 on("init2") {
                     it("should2") {
-                        assertResultAt(0, ClarifyingQuestions.Result.Questions(questions))
+                        assertResultAt(0, Questions(questions))
                     }
                 }
 
@@ -48,21 +48,23 @@ class ClarifyingQuestions2Spec : Spek({
 
 
             }
-        }
-        component(::ClarifyingQuestions) {
 
-            initialized(ClarifyingQuestions.Command.INIT(itemOpportunity)) {
+            initialized(INIT(itemOpportunity)) {
 
                 on("init") {
                     it("should") {
-                        assertResultAt(0, ClarifyingQuestions.Result.NoQuestions)
+                        assertResultAt(0, NoQuestions)
                     }
                 }
 
 
             }
-
-
         }
+        /*component(::ClarifyingQuestions) {
+
+
+
+
+        }*/
     }
 })
