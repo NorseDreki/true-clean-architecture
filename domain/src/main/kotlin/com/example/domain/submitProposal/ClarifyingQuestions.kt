@@ -103,7 +103,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
 
 
                             if (validated.isNotEmpty()) {
-                                Result.Valid(it.id, it.answer)
+                                Result.Valid(it.id, validated)
                             } else {
                                 Result.EmptyAnswer(it.id)
                             }
