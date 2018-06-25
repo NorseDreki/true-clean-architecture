@@ -49,7 +49,7 @@ open class Component<C: UiCommand, R: UiResult, out T : UiActor<C, R>>(
         Deps(cmdstr, sub)
     }
 
-    fun command(command: C) {
+    infix fun command(command: C) {
         deps.cmdstr.onNext(command)
     }
 
@@ -71,3 +71,5 @@ class InitializedComponent<C: UiCommand, R: UiResult, out T: UiActor<C, R>>(
         d
     }
 }
+
+fun SpecBody.perform(callback: () -> Unit) = this.beforeEachTest(callback)
