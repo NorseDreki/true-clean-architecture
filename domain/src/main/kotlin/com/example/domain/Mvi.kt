@@ -3,11 +3,13 @@ package com.example.domain
 import io.reactivex.Observable
 
 
+/*
 interface ViewState
 
 interface Command
 
 interface Result
+*/
 
 interface ScreenComponent
 
@@ -15,6 +17,7 @@ interface ScreenComponent
 interface UiEvent
 
 interface UiCommand
+interface UiDataCommand
 interface UiResult
 
 interface UiState /*{
@@ -24,9 +27,11 @@ interface UiState /*{
 
 interface UiActor<C : UiCommand, R : UiResult> {
 
+/*
     fun acceptCommands(commands: Observable<C>)
 
     fun publishResults(): Observable<R>
+*/
 
     fun process(commands: Observable<C>): Observable<R>
 }
