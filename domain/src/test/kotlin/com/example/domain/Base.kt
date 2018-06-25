@@ -55,8 +55,11 @@ open class Component<C: UiCommand, R: UiResult, out T : UiActor<C, R>>(
 
     fun assertResultAt(index: Int, result: R): TestObserver<out R> {
         println("assert $result")
+
         return deps.sub.assertValueAt(index, result)
     }
+
+    fun assertValuesOnly(vararg values: R) = deps.sub.assertValuesOnly(*values)
 }
 
 @TestDsl
@@ -70,6 +73,12 @@ class InitializedComponent<C: UiCommand, R: UiResult, out T: UiActor<C, R>>(
         d.cmdstr.onNext(cmd)
         d
     }
+
+    fun furtherValueOnly(value: R) =
+            deps.sub.assertSubscribed()
+                    .assertValueAt(1, value)
+                    .assertNoErrors()
+                    .assertNotComplete()
 }
 
 fun SpecBody.perform(callback: () -> Unit) = this.beforeEachTest(callback)

@@ -22,7 +22,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                 .publish { shared ->
                     Observable.merge(
                             shared,
-                            shared.doOnNext { println("input222") }.compose(paAnsweredProcessor).skip(1)
+                            shared.doOnNext { println("input222") }.compose(paAnsweredProcessor)//.skip(1)
                     ).doOnNext { println("COMB $it") }
                 }
         //.share()
@@ -59,7 +59,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
 
     data class AllQuestionsAnswered(
             val totalQuestions: Int? = null,
-            val answeredQuestions: MutableSet<String> = mutableSetOf()
+            val answeredQuestions: MutableSet<String> = mutableSetOf("1234")
     )
 
     val paAnsweredProcessor =
@@ -70,7 +70,8 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                             state.copy(result.questions.size, mutableSetOf())
                         }
                         is Result.NoQuestions -> {
-                            state.copy(0, mutableSetOf())
+                            AllQuestionsAnswered()
+                            //state.copy(0, mutableSetOf())
                         }
                         is Result.Valid -> {
                             state.copy(answeredQuestions = state.answeredQuestions.apply { add(result.id) })
@@ -81,10 +82,17 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                         else -> throw IllegalStateException("sdf")
                     }
                 }
-                        .map {
+                        .skip(1)
+                        .flatMap {
                             //implicitly handles "no questions" case
-                            Result.AllQuestionsAnswered(it.totalQuestions == it.answeredQuestions.size)
+                            if (it.totalQuestions == null) {
+                                println("value! $it")
+                                Observable.empty<Result>()
+                            } else {
+                                Observable.just(Result.AllQuestionsAnswered(it.totalQuestions == it.answeredQuestions.size))
+                            }
                         }
+
             }
 
     val paProcessor =
