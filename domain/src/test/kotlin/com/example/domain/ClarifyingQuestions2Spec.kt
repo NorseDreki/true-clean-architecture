@@ -51,12 +51,8 @@ class ClarifyingQuestions2Spec : Spek({
                     command(UpdateAnswer("1", "answer"))
                 }
 
-                it("nnnnnn") {
-                    assertResultAt(0, Questions(questions))
-                }
-
                 it("should emit result with a valid answer") {
-                    assertResultAt(1, Valid("1", "answer"))
+                    assertResultAt(2, Valid("1", "answer"))
                 }
             }
 
@@ -66,7 +62,7 @@ class ClarifyingQuestions2Spec : Spek({
                 }
 
                 it("should emit result with a trimmed answer") {
-                    assertResultAt(1, Valid("1", "answer"))
+                    assertResultAt(2, Valid("1", "answer"))
                 }
             }
 
@@ -76,7 +72,7 @@ class ClarifyingQuestions2Spec : Spek({
                 }
 
                 it("should emit result as invalid answer") {
-                    assertResultAt(1, EmptyAnswer("1"))
+                    assertResultAt(2, EmptyAnswer("1"))
                 }
             }
 
@@ -93,9 +89,9 @@ class ClarifyingQuestions2Spec : Spek({
 
         initialized(INIT(withAnsweredQuestions)) {
 
-            describe("client initializes with data with answered questions") {
-                it("should emit those questions") {
-                    assertResultAt(0, Questions(questions))
+            describe("client initializes with data with all answered questions") {
+                it("should emit status as all questions answered") {
+                    assertResultAt(5, AllQuestionsAnswered(true))
                 }
             }
         }

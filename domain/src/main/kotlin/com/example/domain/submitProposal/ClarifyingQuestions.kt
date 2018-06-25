@@ -20,12 +20,12 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                 .doOnNext { println("RES " + it) }
                 .cast(Result::class.java)
                 .publish { shared ->
-                    Observable.concat(
+                    Observable.merge(
                             shared,
-                            shared.compose(paAnsweredProcessor)
-                    ).doOnNext { println("2222 $it") }
+                            shared.doOnNext { println("input222") }.compose(paAnsweredProcessor).skip(1)
+                    ).doOnNext { println("COMB $it") }
                 }
-                //.share()
+        //.share()
     }
 
     val results = ReplaySubject.create<UiResult>()
@@ -41,12 +41,12 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                 .publish { shared ->
                     Observable.concat(
                             shared,
-                            shared.compose(paAnsweredProcessor)
+                            shared.doOnNext { println("input222") }.compose(paAnsweredProcessor)
                     ).doOnNext { println("2222 $it") }
                 }
                 .cast(UiResult::class.java)
 
-                someResults.subscribe(results)
+        someResults.subscribe(results)
     }
 
     override fun publishResults(): Observable<Result> {
@@ -89,25 +89,38 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
 
     val paProcessor =
             ObservableTransformer<UiCommand, UiResult> { t ->
-                t.map {
+                t.flatMap {
                     when (it) {
                         is Command.INIT -> {
-                            if (it.itemOpportunity.itemDetails.questions != null) {
-                                Result.Questions(it.itemOpportunity.itemDetails.questions)
-                            } else {
-                                Result.NoQuestions
+                            val questions = it.itemOpportunity.itemDetails.questions
+                            val answers = it.itemOpportunity.proposal.questionAnswers
+
+                            when {
+                                questions != null && answers != null -> {
+                                    Observable
+                                            .just(Result.Questions(questions))
+                                            .cast(UiResult::class.java)
+                                            .mergeWith(
+                                                    Observable
+                                                            .fromIterable(answers)
+                                                            .map { Result.Valid(it.id, it.answer) }
+                                            )
+                                    //Observable.fromArray(Result.Questions(questions))
+                                }
+                                questions != null -> Observable.just(Result.Questions(questions))
+                                else -> Observable.just(Result.NoQuestions)
                             }
                         }
-                        is Command.UpdateAnswer -> {
-                            val validated = it.answer.trim()
+                    is Command.UpdateAnswer -> {
+                        val validated = it.answer.trim()
 
 
-                            if (validated.isNotEmpty()) {
-                                Result.Valid(it.id, validated)
-                            } else {
-                                Result.EmptyAnswer(it.id)
-                            }
+                        if (validated.isNotEmpty()) {
+                            Observable.just(Result.Valid(it.id, validated))
+                        } else {
+                            Observable.just(Result.EmptyAnswer(it.id))
                         }
+                    }
                         else -> throw IllegalStateException("sdf")
                     }
                 }
