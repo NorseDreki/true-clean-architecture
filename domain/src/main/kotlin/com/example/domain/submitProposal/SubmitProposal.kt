@@ -36,6 +36,12 @@ class SubmitProposal(
                                     .compose { clarifyingQuestions.process(it) }
                     )
                 }
+                .publish { shared ->
+                    Observable.merge(
+                            shared,
+                            shared.compose(submitAllowedProcessor)
+                    )
+                }
                 .share()
 
         //properly unsubscribe?

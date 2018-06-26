@@ -3,6 +3,7 @@ package com.example.domain
 import com.example.domain.models.ItemDetails
 import com.example.domain.submitProposal.ClarifyingQuestions
 import com.example.domain.submitProposal.CoverLetter
+import com.example.domain.submitProposal.SubmitAllowedResult
 import com.example.domain.submitProposal.SubmitProposal
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
@@ -27,8 +28,10 @@ class SubmitProposalSpec : Spek({
             describe("client gives control to submit proposal by giving it data") {
 
                 it("should initialize components with data?") {
-                    assertResultAt(0, CoverLetter.Result.NoCoverLetterRequired)
-                    assertResultAt(1, ClarifyingQuestions.Result.NoQuestions)
+                    assertResultAt(0, SubmitAllowedResult.Disabled)
+                    assertResultAt(1, CoverLetter.Result.NoCoverLetterRequired)
+                    assertResultAt(2, ClarifyingQuestions.Result.NoQuestions)
+                    assertResultAt(3, SubmitAllowedResult.Enabled)
 
                 }
 
@@ -39,6 +42,15 @@ class SubmitProposalSpec : Spek({
 
             describe("data is updated and new data is propagated") {
 
+                perform {
+                    command(SubmitProposal.Command.DATA(itemDetails.copy(isCoverLetterRequired = true)))
+                }
+
+                it("should disallow submit") {
+                    assertResultAt(4, CoverLetter.Result.Empty)
+                    assertResultAt(5, ClarifyingQuestions.Result.NoQuestions)
+                    assertResultAt(6, SubmitAllowedResult.Disabled)
+                }
             }
 
         }
