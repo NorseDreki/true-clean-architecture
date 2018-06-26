@@ -13,8 +13,8 @@ import org.jetbrains.spek.api.dsl.xit
 class ClarifyingQuestionsSpec : Spek({
 
     val withNoQuestions = ItemOpportunity(
-            ItemDetails("1234", null),
-            Proposal(0, null)
+            ItemDetails("1234", false,null),
+            Proposal(0, null, "")
     )
 
     val questions = listOf(
@@ -23,8 +23,8 @@ class ClarifyingQuestionsSpec : Spek({
     )
 
     val withQuestions = ItemOpportunity(
-            ItemDetails("1234", questions),
-            Proposal(0, null)
+            ItemDetails("1234", false, questions),
+            Proposal(0, null, "")
     )
 
     val answers = listOf(
@@ -33,8 +33,8 @@ class ClarifyingQuestionsSpec : Spek({
     )
 
     val withAnsweredQuestions = ItemOpportunity(
-            ItemDetails("1234", questions),
-            Proposal(0, answers)
+            ItemDetails("1234", false, questions),
+            Proposal(0, answers, "")
     )
 
     component(::ClarifyingQuestions) {

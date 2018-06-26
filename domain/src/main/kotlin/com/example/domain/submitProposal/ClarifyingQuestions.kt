@@ -32,6 +32,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
 
     lateinit var someResults: Observable<UiResult>
 
+/*
     override fun acceptCommands(commands: Observable<Command>) {
         someResults = commands
                 .doOnNext { println("CMD " + it) }
@@ -52,6 +53,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
     override fun publishResults(): Observable<Result> {
         return someResults.cast(Result::class.java)//results.cast(Result::class.java)
     }
+*/
 
     override fun render(): Observable<ViewState> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
