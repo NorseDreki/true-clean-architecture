@@ -1,7 +1,6 @@
 package com.example.domain.submitProposal
 
 import com.example.domain.UiResult
-import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
 sealed class SubmitAllowedResult : UiResult {
@@ -10,51 +9,37 @@ sealed class SubmitAllowedResult : UiResult {
 }
 
 data class SubmitAllowedData(
-        val hasCoverLetter: Boolean = false,
-        val coverLetterValid: Boolean = true,
-        val attachmentsValid: Boolean = true,
-        val hasQuestions: Boolean = false,
-        val questionsValid: Boolean = true
+        val isCoverLetterRequired: Boolean = true,
+        val areQuestionsRequired: Boolean = true,
+        val coverLetterValid: Boolean = false,
+        //val attachmentsValid: Boolean = false,
+        val questionsValid: Boolean = false
 )
-
-fun <T> T.smth() where T: UiResult,  T : ClarifyingQuestions.Result.Questions {
-
-}
-
 
 val submitAllowedProcessor =
         ObservableTransformer<UiResult, SubmitAllowedResult> {
             it
-                    .filter {
-                        it is ClarifyingQuestions.Result.AllQuestionsAnswered
-                    }
-                    .cast(ClarifyingQuestions.Result.AllQuestionsAnswered::class.java)
-                    /*.publish { shared ->
-                        Observable.merge(
-                                shared.ofType(ClarifyingQuestions.Result::class.java),
-                                shared.ofType(ClarifyingQuestions.Result::class.java)
-                        )
-
-                    }*/
                     .scan(SubmitAllowedData()) { state, result ->
                         when (result) {
-                        /*CoverLetter.Result.Empty -> state.copy(hasCoverLetter = true, coverLetterValid = false)
-                        is UpdateCoverLetterResult.Valid -> state.copy(hasCoverLetter = true, coverLetterValid = true)
-                        is UpdateCoverLetterResult.LengthExceeded -> state.copy(hasCoverLetter = true, coverLetterValid = false)
-                        is PineappleQuestionsResult.EmptyAnswer -> state.copy(hasQuestions = true, questionsValid = false)
-                        is PineappleQuestionsResult.Valid -> state.copy(hasQuestions = true, questionsValid = false)*/
-                            is ClarifyingQuestions.Result.AllQuestionsAnswered -> state.copy(hasQuestions = true, questionsValid = false)
+                            CoverLetter.Result.NoCoverLetterRequired ->
+                                state.copy(isCoverLetterRequired = false)
+                            ClarifyingQuestions.Result.NoQuestions ->
+                                state.copy(areQuestionsRequired = false)
+                            is ClarifyingQuestions.Result.AllQuestionsAnswered ->
+                                state.copy(questionsValid = true)
                             else -> state
                         }
                     }
-                    .distinctUntilChanged()
-                    .scan<SubmitAllowedResult>(SubmitAllowedResult.Disabled) { state, result ->
-                        with(result) {
-                            if ((!hasCoverLetter || coverLetterValid) && (!hasQuestions || questionsValid)) {
+                    .map {
+                        println("----------> $it")
+                        with (it) {
+                            if ((!isCoverLetterRequired || coverLetterValid)
+                                    && (!areQuestionsRequired || questionsValid)) {
                                 SubmitAllowedResult.Enabled
                             } else {
                                 SubmitAllowedResult.Disabled
                             }
                         }
                     }
+                    .distinctUntilChanged()
         }
