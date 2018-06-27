@@ -58,26 +58,14 @@ class ProposeTerms : UiComponent<Command, Result, ViewState> {
 
                     }
 
-                }
-                        .map { Result.Empty }
-                /*t.scan(State()) { state, command ->
-                    when (command) {
-                        is Command.DATA -> {
-                            Result.DATALoaded(it.itemOpportunity.itemDetails)
-                        }
-                        is Command.UpdateBid -> {
-                            result(it.coverLetter)
-                        }
-                    }
-                }*/
-
+                }.flatMap { it }
             }
 
     fun calculate(itemOpportunity: ItemOpportunity): Result {
         val bid = itemOpportunity.proposal.bid
 
         return when (bid) {
-            0 -> Result.Empty
+            0 -> Result.BidEmpty
             else -> when (bid) {
                 in 101..999 -> {
                     val fee = bid / 10
@@ -108,25 +96,18 @@ class ProposeTerms : UiComponent<Command, Result, ViewState> {
             object Failed : Validation()
         }
 
-        //data class DATALoaded(val itemDetails: ItemDetails) : Result()
-/*
-        data class CommissionLoaded(val percents: List<String>) : Result()
-        data class DurationsLoaded(val percents: List<String>) : Result()
-        data class SecretMessageLoaded(val percents: List<String>) : Result()
-        data class RecommendedCommisionMessageLoaded(val percents: List<String>) : Result()
-*/
-
-        //data class FeeUpdated(val fee: Int) : Result()
-
         data class ItemGreetingLoaded(val message: String) : Result()
+        data class EngagementsLoaded(val message: String) : Result()
 
         data class BidValid(val bid: Int, val fee: Int) : Result()
-        object Empty : Result()
+        object BidEmpty : Result()
         data class BidRangeExceeded(val bid: Int, val min: Int, val max: Int) : Result()
 
 
         data class EngagementSelected(val engagement: String): Result()
         object EngagementNotSelected: Result()
+
+        object EngagementNotRequired: Result()
     }
 
     data class ViewState(

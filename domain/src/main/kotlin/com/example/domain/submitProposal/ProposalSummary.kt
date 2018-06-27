@@ -66,6 +66,7 @@ class ProposalSummary : UiComponent<ProposalSummary.Command, ProposalSummary.Res
                     when(it) {
                         is Command.INIT -> Result.INITResult(it.itemOpportunity)
                         is Command.ToggleSubmitEnabled -> Result.SubmitEnabled(it.enabled)
+                        else -> throw IllegalStateException("sdf")
                     }
                 }
 
