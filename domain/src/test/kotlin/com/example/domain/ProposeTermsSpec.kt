@@ -8,7 +8,10 @@ import com.example.domain.submitProposal.ProposeTerms.Command.DATA
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
+import org.junit.platform.runner.JUnitPlatform
+import org.junit.runner.RunWith
 
+@RunWith(JUnitPlatform::class)
 class ProposeTermsSpec : Spek({
 
     val withNotEnteredBid = ItemOpportunity(

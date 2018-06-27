@@ -33,7 +33,9 @@ class SubmitProposal(
                             shared.ofType(CoverLetter.Command::class.java)
                                     .compose { coverLetter.process(it) },
                             shared.ofType(ClarifyingQuestions.Command::class.java)
-                                    .compose { clarifyingQuestions.process(it) }
+                                    .compose { clarifyingQuestions.process(it) },
+                            shared.ofType(DoSubmitProposalCommand::class.java)
+                                    .compose(doSubmitProposalProcessor)
                     )
                 }
                 .publish { shared ->
