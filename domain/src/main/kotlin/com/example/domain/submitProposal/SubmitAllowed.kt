@@ -13,7 +13,8 @@ data class SubmitAllowedData(
         val areQuestionsRequired: Boolean = true,
         val coverLetterValid: Boolean = false,
         //val attachmentsValid: Boolean = false,
-        val questionsValid: Boolean = false
+        val questionsValid: Boolean = false,
+        val proposeTermsValid: Boolean = false
 )
 
 val submitAllowedProcessor =
@@ -26,7 +27,14 @@ val submitAllowedProcessor =
                             ClarifyingQuestions.Result.NoQuestionsRequired ->
                                 state.copy(areQuestionsRequired = false)
                             is ClarifyingQuestions.Result.AllQuestionsAnswered ->
-                                state.copy(questionsValid = true)
+                                state.copy(questionsValid = result.answered)
+
+                            is ProposeTerms.Result.Validation.OK ->
+                                    state.copy(proposeTermsValid = true)
+
+                            is ProposeTerms.Result.Validation.Failed ->
+                                    state.copy(proposeTermsValid = false)
+
                             else -> state
                         }
                     }
@@ -34,7 +42,8 @@ val submitAllowedProcessor =
                         println("----------> $it")
                         with (it) {
                             if ((!isCoverLetterRequired || coverLetterValid)
-                                    && (!areQuestionsRequired || questionsValid)) {
+                                    && (!areQuestionsRequired || questionsValid)
+                                    && proposeTermsValid) {
                                 SubmitAllowedResult.Enabled
                             } else {
                                 SubmitAllowedResult.Disabled

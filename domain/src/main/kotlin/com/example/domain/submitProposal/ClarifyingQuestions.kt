@@ -9,7 +9,6 @@ import com.example.domain.models.Question
 import com.example.domain.submitProposal.ClarifyingQuestions.*
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.subjects.ReplaySubject
 
 
 class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
@@ -28,33 +27,6 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
         //.share()
     }
 
-    val results = ReplaySubject.create<UiResult>()
-
-    lateinit var someResults: Observable<UiResult>
-
-/*
-    override fun acceptCommands(commands: Observable<Command>) {
-        someResults = commands
-                .doOnNext { println("CMD " + it) }
-                .compose(paProcessor)
-                .doOnNext { println("RES " + it) }
-                .cast(Result::class.java)
-                .publish { shared ->
-                    Observable.concat(
-                            shared,
-                            shared.doOnNext { println("input222") }.compose(paAnsweredProcessor)
-                    ).doOnNext { println("2222 $it") }
-                }
-                .cast(UiResult::class.java)
-
-        someResults.subscribe(results)
-    }
-
-    override fun publishResults(): Observable<Result> {
-        return someResults.cast(Result::class.java)//results.cast(Result::class.java)
-    }
-*/
-
     override fun render(): Observable<ViewState> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -66,24 +38,25 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
 
     val paAnsweredProcessor =
             ObservableTransformer<Result, Result> { t ->
-                t.doOnNext { println("111 $it") }.scan(AllQuestionsAnswered()) { state, result ->
-                    when (result) {
-                        is Result.QuestionsLoaded -> {
-                            state.copy(result.questions.size, mutableSetOf())
+                t.doOnNext { println("111 $it") }
+                        .scan(AllQuestionsAnswered()) { state, result ->
+                            when (result) {
+                                is Result.QuestionsLoaded -> {
+                                    state.copy(result.questions.size, mutableSetOf())
+                                }
+                                is Result.NoQuestionsRequired -> {
+                                    AllQuestionsAnswered()
+                                    //state.copy(0, mutableSetOf())
+                                }
+                                is Result.ValidAnswer -> {
+                                    state.copy(answeredQuestions = state.answeredQuestions.apply { add(result.id) })
+                                }
+                                is Result.EmptyAnswer -> {
+                                    state.copy(answeredQuestions = state.answeredQuestions.apply { remove(result.id) })
+                                }
+                                else -> throw IllegalStateException("sdf")
+                            }
                         }
-                        is Result.NoQuestionsRequired -> {
-                            AllQuestionsAnswered()
-                            //state.copy(0, mutableSetOf())
-                        }
-                        is Result.ValidAnswer -> {
-                            state.copy(answeredQuestions = state.answeredQuestions.apply { add(result.id) })
-                        }
-                        is Result.EmptyAnswer -> {
-                            state.copy(answeredQuestions = state.answeredQuestions.apply { remove(result.id) })
-                        }
-                        else -> throw IllegalStateException("sdf")
-                    }
-                }
                         .skip(1)
                         .flatMap {
                             //implicitly handles "no questions" case
@@ -121,34 +94,20 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                                 else -> Observable.just(Result.NoQuestionsRequired)
                             }
                         }
-                    is Command.UpdateAnswer -> {
-                        val validated = it.answer.trim()
+                        is Command.UpdateAnswer -> {
+                            val validated = it.answer.trim()
 
 
-                        if (validated.isNotEmpty()) {
-                            Observable.just(Result.ValidAnswer(it.id, validated))
-                        } else {
-                            Observable.just(Result.EmptyAnswer(it.id))
+                            if (validated.isNotEmpty()) {
+                                Observable.just(Result.ValidAnswer(it.id, validated))
+                            } else {
+                                Observable.just(Result.EmptyAnswer(it.id))
+                            }
                         }
-                    }
                         else -> throw IllegalStateException("sdf")
                     }
                 }
             }
-
-    /*val toPQCommands =
-    Observable.Transformer<UiEvent, UiCommand> {
-        it.map {
-            when (it) {
-                is PineappleQuestionsEvents.PineappleQuestionAnswerUpdated ->
-                    PineappleQuestionCommand.UpdatePineappleQuestionAnswer(event.question, event.answer)
-                else -> { throw IllegalStateException("sdaf")
-                }
-            }
-        }
-    }
-*/
-
 
     sealed class Result : UiResult {
         data class QuestionsLoaded(val questions: List<Question>) : Result()
