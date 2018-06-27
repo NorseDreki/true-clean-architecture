@@ -12,18 +12,18 @@ class ProposeTerms : UiComponent<Command, Result, ViewState> {
                 .doOnNext { println("CMD " + it) }
                 .compose(processor)
                 .doOnNext { println("RES " + it) }
+                .publish { shared ->
+                    Observable.merge(
+                            shared,
+                            shared.compose(paAnsweredProcessor)//.skip(1)
+                    ).doOnNext { println("COMB $it") }
+                }
                 .cast(Result::class.java)
     }
 
     override fun render(): Observable<ViewState> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
-    /*data class State(
-            val minBid: String = "",
-            val maxBid: String = "",
-            val calculator: String = ""
-    )*/
 
     val processor =
             ObservableTransformer<Command, Result> { t ->
@@ -79,6 +79,44 @@ class ProposeTerms : UiComponent<Command, Result, ViewState> {
     fun duration(): Result {
         return Result.EngagementNotSelected
     }
+
+    data class Validation(
+            val isBidValid: Boolean = false,
+            val isEngagementRequired: Boolean = true,
+            val isEngagementSelected: Boolean = false
+    )
+
+    val paAnsweredProcessor =
+            ObservableTransformer<Result, Result> { t ->
+                t
+                        .scan(Validation()) { state, result ->
+                            when (result) {
+                                is Result.EngagementNotRequired -> {
+                                    state.copy(isEngagementRequired = false)
+                                }
+                                is Result.EngagementSelected -> {
+                                    state.copy(isEngagementSelected = true)
+                                }
+                                is Result.BidRangeExceeded -> {
+                                    state.copy(isBidValid = false)
+                                }
+                                is Result.BidEmpty -> {
+                                    state.copy(isBidValid = false)
+                                }
+                                is Result.BidValid ->
+                                        state.copy(isBidValid = true)
+                                else -> state
+                            }
+                        }
+                        .skip(1)
+                        .flatMap {
+                            if (it.isBidValid && (!it.isEngagementRequired || it.isEngagementSelected)) {
+                                Observable.just(Result.Validation.OK)
+                            } else {
+                                Observable.just(Result.Validation.Failed)
+                            }
+                        }
+            }
 
 
     sealed class Command : UiCommand {
