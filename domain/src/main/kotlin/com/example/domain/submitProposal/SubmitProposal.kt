@@ -24,7 +24,7 @@ class SubmitProposal(
     override fun process(commands: Observable<Command>): Observable<UiResult> {
         val c = commands
                 .doOnNext { println("CMD " + it) }
-                .compose(storageProcessor)
+                .compose(storageLoader)
                 //.takeUntil
                 .mergeWith(loopbackCommands)
                 .doOnNext { println("RES " + it) }
@@ -41,7 +41,8 @@ class SubmitProposal(
                 .publish { shared ->
                     Observable.merge(
                             shared,
-                            shared.compose(submitAllowedProcessor)
+                            shared.compose(submitAllowedProcessor),
+                            shared.compose(storageSaver)
                     )
                 }
                 .share()

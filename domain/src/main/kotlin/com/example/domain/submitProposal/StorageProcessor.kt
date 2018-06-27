@@ -14,7 +14,7 @@ sealed class SubmitProposalStorageResult : UiResult {
     object Failure : SubmitProposalStorageResult()
 }
 
-val storageProcessor =
+val storageLoader =
         ObservableTransformer<SubmitProposal.Command, UiCommand> {
             it.flatMap {
                 val itemOpportunity =
@@ -27,6 +27,32 @@ val storageProcessor =
                 )
             }
         }
+
+var repo: ProposalRepository? = null
+
+val storageSaver =
+        ObservableTransformer<UiResult, SubmitProposalStorageResult> {
+            it.flatMap {
+                when(it) {
+                    is ClarifyingQuestions.Result.ValidAnswer -> {
+                        try {
+                            repo!!.updateCoverLetter("234", "324")
+                            //Observable.just(SubmitProposalStorageResult.Success)
+                            Observable.empty<SubmitProposalStorageResult>()
+                        } catch (e: Exception) {
+                            Observable.error<SubmitProposalStorageResult>(e)
+                        }
+                    }
+                    else -> Observable.empty()
+                }
+            }
+        }
+
+interface ProposalRepository {
+    fun updateCoverLetter(id: String, coverLetter: String)
+
+    fun updateQuestionAnswer()
+}
 
 private fun createItemOpportunity(itemDetails: ItemDetails): ItemOpportunity {
     val questions = listOf(
