@@ -68,14 +68,14 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
             ObservableTransformer<Result, Result> { t ->
                 t.doOnNext { println("111 $it") }.scan(AllQuestionsAnswered()) { state, result ->
                     when (result) {
-                        is Result.Questions -> {
+                        is Result.QuestionsLoaded -> {
                             state.copy(result.questions.size, mutableSetOf())
                         }
-                        is Result.NoQuestions -> {
+                        is Result.NoQuestionsRequired -> {
                             AllQuestionsAnswered()
                             //state.copy(0, mutableSetOf())
                         }
-                        is Result.Valid -> {
+                        is Result.ValidAnswer -> {
                             state.copy(answeredQuestions = state.answeredQuestions.apply { add(result.id) })
                         }
                         is Result.EmptyAnswer -> {
@@ -108,17 +108,17 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                             when {
                                 questions != null && answers != null -> {
                                     Observable
-                                            .just(Result.Questions(questions))
+                                            .just(Result.QuestionsLoaded(questions))
                                             .cast(UiResult::class.java)
                                             .mergeWith(
                                                     Observable
                                                             .fromIterable(answers)
-                                                            .map { Result.Valid(it.id, it.answer) }
+                                                            .map { Result.ValidAnswer(it.id, it.answer) }
                                             )
                                     //Observable.fromArray(Result.Questions(questions))
                                 }
-                                questions != null -> Observable.just(Result.Questions(questions))
-                                else -> Observable.just(Result.NoQuestions)
+                                questions != null -> Observable.just(Result.QuestionsLoaded(questions))
+                                else -> Observable.just(Result.NoQuestionsRequired)
                             }
                         }
                     is Command.UpdateAnswer -> {
@@ -126,7 +126,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
 
 
                         if (validated.isNotEmpty()) {
-                            Observable.just(Result.Valid(it.id, validated))
+                            Observable.just(Result.ValidAnswer(it.id, validated))
                         } else {
                             Observable.just(Result.EmptyAnswer(it.id))
                         }
@@ -151,10 +151,10 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
 
 
     sealed class Result : UiResult {
-        data class Questions(val questions: List<Question>) : Result()
-        object NoQuestions : Result()
+        data class QuestionsLoaded(val questions: List<Question>) : Result()
+        object NoQuestionsRequired : Result()
 
-        data class Valid(val id: String, val answer: String) : Result()
+        data class ValidAnswer(val id: String, val answer: String) : Result()
         data class EmptyAnswer(val id: String) : Result()
 
         data class AllQuestionsAnswered(val answered: Boolean) : Result()

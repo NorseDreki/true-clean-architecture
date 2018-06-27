@@ -43,7 +43,7 @@ class ClarifyingQuestionsSpec : Spek({
 
             describe("client initializes with data with non-empty questions") {
                 it("should emit those questions") {
-                    assertResultAt(0, Questions(questions))
+                    assertResultAt(0, QuestionsLoaded(questions))
                 }
 
                 it("should emit status as 'not answered'") {
@@ -57,7 +57,7 @@ class ClarifyingQuestionsSpec : Spek({
                 }
 
                 it("should emit result with a valid answer") {
-                    assertResultAt(2, Valid("1", "answer"))
+                    assertResultAt(2, ValidAnswer("1", "answer"))
                 }
             }
 
@@ -67,7 +67,7 @@ class ClarifyingQuestionsSpec : Spek({
                 }
 
                 it("should emit result with a trimmed answer") {
-                    assertResultAt(2, Valid("1", "answer"))
+                    assertResultAt(2, ValidAnswer("1", "answer"))
                 }
             }
 
@@ -88,7 +88,7 @@ class ClarifyingQuestionsSpec : Spek({
             describe("client initialized with data containing no questions") {
                 it("should emit result as no questions") {
                     //assertResultAt(0, NoQuestions)
-                    assertValuesOnly(NoQuestions)
+                    assertValuesOnly(NoQuestionsRequired)
                 }
             }
         }
@@ -102,9 +102,9 @@ class ClarifyingQuestionsSpec : Spek({
                 }
 
                 it("should emit each answer as valid, followed by status update") {
-                    assertResultAt(2, Valid(answers[0].id, answers[0].answer))
+                    assertResultAt(2, ValidAnswer(answers[0].id, answers[0].answer))
                     assertResultAt(3, AllQuestionsAnswered(false))
-                    assertResultAt(4, Valid(answers[1].id, answers[1].answer))
+                    assertResultAt(4, ValidAnswer(answers[1].id, answers[1].answer))
                     assertResultAt(5, AllQuestionsAnswered(true))
                 }
 

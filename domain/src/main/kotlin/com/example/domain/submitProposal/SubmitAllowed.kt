@@ -23,7 +23,7 @@ val submitAllowedProcessor =
                         when (result) {
                             CoverLetter.Result.NoCoverLetterRequired ->
                                 state.copy(isCoverLetterRequired = false)
-                            ClarifyingQuestions.Result.NoQuestions ->
+                            ClarifyingQuestions.Result.NoQuestionsRequired ->
                                 state.copy(areQuestionsRequired = false)
                             is ClarifyingQuestions.Result.AllQuestionsAnswered ->
                                 state.copy(questionsValid = true)

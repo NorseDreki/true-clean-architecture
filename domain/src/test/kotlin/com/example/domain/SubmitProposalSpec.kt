@@ -30,7 +30,7 @@ class SubmitProposalSpec : Spek({
                 it("should initialize components with data?") {
                     assertResultAt(0, SubmitAllowedResult.Disabled)
                     assertResultAt(1, CoverLetter.Result.NoCoverLetterRequired)
-                    assertResultAt(2, ClarifyingQuestions.Result.NoQuestions)
+                    assertResultAt(2, ClarifyingQuestions.Result.NoQuestionsRequired)
                     assertResultAt(3, SubmitAllowedResult.Enabled)
 
                 }
@@ -48,7 +48,7 @@ class SubmitProposalSpec : Spek({
 
                 it("should disallow submit") {
                     assertResultAt(4, CoverLetter.Result.Empty)
-                    assertResultAt(5, ClarifyingQuestions.Result.NoQuestions)
+                    assertResultAt(5, ClarifyingQuestions.Result.NoQuestionsRequired)
                     assertResultAt(6, SubmitAllowedResult.Disabled)
                 }
             }
