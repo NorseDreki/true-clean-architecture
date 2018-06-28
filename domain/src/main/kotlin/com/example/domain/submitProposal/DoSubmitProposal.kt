@@ -8,7 +8,6 @@ import io.reactivex.ObservableTransformer
 
 sealed class DoSubmitProposalCommand : UiCommand {
     data class DoSubmit(val proposal: Proposal) : DoSubmitProposalCommand()
-    object Remove : DoSubmitProposalCommand()
 }
 
 sealed class DoSubmitProposalResult : UiResult {
@@ -38,11 +37,7 @@ val doSubmitProposalProcessor =
                                 .onErrorReturn(DoSubmitProposalResult::Error)
                                 .startWith(DoSubmitProposalResult.InProgress)
                     }
-                    DoSubmitProposalCommand.Remove -> {
-                        Observable.just<UiResult>(DoSubmitProposalResult.InProgress)
-                    }
                 }
             }
 
         }
-

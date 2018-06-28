@@ -10,21 +10,39 @@ import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
 sealed class SubmitProposalStorageResult : UiResult {
-    object Success : SubmitProposalStorageResult()
-    object Failure : SubmitProposalStorageResult()
+    object ProposalRemoved : SubmitProposalStorageResult()
+
+    /*object Success : SubmitProposalStorageResult()
+    object Failure : SubmitProposalStorageResult()*/
+}
+
+sealed class SubmitProposalStorageCommand : UiCommand {
+    data class DATA(val itemDetails: ItemDetails) : SubmitProposalStorageCommand()
+    data class CreateProposal(val itemDetails: ItemDetails) : SubmitProposalStorageCommand()
+
+    object RemoveProposal: SubmitProposalStorageCommand()
 }
 
 val storageLoader =
-        ObservableTransformer<SubmitProposal.Command, UiCommand> {
+        ObservableTransformer<SubmitProposalStorageCommand, UiCommand> {
             it.flatMap {
-                val itemOpportunity =
-                        createItemOpportunity((it as SubmitProposal.Command.DATA).itemDetails)
+                when (it) {
+                    is SubmitProposalStorageCommand.CreateProposal -> {
+                        //or move this to "from results to commands"
+                        val itemOpportunity =
+                                createItemOpportunity((it as SubmitProposalStorageCommand.CreateProposal).itemDetails)
 
-                Observable.fromArray(
-                        CoverLetter.Command.DATA(itemOpportunity),
-                        ClarifyingQuestions.Command.INIT(itemOpportunity)
-                        //AnchoredPanel.Command.Expand
-                )
+                        Observable.fromArray(
+                                CoverLetter.Command.DATA(itemOpportunity),
+                                ClarifyingQuestions.Command.INIT(itemOpportunity)
+                                //AnchoredPanel.Command.Expand
+                        )
+                    }
+                    /*is SubmitProposalStorageCommand.RemoveProposal -> {
+                        repo!!.removeProposal()
+                        Observable.just(SubmitProposalStorageResult.ProposalRemoved)
+                    }*/
+                }
             }
         }
 
@@ -52,6 +70,8 @@ interface ProposalRepository {
     fun updateCoverLetter(id: String, coverLetter: String)
 
     fun updateQuestionAnswer()
+
+    fun removeProposal()
 }
 
 private fun createItemOpportunity(itemDetails: ItemDetails): ItemOpportunity {

@@ -13,6 +13,7 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.PublishSubject
 
 
+
 class SubmitProposal(
         val coverLetter: CoverLetter,
         val clarifyingQuestions: ClarifyingQuestions
@@ -24,6 +25,7 @@ class SubmitProposal(
     override fun process(commands: Observable<Command>): Observable<UiResult> {
         val c = commands
                 .doOnNext { println("CMD " + it) }
+                .compose(submitProposalCommandDispatcher)
                 .compose(storageLoader)
                 //.takeUntil
                 .mergeWith(loopbackCommands)
@@ -35,13 +37,16 @@ class SubmitProposal(
                             shared.ofType(ClarifyingQuestions.Command::class.java)
                                     .compose { clarifyingQuestions.process(it) },
                             shared.ofType(DoSubmitProposalCommand::class.java)
-                                    .compose(doSubmitProposalProcessor)
+                                    .compose(doSubmitProposalProcessor),
+                            shared.ofType(FeesCommands::class.java)
+                                    .compose(feesProc)
                     )
                 }
                 .publish { shared ->
                     Observable.merge(
                             shared,
                             shared.compose(submitAllowedProcessor),
+                            shared.compose(submitProposalResultsProcessor),
                             shared.compose(storageSaver)
                     )
                 }
@@ -53,7 +58,7 @@ class SubmitProposal(
                 .subscribe(loopbackCommands)*/
 
         return c
-               // .cast(Result::class.java)
+        // .cast(Result::class.java)
     }
 
     override fun render(): Observable<ViewState> {
@@ -69,31 +74,38 @@ class SubmitProposal(
 
     val fromResultToCommands =
             ObservableTransformer<UiResult, UiCommand> {
-                it.map {
+                it.flatMap {
+
+                    //memoize itemOpportunity here as well?
                     when (it) {
-                        else -> throw IllegalStateException("sdaf")
-                        /*is SuggestedRateResult.SuggestAccepted -> {
-                            ProposeTermsCommands.UpdateBid(it.suggestedRate)
-                        }
                         is FeesResult.CalculatorLoaded -> {
-                            //and navigate to it
-                            ProposeTermsCommands.RecalculateBidEarn
+                            //ProposeTerms.Command.DATA
+                            Observable.empty<UiCommand>()
                         }
-                        is AnchorablePanelResult.Discard -> {
-                            //show dialog first
-                            //hide panel
-                            DoSubmitProposalCommand.Remove
-                        }
-                        is AnchorablePanelResult.PageChanged -> {
-                            //show dialog first
-                            DoSubmitProposalCommand.Expand
-                        }
-                        is DoSubmitProposalResult.Success -> {
-                            DoSubmitProposalCommand.Hide
-                        }
-                        is DoSubmitProposalResult.Error -> {
-                            DoSubmitProposalCommand.Hide
-                        }*/
+
+                        else -> throw IllegalStateException("sdaf")
+                    /*is SuggestedRateResult.SuggestAccepted -> {
+                        ProposeTermsCommands.UpdateBid(it.suggestedRate)
+                    }
+                    is FeesResult.CalculatorLoaded -> {
+                        //and navigate to it
+                        ProposeTermsCommands.RecalculateBidEarn
+                    }
+                    is AnchorablePanelResult.Discard -> {
+                        //show dialog first
+                        //hide panel
+                        DoSubmitProposalCommand.Remove
+                    }
+                    is AnchorablePanelResult.PageChanged -> {
+                        //show dialog first
+                        DoSubmitProposalCommand.Expand
+                    }
+                    is DoSubmitProposalResult.Success -> {
+                        DoSubmitProposalCommand.Hide
+                    }
+                    is DoSubmitProposalResult.Error -> {
+                        DoSubmitProposalCommand.Hide
+                    }*/
                     /*ProposalSummaryEvents.OnSubmitProposal -> {
                         SubmitProposalCommand.DoSubmit(proposal)
                     }
@@ -114,15 +126,56 @@ class SubmitProposal(
                 }
             }
 
+    //replace with "results to commands" stuff?
+    val submitProposalCommandDispatcher =
+            ObservableTransformer<Command, SubmitProposalStorageCommand> {
+                it.map {
+                    when(it) {
+                        is Command.DATA -> SubmitProposalStorageCommand.CreateProposal(it.itemDetails)
+                        is Command.RemoveProposal -> SubmitProposalStorageCommand.RemoveProposal
+                    }
+                }
+            }
+
+    val submitProposalResultsProcessor =
+            ObservableTransformer<UiResult, Result> {
+                it.flatMap {
+                    when (it) {
+                        CoverLetter.Result.Empty,
+                        is CoverLetter.Result.Valid,
+                        is ClarifyingQuestions.Result.ValidAnswer,
+                        is ClarifyingQuestions.Result.EmptyAnswer,
+                        is ProposeTerms.Result.BidValid,
+                        ProposeTerms.Result.BidEmpty,
+                        is ProposeTerms.Result.EngagementSelected ->
+
+                            Observable.just(Result.ProposalUpdated)
+
+                        is DoSubmitProposalResult.Success ->
+                                Observable.just(Result.ProposalSent)
+
+                        is DoSubmitProposalResult.Error ->
+                                Observable.just(Result.JobNoLongerAvailable)
+
+                        is SubmitProposalStorageResult.ProposalRemoved ->
+                                Observable.just(Result.ProposalRemoved)
+
+                        else -> Observable.empty()
+                    }
+                }
+            }
 
     sealed class Result : UiResult {
-        //object ProposalRemoved : Result()
+        object ProposalRemoved : Result()
         object ProposalSent : Result() //change to already applied
+
         //object ProposalCreated : Result()
         object ProposalUpdated : Result() //time
+
         object JobIsPrivate : Result()
         object JobNoLongerAvailable : Result()
     }
+
     data class ViewState(
             val coverLetterViewState: CoverLetter.ViewState,
             val pineappleQuestionsViewState: ClarifyingQuestions.ViewState
@@ -135,8 +188,3 @@ class SubmitProposal(
         }
     }
 }
-
-
-
-
-
