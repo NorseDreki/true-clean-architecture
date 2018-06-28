@@ -24,8 +24,10 @@ val submitAllowedProcessor =
                         when (result) {
                             CoverLetter.Result.NoCoverLetterRequired ->
                                 state.copy(isCoverLetterRequired = false)
+
                             ClarifyingQuestions.Result.NoQuestionsRequired ->
                                 state.copy(areQuestionsRequired = false)
+
                             is ClarifyingQuestions.Result.AllQuestionsAnswered ->
                                 state.copy(questionsValid = result.answered)
 
@@ -43,7 +45,8 @@ val submitAllowedProcessor =
                         with (it) {
                             if ((!isCoverLetterRequired || coverLetterValid)
                                     && (!areQuestionsRequired || questionsValid)
-                                    && proposeTermsValid) {
+                                    //negate
+                                    && !proposeTermsValid) {
                                 SubmitAllowedResult.Enabled
                             } else {
                                 SubmitAllowedResult.Disabled

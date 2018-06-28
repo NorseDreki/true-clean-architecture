@@ -1,6 +1,5 @@
 package com.example.domain.submitProposal
 
-import com.example.domain.UiCommand
 import com.example.domain.UiResult
 import com.example.domain.models.ItemDetails
 import com.example.domain.models.ItemOpportunity
@@ -9,39 +8,23 @@ import com.example.domain.models.Question
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
-sealed class SubmitProposalStorageResult : UiResult {
-    object ProposalRemoved : SubmitProposalStorageResult()
-
-    /*object Success : SubmitProposalStorageResult()
-    object Failure : SubmitProposalStorageResult()*/
-}
-
-sealed class SubmitProposalStorageCommand : UiCommand {
-    data class DATA(val itemDetails: ItemDetails) : SubmitProposalStorageCommand()
-    data class CreateProposal(val itemDetails: ItemDetails) : SubmitProposalStorageCommand()
-
-    object RemoveProposal: SubmitProposalStorageCommand()
-}
-
 val storageLoader =
-        ObservableTransformer<SubmitProposalStorageCommand, UiCommand> {
+        ObservableTransformer<SubmitProposal.Command, SubmitProposal.Result> {
             it.flatMap {
                 when (it) {
-                    is SubmitProposalStorageCommand.CreateProposal -> {
+                    is SubmitProposal.Command.DATA -> {
                         //or move this to "from results to commands"
                         val itemOpportunity =
-                                createItemOpportunity((it as SubmitProposalStorageCommand.CreateProposal).itemDetails)
+                                createItemOpportunity((it).itemDetails)
 
-                        Observable.fromArray(
-                                CoverLetter.Command.DATA(itemOpportunity),
-                                ClarifyingQuestions.Command.INIT(itemOpportunity)
-                                //AnchoredPanel.Command.Expand
-                        )
+                                //or created
+                                Observable.just(SubmitProposal.Result.ProposalUpdated(itemOpportunity))
                     }
-                    /*is SubmitProposalStorageCommand.RemoveProposal -> {
+                    is SubmitProposal.Command.RemoveProposal -> {
                         repo!!.removeProposal()
-                        Observable.just(SubmitProposalStorageResult.ProposalRemoved)
-                    }*/
+
+                        Observable.just(SubmitProposal.Result.ProposalRemoved)
+                    }
                 }
             }
         }
@@ -49,16 +32,16 @@ val storageLoader =
 var repo: ProposalRepository? = null
 
 val storageSaver =
-        ObservableTransformer<UiResult, SubmitProposalStorageResult> {
+        ObservableTransformer<UiResult, UiResult> {
             it.flatMap {
                 when(it) {
                     is ClarifyingQuestions.Result.ValidAnswer -> {
                         try {
                             repo!!.updateCoverLetter("234", "324")
                             //Observable.just(SubmitProposalStorageResult.Success)
-                            Observable.empty<SubmitProposalStorageResult>()
+                            Observable.empty<UiResult>()
                         } catch (e: Exception) {
-                            Observable.error<SubmitProposalStorageResult>(e)
+                            Observable.error<UiResult>(e)
                         }
                     }
                     else -> Observable.empty()

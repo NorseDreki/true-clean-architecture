@@ -6,6 +6,7 @@ import com.example.domain.UiComponent
 import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.models.ItemDetails
+import com.example.domain.models.ItemOpportunity
 import com.example.domain.submitProposal.SubmitProposal.Command
 import com.example.domain.submitProposal.SubmitProposal.ViewState
 import io.reactivex.Observable
@@ -25,29 +26,43 @@ class SubmitProposal(
     override fun process(commands: Observable<Command>): Observable<UiResult> {
         val c = commands
                 .doOnNext { println("CMD " + it) }
-                .compose(submitProposalCommandDispatcher)
-                .compose(storageLoader)
+                //.compose(submitProposalCommandDispatcher)
+                //.compose(storageLoader)
                 //.takeUntil
+                .cast(UiCommand::class.java)
                 .mergeWith(loopbackCommands)
                 .doOnNext { println("RES " + it) }
-                .publish { shared ->
+                .publish<UiResult> { shared ->
                     Observable.merge<UiResult>(
+
+                            shared.ofType(SubmitProposal.Command::class.java)
+                                    .compose(storageLoader),
+
+
                             shared.ofType(CoverLetter.Command::class.java)
                                     .compose { coverLetter.process(it) },
                             shared.ofType(ClarifyingQuestions.Command::class.java)
                                     .compose { clarifyingQuestions.process(it) },
                             shared.ofType(DoSubmitProposalCommand::class.java)
-                                    .compose(doSubmitProposalProcessor),
+                                    .compose(doSubmitProposalProcessor)
+                            /*,
+
+
                             shared.ofType(FeesCommands::class.java)
-                                    .compose(feesProc)
+                                    .compose(feesProc)*/
                     )
                 }
                 .publish { shared ->
                     Observable.merge(
                             shared,
                             shared.compose(submitAllowedProcessor),
-                            shared.compose(submitProposalResultsProcessor),
                             shared.compose(storageSaver)
+                    )
+                }
+                .publish { shared ->
+                    Observable.merge(
+                            shared,
+                            shared.compose(submitProposalResultsProcessor)
                     )
                 }
                 .share()
@@ -78,9 +93,31 @@ class SubmitProposal(
 
                     //memoize itemOpportunity here as well?
                     when (it) {
+                        is SubmitAllowedResult.Enabled -> {
+                            Observable.just(ProposalSummary.Command.ToggleSubmitEnabled(true))
+                        }
+
+                        is Result.ProposalUpdated -> {
+                            //hide panel
+                            Observable.fromArray(
+                                    CoverLetter.Command.DATA(it.itemOpportunity),
+                                    ClarifyingQuestions.Command.INIT(it.itemOpportunity)
+                            )
+                                            //AnchoredPanel.Command.Expand
+
+                        }
+                        is Result.ProposalRemoved -> {
+                            //hide panel
+
+                            Observable.empty<UiCommand>()
+
+                        }
                         is FeesResult.CalculatorLoaded -> {
                             //ProposeTerms.Command.DATA
                             Observable.empty<UiCommand>()
+                        }
+                        is DoSubmitProposalResult.Success -> {
+                            Observable.just(SubmitProposal.Command.RemoveProposal)
                         }
 
                         else -> throw IllegalStateException("sdaf")
@@ -126,17 +163,6 @@ class SubmitProposal(
                 }
             }
 
-    //replace with "results to commands" stuff?
-    val submitProposalCommandDispatcher =
-            ObservableTransformer<Command, SubmitProposalStorageCommand> {
-                it.map {
-                    when(it) {
-                        is Command.DATA -> SubmitProposalStorageCommand.CreateProposal(it.itemDetails)
-                        is Command.RemoveProposal -> SubmitProposalStorageCommand.RemoveProposal
-                    }
-                }
-            }
-
     val submitProposalResultsProcessor =
             ObservableTransformer<UiResult, Result> {
                 it.flatMap {
@@ -147,18 +173,15 @@ class SubmitProposal(
                         is ClarifyingQuestions.Result.EmptyAnswer,
                         is ProposeTerms.Result.BidValid,
                         ProposeTerms.Result.BidEmpty,
-                        is ProposeTerms.Result.EngagementSelected ->
+                        /*is ProposeTerms.Result.EngagementSelected ->
 
-                            Observable.just(Result.ProposalUpdated)
+                            Observable.just(Result.ProposalUpdated)*/
 
                         is DoSubmitProposalResult.Success ->
                                 Observable.just(Result.ProposalSent)
 
                         is DoSubmitProposalResult.Error ->
                                 Observable.just(Result.JobNoLongerAvailable)
-
-                        is SubmitProposalStorageResult.ProposalRemoved ->
-                                Observable.just(Result.ProposalRemoved)
 
                         else -> Observable.empty()
                     }
@@ -170,7 +193,7 @@ class SubmitProposal(
         object ProposalSent : Result() //change to already applied
 
         //object ProposalCreated : Result()
-        object ProposalUpdated : Result() //time
+        data class ProposalUpdated(val itemOpportunity: ItemOpportunity) : Result() //time
 
         object JobIsPrivate : Result()
         object JobNoLongerAvailable : Result()
