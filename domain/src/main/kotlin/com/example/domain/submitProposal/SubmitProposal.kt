@@ -68,9 +68,9 @@ class SubmitProposal(
                 .share()
 
         //properly unsubscribe?
-        /*c.compose(fromResultToCommands)
+        c.compose(fromResultToCommands)
                 //.takeWhile
-                .subscribe(loopbackCommands)*/
+                .subscribe(loopbackCommands)
 
         return c
         // .cast(Result::class.java)
@@ -120,7 +120,7 @@ class SubmitProposal(
                             Observable.just(SubmitProposal.Command.RemoveProposal)
                         }
 
-                        else -> throw IllegalStateException("sdaf")
+                        else -> Observable.empty<UiCommand>()
                     /*is SuggestedRateResult.SuggestAccepted -> {
                         ProposeTermsCommands.UpdateBid(it.suggestedRate)
                     }

@@ -41,7 +41,6 @@ val submitAllowedProcessor =
                         }
                     }
                     .map {
-                        println("----------> $it")
                         with (it) {
                             if ((!isCoverLetterRequired || coverLetterValid)
                                     && (!areQuestionsRequired || questionsValid)
@@ -53,5 +52,7 @@ val submitAllowedProcessor =
                             }
                         }
                     }
+                    .skip(1)
                     .distinctUntilChanged()
+                    .doOnNext { println("----------> $it") }
         }
