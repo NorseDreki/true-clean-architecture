@@ -68,8 +68,8 @@ class SubmitProposal(
                 }
                 .publish { shared ->
                     Observable.merge(
-                            shared.compose(submitProposalResultsProcessor),
-                            shared.doOnNext { println(">>>> SHARED AFTER SAP: $it") }
+                            shared.doOnNext { println(">>>> SHARED AFTER SAP: $it") },
+                            shared.compose(submitProposalResultsProcessor)
                     )
                 }.doOnNext { println(">>>> BEFORE SHARE: $it") }
                 //.startWith(Result.Dummy)

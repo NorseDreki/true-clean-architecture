@@ -81,8 +81,8 @@ class SubmitProposalSpec : Spek({
                     assertResultAt(1, SubmitProposal.Result.ProposalLoaded(
                             ItemOpportunity(everythingFilled, proposal))
                     )
-                    assertResultAt(2, SubmitProposal.Result.ProposalUpdated)
-                    assertResultAt(3, CoverLetter.Result.Empty)
+                    assertResultAt(2, CoverLetter.Result.Empty)
+                    assertResultAt(3, SubmitProposal.Result.ProposalUpdated)
                     assertResultAt(4, ClarifyingQuestions.Result.QuestionsLoaded(questions))
                     assertResultAt(5, ClarifyingQuestions.Result.AllQuestionsAnswered(false))
 
@@ -106,13 +106,13 @@ class SubmitProposalSpec : Spek({
                 }
 
                 it("should have all steps filled") {
-                    assertResultAt(6, SubmitProposal.Result.ProposalUpdated)
-                    assertResultAt(7, CoverLetter.Result.Valid("coverLetter"))
-                    assertResultAt(8, SubmitProposal.Result.ProposalUpdated)
-                    assertResultAt(9, ClarifyingQuestions.Result.ValidAnswer("1", "answer1"))
+                    assertResultAt(6, CoverLetter.Result.Valid("coverLetter"))
+                    assertResultAt(7, SubmitProposal.Result.ProposalUpdated)
+                    assertResultAt(8, ClarifyingQuestions.Result.ValidAnswer("1", "answer1"))
+                    assertResultAt(9, SubmitProposal.Result.ProposalUpdated)
                     assertResultAt(10, ClarifyingQuestions.Result.AllQuestionsAnswered(false))
-                    assertResultAt(11, SubmitProposal.Result.ProposalUpdated)
-                    assertResultAt(12, ClarifyingQuestions.Result.ValidAnswer("2", "answer2"))
+                    assertResultAt(11, ClarifyingQuestions.Result.ValidAnswer("2", "answer2"))
+                    assertResultAt(12, SubmitProposal.Result.ProposalUpdated)
                     assertResultAt(13, ClarifyingQuestions.Result.AllQuestionsAnswered(true))
                     assertResultAt(14, SubmitAllowedResult.Enabled)
                 }
@@ -122,8 +122,8 @@ class SubmitProposalSpec : Spek({
 
                 it("should send submit proposal") {
                     assertResultAt(15, DoSubmitProposalResult.InProgress)
-                    assertResultAt(16, SubmitProposal.Result.ProposalSent)
-                    assertResultAt(17, DoSubmitProposalResult.Success("response"))
+                    assertResultAt(16, DoSubmitProposalResult.Success("response"))
+                    assertResultAt(17, SubmitProposal.Result.ProposalSent)
                 }
 
             }
