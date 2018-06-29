@@ -55,24 +55,28 @@ class SubmitProposal(
                 .publish { shared ->
                     Observable.merge(
                             shared,
-                            shared.compose(submitAllowedProcessor),
+                            shared.compose(submitAllowedProcessor).doOnNext { println(">>>> SAP: $it") },
                             shared.compose(storageSaver)
                     )
                 }
                 .publish { shared ->
                     Observable.merge(
-                            shared,
-                            shared.compose(submitProposalResultsProcessor)
+                            shared.compose(submitProposalResultsProcessor),
+                            shared.doOnNext { println(">>>> SHARED AFTER SAP: $it") }
                     )
-                }
-                .share()
+                }.doOnNext { println(">>>> BEFORE SHARE: $it") }
+                //.startWith(Result.Dummy)
+                //.share()
+                //.publish().autoConnect(2)
+                .replay().refCount().doOnNext { println(">>>> AFTER SHARE: $it") }
+
 
         //properly unsubscribe?
         c.compose(fromResultToCommands)
                 //.takeWhile
                 .subscribe(loopbackCommands)
 
-        return c
+        return c.doOnNext { println(">>>> C: $it") }
         // .cast(Result::class.java)
     }
 
@@ -120,7 +124,7 @@ class SubmitProposal(
                             Observable.just(SubmitProposal.Command.RemoveProposal)
                         }
 
-                        else -> Observable.empty<UiCommand>()
+                        else -> {Observable.empty<UiCommand>()}
                     /*is SuggestedRateResult.SuggestAccepted -> {
                         ProposeTermsCommands.UpdateBid(it.suggestedRate)
                     }
@@ -197,6 +201,8 @@ class SubmitProposal(
 
         object JobIsPrivate : Result()
         object JobNoLongerAvailable : Result()
+
+        object Dummy: Result()
     }
 
     data class ViewState(

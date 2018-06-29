@@ -30,10 +30,10 @@ class SubmitProposalSpec : Spek({
             describe("client gives control to submit proposal by giving it data") {
 
                 it("should initialize components with data?") {
-                    assertResultAt(0, SubmitProposal.Result.ProposalUpdated(
+                    assertResultAt(0, SubmitAllowedResult.Disabled)
+                    assertResultAt(1, SubmitProposal.Result.ProposalUpdated(
                             ItemOpportunity(proposeTermsOnly, Proposal(0, null, "")))
                     )
-                    assertResultAt(1, SubmitAllowedResult.Disabled)
                     assertResultAt(2, CoverLetter.Result.NoCoverLetterRequired)
                     assertResultAt(3, ClarifyingQuestions.Result.NoQuestionsRequired)
                     assertResultAt(4, SubmitAllowedResult.Enabled)

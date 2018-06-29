@@ -21,7 +21,9 @@ val submitAllowedProcessor =
         ObservableTransformer<UiResult, SubmitAllowedResult> {
             it
                     .scan(SubmitAllowedData()) { state, result ->
+                        println("----------> UIRES $result")
                         when (result) {
+
                             CoverLetter.Result.NoCoverLetterRequired ->
                                 state.copy(isCoverLetterRequired = false)
 
@@ -40,6 +42,7 @@ val submitAllowedProcessor =
                             else -> state
                         }
                     }
+                    //.distinctUntilChanged()
                     .map {
                         with (it) {
                             if ((!isCoverLetterRequired || coverLetterValid)
@@ -52,7 +55,9 @@ val submitAllowedProcessor =
                             }
                         }
                     }
-                    .skip(1)
+                    //.skip(1)
                     .distinctUntilChanged()
+                    //.startWith(SubmitAllowedResult.Disabled)
+
                     .doOnNext { println("----------> $it") }
         }
