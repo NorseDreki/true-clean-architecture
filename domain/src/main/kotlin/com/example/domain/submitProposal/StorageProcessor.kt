@@ -18,10 +18,10 @@ val storageLoader =
                                 createItemOpportunity((it).itemDetails)
 
                                 //or created
-                                Observable.just(SubmitProposal.Result.ProposalUpdated(itemOpportunity))
+                                Observable.just(SubmitProposal.Result.ProposalLoaded(itemOpportunity))
                     }
                     is SubmitProposal.Command.RemoveProposal -> {
-                        repo!!.removeProposal()
+//                        repo!!.removeProposal()
 
                         Observable.just(SubmitProposal.Result.ProposalRemoved)
                     }
@@ -37,8 +37,7 @@ val storageSaver =
                 when(it) {
                     is ClarifyingQuestions.Result.ValidAnswer -> {
                         try {
-                            repo!!.updateCoverLetter("234", "324")
-                            //Observable.just(SubmitProposalStorageResult.Success)
+//                            repo!!.updateCoverLetter("234", "324")
                             Observable.empty<UiResult>()
                         } catch (e: Exception) {
                             Observable.error<UiResult>(e)

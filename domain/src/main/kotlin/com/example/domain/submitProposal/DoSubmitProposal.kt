@@ -24,12 +24,19 @@ interface Api {
     fun submitProposal(id: String, some: String): Observable<String>
 }
 
+class SomeApi : Api {
+    override fun submitProposal(id: String, some: String): Observable<String> {
+        return Observable.just("response")
+    }
+
+}
+
 val doSubmitProposalProcessor =
         ObservableTransformer<DoSubmitProposalCommand, UiResult> {
             it.flatMap {
                 when (it) {
                     is DoSubmitProposalCommand.DoSubmit -> {
-                        val api: Api? = null
+                        val api: Api? = SomeApi()
 
                         api!!.submitProposal("123", "dsf")
                                 .map(DoSubmitProposalResult::Success)
