@@ -9,11 +9,20 @@ import com.example.domain.models.Question
 import com.example.domain.submitProposal.ClarifyingQuestions.*
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.subjects.PublishSubject
 
 
 class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
+
+    val cmd = PublishSubject.create<Command>()
+
+    fun fromEvent(command: Command) {
+        cmd.onNext(command)
+    }
+
     override fun process(commands: Observable<Command>): Observable<Result> {
         return commands
+                .mergeWith(cmd)
                 .doOnNext { println("CMD " + it) }
                 .compose(paProcessor)
                 .doOnNext { println("RES " + it) }

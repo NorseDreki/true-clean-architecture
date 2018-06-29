@@ -5,10 +5,20 @@ import com.example.domain.models.ItemOpportunity
 import com.example.domain.submitProposal.CoverLetter.*
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.subjects.PublishSubject
 
 class CoverLetter : UiComponent<Command, Result, ViewState> {
+
+    val cmd = PublishSubject.create<Command>()
+
+    fun fromEvent(command: Command) {
+        cmd.onNext(command)
+    }
+
+
     override fun process(commands: Observable<Command>): Observable<Result> {
         return commands
+                .mergeWith(cmd)
                 .doOnNext { println("CMD " + it) }
                 .compose(coverLetterProcessor)
                 .doOnNext { println("RES " + it) }

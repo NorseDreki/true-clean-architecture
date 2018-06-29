@@ -20,6 +20,12 @@ class SubmitProposal(
         val clarifyingQuestions: ClarifyingQuestions
 ) : UiComponent<Command, UiResult, ViewState> {
 
+    val cmd = PublishSubject.create<DoSubmitProposalCommand>()
+
+    fun fromEvent(command: DoSubmitProposalCommand) {
+        cmd.onNext(command)
+    }
+
 
     val loopbackCommands = PublishSubject.create<UiCommand>()
 
@@ -30,6 +36,7 @@ class SubmitProposal(
                 //.compose(storageLoader)
                 //.takeUntil
                 .cast(UiCommand::class.java)
+                .mergeWith(cmd)
                 .mergeWith(loopbackCommands)
                 .doOnNext { println("RES " + it) }
                 .publish<UiResult> { shared ->
@@ -101,10 +108,10 @@ class SubmitProposal(
                             Observable.just(ProposalSummary.Command.ToggleSubmitEnabled(true))
                         }
 
-                        is Result.ProposalUpdated -> {
+                        is Result.ProposalLoaded -> {
                             //hide panel
                             Observable.fromArray(
-                                    CoverLetter.Command.DATA(it.itemOpportunity),
+                                    CoverLetter.Command.DATA(it.itemOpportunity!!),
                                     ClarifyingQuestions.Command.INIT(it.itemOpportunity)
                             )
                                             //AnchoredPanel.Command.Expand
@@ -176,10 +183,10 @@ class SubmitProposal(
                         is ClarifyingQuestions.Result.ValidAnswer,
                         is ClarifyingQuestions.Result.EmptyAnswer,
                         is ProposeTerms.Result.BidValid,
-                        ProposeTerms.Result.BidEmpty,
-                        /*is ProposeTerms.Result.EngagementSelected ->
+                        ProposeTerms.Result.BidEmpty ->//,
+                        //is ProposeTerms.Result.EngagementSelected ->
 
-                            Observable.just(Result.ProposalUpdated)*/
+                            Observable.just(Result.ProposalUpdated)
 
                         is DoSubmitProposalResult.Success ->
                                 Observable.just(Result.ProposalSent)
@@ -196,8 +203,8 @@ class SubmitProposal(
         object ProposalRemoved : Result()
         object ProposalSent : Result() //change to already applied
 
-        //object ProposalCreated : Result()
-        data class ProposalUpdated(val itemOpportunity: ItemOpportunity) : Result() //time
+        object ProposalUpdated : Result()
+        data class ProposalLoaded(val itemOpportunity: ItemOpportunity) : Result() //time
 
         object JobIsPrivate : Result()
         object JobNoLongerAvailable : Result()

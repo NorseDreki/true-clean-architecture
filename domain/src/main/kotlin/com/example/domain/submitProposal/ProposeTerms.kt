@@ -5,8 +5,16 @@ import com.example.domain.models.ItemOpportunity
 import com.example.domain.submitProposal.ProposeTerms.*
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.subjects.PublishSubject
 
 class ProposeTerms : UiComponent<Command, Result, ViewState> {
+
+    val cmd = PublishSubject.create<Command>()
+
+    fun fromEvent(command: Command) {
+        cmd.onNext(command)
+    }
+
     override fun process(commands: Observable<Command>): Observable<Result> {
         return commands
                 .doOnNext { println("CMD " + it) }
