@@ -24,6 +24,15 @@ val submitAllowedProcessor =
                         println("----------> UIRES $result")
                         when (result) {
 
+                            is CoverLetter.Result.Valid ->
+                                state.copy(coverLetterValid = true)
+
+                            is CoverLetter.Result.Empty ->
+                                state.copy(coverLetterValid = false)
+
+                            is CoverLetter.Result.LengthExceeded ->
+                                state.copy(coverLetterValid = false)
+
                             CoverLetter.Result.NoCoverLetterRequired ->
                                 state.copy(isCoverLetterRequired = false)
 
