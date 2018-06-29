@@ -26,9 +26,10 @@ fun <C: UiCommand, R: UiResult, T: UiActor<C, R>> Component<C, R, T>.initialized
         InitializedComponent(cmd, this).apply(body)
 
 
-data class Deps<C, R>(
+data class Deps<C : UiCommand, R : UiResult>(
         val cmdstr: ReplaySubject<C>,
-        val sub: TestObserver<R>
+        val sub: TestObserver<R>,
+        val component: UiActor<C, R>
 )
 
 @TestDsl
@@ -37,16 +38,17 @@ open class Component<C: UiCommand, R: UiResult, out T : UiActor<C, R>>(
         val componentCreator: () -> T
 ) {
 
-    protected open val deps by specBody.memoized {
+    /*protected*/ open val deps by specBody.memoized {
 
         println("deps")
         val cmdstr =
             ReplaySubject.create<C>()
 
+        val component = componentCreator()
         val sub =
-            componentCreator().process(cmdstr).test()
+            component.process(cmdstr).test()
 
-        Deps(cmdstr, sub)
+        Deps(cmdstr, sub, component)
     }
 
     infix fun command(command: C) {
