@@ -1,12 +1,7 @@
 package com.example.domain
 
-import com.example.domain.models.ItemDetails
-import com.example.domain.models.ItemOpportunity
-import com.example.domain.models.Proposal
-import com.example.domain.submitProposal.ClarifyingQuestions
-import com.example.domain.submitProposal.CoverLetter
-import com.example.domain.submitProposal.SubmitAllowedResult
-import com.example.domain.submitProposal.SubmitProposal
+import com.example.domain.models.*
+import com.example.domain.submitProposal.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -23,7 +18,24 @@ class SubmitProposalSpec : Spek({
         SubmitProposal(cl, cq)
     }
 
+    val questions = listOf(
+            Question("1", "q1"),
+            Question("2", "q1")
+    )
+
+    val answers = listOf(
+            AnsweredQuestion("1", "answer1"),
+            AnsweredQuestion("2", "answer2")
+    )
+
+
+    val everythingFilled = ItemDetails("1234", true, questions)
+
+    val proposal = Proposal(0, null, "")
+
+
     component(sp) {
+
 
         initialized(SubmitProposal.Command.DATA(proposeTermsOnly)) {
 
@@ -31,8 +43,8 @@ class SubmitProposalSpec : Spek({
 
                 it("should initialize components with data?") {
                     assertResultAt(0, SubmitAllowedResult.Disabled)
-                    assertResultAt(1, SubmitProposal.Result.ProposalUpdated(
-                            ItemOpportunity(proposeTermsOnly, Proposal(0, null, "")))
+                    assertResultAt(1, SubmitProposal.Result.ProposalLoaded(
+                            ItemOpportunity(proposeTermsOnly, proposal))
                     )
                     assertResultAt(2, CoverLetter.Result.NoCoverLetterRequired)
                     assertResultAt(3, ClarifyingQuestions.Result.NoQuestionsRequired)
@@ -58,6 +70,63 @@ class SubmitProposalSpec : Spek({
                 }
             }*/
 
+        }
+
+        initialized(SubmitProposal.Command.DATA(everythingFilled)) {
+
+            describe("client gives control to submit proposal with full data") {
+
+                it("should initialize components with data?") {
+                    assertResultAt(0, SubmitAllowedResult.Disabled)
+                    assertResultAt(1, SubmitProposal.Result.ProposalLoaded(
+                            ItemOpportunity(everythingFilled, proposal))
+                    )
+                    assertResultAt(2, SubmitProposal.Result.ProposalUpdated)
+                    assertResultAt(3, CoverLetter.Result.Empty)
+                    assertResultAt(4, ClarifyingQuestions.Result.QuestionsLoaded(questions))
+                    assertResultAt(5, ClarifyingQuestions.Result.AllQuestionsAnswered(false))
+
+                }
+
+            }
+
+            describe("client fills all steps of submit proposal") {
+                perform {
+                    (deps.component as SubmitProposal).coverLetter
+                            .fromEvent(CoverLetter.Command.UpdateCoverLetter("coverLetter"))
+
+                    (deps.component as SubmitProposal).clarifyingQuestions
+                            .fromEvent(ClarifyingQuestions.Command.UpdateAnswer("1", "answer1"))
+
+                    (deps.component as SubmitProposal).clarifyingQuestions
+                            .fromEvent(ClarifyingQuestions.Command.UpdateAnswer("2", "answer2"))
+
+                    (deps.component as SubmitProposal)
+                            .fromEvent(DoSubmitProposalCommand.DoSubmit(proposal))
+                }
+
+                it("should have all steps filled") {
+                    assertResultAt(6, SubmitProposal.Result.ProposalUpdated)
+                    assertResultAt(7, CoverLetter.Result.Valid("coverLetter"))
+                    assertResultAt(8, SubmitProposal.Result.ProposalUpdated)
+                    assertResultAt(9, ClarifyingQuestions.Result.ValidAnswer("1", "answer1"))
+                    assertResultAt(10, ClarifyingQuestions.Result.AllQuestionsAnswered(false))
+                    assertResultAt(11, SubmitProposal.Result.ProposalUpdated)
+                    assertResultAt(12, ClarifyingQuestions.Result.ValidAnswer("2", "answer2"))
+                    assertResultAt(13, ClarifyingQuestions.Result.AllQuestionsAnswered(true))
+                    assertResultAt(14, SubmitAllowedResult.Enabled)
+                }
+
+                //do not allow processing "DoSubmitProposal" when submit not allowed
+                //make an explicit state machine
+
+                it("should send submit proposal") {
+                    assertResultAt(15, DoSubmitProposalResult.InProgress)
+                    assertResultAt(16, SubmitProposal.Result.ProposalSent)
+                    assertResultAt(17, DoSubmitProposalResult.Success("response"))
+                }
+
+            }
         }
     }
 })
