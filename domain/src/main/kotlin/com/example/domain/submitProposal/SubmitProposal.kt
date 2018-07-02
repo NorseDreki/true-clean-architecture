@@ -14,7 +14,6 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.PublishSubject
 
 
-
 class SubmitProposal(
         val coverLetter: CoverLetter,
         val clarifyingQuestions: ClarifyingQuestions
@@ -26,6 +25,7 @@ class SubmitProposal(
         cmd.onNext(command)
     }
 
+    lateinit var results: Observable<UiResult>
 
     val loopbackCommands = PublishSubject.create<UiCommand>()
 
@@ -81,12 +81,23 @@ class SubmitProposal(
                 //.takeWhile
                 .subscribe(loopbackCommands)
 
+        results = c
+
         return c.doOnNext { println(">>>> C: $it") }
         // .cast(Result::class.java)
     }
 
     override fun render(): Observable<ViewState> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Observable.combineLatest(
+                arrayOf(
+                        coverLetter.render(),
+                        clarifyingQuestions.render()
+                )
+        ) {
+            val cl = it[0] as CoverLetter.ViewState
+            val cq = it[1] as ClarifyingQuestions.ViewState
+            ViewState(cl, cq)
+        }
     }
 
     sealed class Command : UiCommand {
@@ -112,7 +123,7 @@ class SubmitProposal(
                                     CoverLetter.Command.DATA(it.itemOpportunity!!),
                                     ClarifyingQuestions.Command.INIT(it.itemOpportunity)
                             )
-                                            //AnchoredPanel.Command.Expand
+                            //AnchoredPanel.Command.Expand
 
                         }
                         is Result.ProposalRemoved -> {
@@ -129,7 +140,9 @@ class SubmitProposal(
                             Observable.just(SubmitProposal.Command.RemoveProposal)
                         }
 
-                        else -> {Observable.empty<UiCommand>()}
+                        else -> {
+                            Observable.empty<UiCommand>()
+                        }
                     /*is SuggestedRateResult.SuggestAccepted -> {
                         ProposeTermsCommands.UpdateBid(it.suggestedRate)
                     }
@@ -182,15 +195,15 @@ class SubmitProposal(
                         is ClarifyingQuestions.Result.EmptyAnswer,
                         is ProposeTerms.Result.BidValid,
                         ProposeTerms.Result.BidEmpty ->//,
-                        //is ProposeTerms.Result.EngagementSelected ->
+                            //is ProposeTerms.Result.EngagementSelected ->
 
                             Observable.just(Result.ProposalUpdated)
 
                         is DoSubmitProposalResult.Success ->
-                                Observable.just(Result.ProposalSent)
+                            Observable.just(Result.ProposalSent)
 
                         is DoSubmitProposalResult.Error ->
-                                Observable.just(Result.JobNoLongerAvailable)
+                            Observable.just(Result.JobNoLongerAvailable)
 
                         else -> Observable.empty()
                     }
@@ -207,7 +220,7 @@ class SubmitProposal(
         object JobIsPrivate : Result()
         object JobNoLongerAvailable : Result()
 
-        object Dummy: Result()
+        object Dummy : Result()
     }
 
     data class ViewState(

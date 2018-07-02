@@ -126,6 +126,7 @@ class ClarifyingQuestionsSpec : Spek({
             }
         }
 
+        //merge initialized with first describe
         initialized(INIT(withAnsweredQuestions)) {
 
             describe("client initializes with data with all answered questions") {

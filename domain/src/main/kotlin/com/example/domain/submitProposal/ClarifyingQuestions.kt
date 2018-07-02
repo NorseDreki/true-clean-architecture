@@ -20,6 +20,10 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
         cmd.onNext(command)
     }
 
+
+    lateinit var results: Observable<Result>
+
+
     override fun process(commands: Observable<Command>): Observable<Result> {
         return commands
                 .mergeWith(cmd)
@@ -37,7 +41,8 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
     }
 
     override fun render(): Observable<ViewState> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO()
+        //return results//.compose<ViewState> { pineappleQuestionsReducer() }
     }
 
     data class AllQuestionsAnswered(
@@ -134,6 +139,21 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
         //only for internal use? from event
         data class UpdateAnswer(val id: String, val answer: String) : Command()
     }
+
+    val pineappleQuestionsReducer =
+            { state: ViewState, result: UiResult ->
+                when (result) {
+                    is Result.ValidAnswer -> {
+                        val old =
+                                //state.items.find { it.question == result.question }
+
+                        //old?.apply { answer = result.answer }
+
+                        state
+                    }
+                    else -> throw IllegalStateException("sdaf")
+                }
+            }
 
     data class ViewState(
             val items: List<Question>
