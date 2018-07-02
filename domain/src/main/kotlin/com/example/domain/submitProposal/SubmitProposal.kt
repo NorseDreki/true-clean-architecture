@@ -32,8 +32,6 @@ class SubmitProposal(
     override fun process(commands: Observable<Command>): Observable<UiResult> {
         val c = commands
                 .doOnNext { println("CMD " + it) }
-                //.compose(submitProposalCommandDispatcher)
-                //.compose(storageLoader)
                 //.takeUntil
                 .cast(UiCommand::class.java)
                 .mergeWith(cmd)
@@ -144,6 +142,8 @@ class SubmitProposal(
                         //hide panel
                         DoSubmitProposalCommand.Remove
                     }
+
+
                     is AnchorablePanelResult.PageChanged -> {
                         //show dialog first
                         DoSubmitProposalCommand.Expand
@@ -157,8 +157,6 @@ class SubmitProposal(
                     /*ProposalSummaryEvents.OnSubmitProposal -> {
                         SubmitProposalCommand.DoSubmit(proposal)
                     }
-
-
 
                     ProposalSummaryEvents.ToCoverLetter -> {
                         AnchorablePanelCommands.NavigateTo.SpecificPage(1)
