@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changeKey(state: UiState) {
-        Flow.get(this).set(state)
-
+        //Flow.get(this).set(state)
+        println("11111111111 $state")
     }
 
     override fun attachBaseContext(baseContext: Context) {

@@ -41,7 +41,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
     }
 
     override fun render(): Observable<ViewState> {
-        TODO()
+        return Observable.just(ViewState(arrayListOf()))
         //return results//.compose<ViewState> { pineappleQuestionsReducer() }
     }
 

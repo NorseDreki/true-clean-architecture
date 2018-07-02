@@ -90,8 +90,8 @@ class SubmitProposal(
     override fun render(): Observable<ViewState> {
         return Observable.combineLatest(
                 arrayOf(
-                        coverLetter.render(),
-                        clarifyingQuestions.render()
+                        coverLetter.render().doOnNext { println("render CL: $it") },
+                        clarifyingQuestions.render().doOnNext { println("render CQ: $it") }
                 )
         ) {
             val cl = it[0] as CoverLetter.ViewState
