@@ -50,9 +50,40 @@ class ClarifyingQuestionsSpec : Spek({
                 it("should emit status as 'not answered'") {
                     assertResultAt(1, AllQuestionsAnswered(false))
                 }
+
+                describe("client updates question with a valid answer") {
+                    perform {
+                        command(UpdateAnswer("1", "answer"))
+                    }
+
+                    it("should emit result with a valid answer") {
+                        assertResultAt(2, ValidAnswer("1", "answer"))
+                    }
+                }
+
+                describe("client updates a question with answer leading and trailing spaces") {
+                    perform {
+                        command(UpdateAnswer("1", " answer "))
+                    }
+
+                    it("should emit result with a trimmed answer") {
+                        assertResultAt(2, ValidAnswer("1", "answer"))
+                    }
+                }
+
+                describe("client updates question with answer containing only spaces") {
+                    perform {
+                        command(UpdateAnswer("1", "  "))
+                    }
+
+                    it("should emit result as invalid answer") {
+                        assertResultAt(2, EmptyAnswer("1"))
+                    }
+                }
             }
 
-            describe("client updates question with a valid answer") {
+            //vs
+            /*describe("client updates question with a valid answer") {
                 perform {
                     command(UpdateAnswer("1", "answer"))
                 }
@@ -80,7 +111,8 @@ class ClarifyingQuestionsSpec : Spek({
                 it("should emit result as invalid answer") {
                     assertResultAt(2, EmptyAnswer("1"))
                 }
-            }
+            }*/
+
 
         }
 
@@ -97,6 +129,9 @@ class ClarifyingQuestionsSpec : Spek({
         initialized(INIT(withAnsweredQuestions)) {
 
             describe("client initializes with data with all answered questions") {
+                it("should emit those questions") {
+                    assertResultAt(0, QuestionsLoaded(questions))
+                }
 
                 it("should emit status as 'not answered'") {
                     assertResultAt(1, AllQuestionsAnswered(false))
@@ -112,9 +147,28 @@ class ClarifyingQuestionsSpec : Spek({
                 xit("should emit status as all questions answered") {
                     assertResultAt(5, AllQuestionsAnswered(true))
                 }
+
+                describe("client deletes changes one answer to invalid") {
+                    once {
+                        println("once")
+                        command(UpdateAnswer("1", ""))
+                    }
+                    //perform {
+//                        command(UpdateAnswer("1", ""))
+                    //}
+
+                    it("should emit answer as invalid") {
+                        assertResultAt(6, EmptyAnswer("1"))
+                    }
+
+                    it("should emit status as 'not answered'") {
+                        assertResultAt(7, AllQuestionsAnswered(false))
+                    }
+                }
             }
 
-            describe("client deletes changes one answer to invalid") {
+            //VS
+            /*describe("client deletes changes one answer to invalid") {
                 perform {
                     command(UpdateAnswer("1", ""))
                 }
@@ -126,7 +180,7 @@ class ClarifyingQuestionsSpec : Spek({
                 it("should emit status as 'not answered'") {
                     assertResultAt(7, AllQuestionsAnswered(false))
                 }
-            }
+            }*/
         }
     }
 })

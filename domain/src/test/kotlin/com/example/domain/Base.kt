@@ -4,6 +4,7 @@ import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.ReplaySubject
 import org.jetbrains.spek.api.dsl.SpecBody
 import org.jetbrains.spek.api.dsl.context
+import org.jetbrains.spek.api.lifecycle.CachingMode
 
 
 @TestDsl
@@ -38,7 +39,7 @@ open class Component<C: UiCommand, R: UiResult, out T : UiActor<C, R>>(
         val componentCreator: () -> T
 ) {
 
-    /*protected*/ open val deps by specBody.memoized {
+    /*protected*/ open val deps by specBody.memoized(CachingMode.GROUP) {
 
         println("deps")
         val cmdstr =
@@ -52,7 +53,10 @@ open class Component<C: UiCommand, R: UiResult, out T : UiActor<C, R>>(
     }
 
     infix fun command(command: C) {
-        deps.cmdstr.onNext(command)
+        println("command")
+        val cmdstr = deps.cmdstr
+        println("after init")
+        cmdstr.onNext(command)
     }
 
     fun assertResultAt(index: Int, result: R): TestObserver<out R> {
@@ -70,7 +74,7 @@ class InitializedComponent<C: UiCommand, R: UiResult, out T: UiActor<C, R>>(
         component: Component<C, R, T>
 ) : Component<C, R, T>(component.specBody, component.componentCreator) {
 
-    override val deps by specBody.memoized {
+    override val deps by specBody.memoized(CachingMode.GROUP) {
         val d = super.deps
         d.cmdstr.onNext(cmd)
         d
@@ -84,3 +88,4 @@ class InitializedComponent<C: UiCommand, R: UiResult, out T: UiActor<C, R>>(
 }
 
 fun SpecBody.perform(callback: () -> Unit) = this.beforeEachTest(callback)
+fun SpecBody.once(callback: () -> Unit) = this.beforeGroup(callback)
