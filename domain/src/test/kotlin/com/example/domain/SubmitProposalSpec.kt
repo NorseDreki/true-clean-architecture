@@ -124,6 +124,7 @@ class SubmitProposalSpec : Spek({
                     assertResultAt(15, DoSubmitProposalResult.InProgress)
                     assertResultAt(16, DoSubmitProposalResult.Success("response"))
                     assertResultAt(17, SubmitProposal.Result.ProposalSent)
+                    assertResultAt(18, SubmitProposal.Result.ProposalRemoved)
                 }
 
             }
