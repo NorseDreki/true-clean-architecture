@@ -19,11 +19,14 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sp: SubmitProposal
 
+    private lateinit var cl: CoverLetter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.basic_activity_frame)
 
-        val cl = CoverLetter()
+        cl = CoverLetter()
+        cle = CoverLetterEvents(cl)
         val cq = ClarifyingQuestions()
         sp = SubmitProposal(cl, cq)
 
@@ -43,8 +46,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    data class Screen(val state: UiState, val events: CoverLetterEvents)
+
+    private lateinit var cle: CoverLetterEvents
+
     fun changeKey(state: UiState) {
-        Flow.get(this).set(state)
+        //cle = CoverLetterEvents(cl)
+        val screen = Screen(state, cle)
+
+        Flow.get(this).set(screen)
         //println("11111111111 $state")
     }
 

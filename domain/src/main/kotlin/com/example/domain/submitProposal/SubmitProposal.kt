@@ -33,12 +33,12 @@ class SubmitProposal(
 
     override fun process(commands: Observable<Command>): Observable<UiResult> {
         val c = commands
-                .doOnNext { println("CMD " + it) }
+                .doOnNext { println("CMDSP " + it) }
                 //.takeUntil
                 .cast(UiCommand::class.java)
-                //.mergeWith(cmd)
-                .mergeWith(loopbackCommands)
-                .doOnNext { println("RESWLOOP " + it) }
+                .mergeWith(cmd)
+                .mergeWith(loopbackCommands.doOnNext { println("GOT LB $it") })
+                .doOnNext { println("RESSP " + it) }
                 .publish<UiResult> { shared ->
                     Observable.merge<UiResult>(
 
@@ -62,26 +62,31 @@ class SubmitProposal(
                 .publish { shared ->
                     Observable.merge(
                             shared,
-                            shared.compose(submitAllowedProcessor).doOnNext { println(">>>> SAP: $it") },
+                            shared.compose(submitAllowedProcessor),//.doOnNext { println(">>>> SAP: $it") },
                             shared.compose(storageSaver)
                     )
                 }
                 .publish { shared ->
                     Observable.merge(
-                            shared.doOnNext { println(">>>> SHARED AFTER SAP: $it") },
+                            shared,//.doOnNext { println(">>>> SHARED AFTER SAP: $it") },
                             shared.compose(submitProposalResultsProcessor)
                     )
-                }.doOnNext { println(">>>> BEFORE SHARE: $it") }
+                }//.doOnNext { println(">>>> BEFORE SHARE: $it") }
                 //.startWith(Result.Dummy)
                 //.share()
-                //.publish().autoConnect(2)
-                .replay().refCount().doOnNext { println(">>>> AFTER SHARE: $it") }
+                //.publish().autoConnect(2).doOnNext { println(">>>> AFTER SHARE: $it") }
+                .publish().refCount().doOnNext { println(">>>> AFTER SHARE: $it") }
 
 
         //properly unsubscribe?
         c.compose(fromResultToCommands)
                 //.takeWhile
-                .subscribe(loopbackCommands)
+                .doOnNext { println("GOT COMMAND: $it") }
+                //.delay(10, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    println("GOT COMMAND SUB $it")
+                    loopbackCommands.onNext(it)
+                }
 
         results = c
 
