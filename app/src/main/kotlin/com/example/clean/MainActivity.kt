@@ -11,6 +11,7 @@ import com.example.domain.submitProposal.SubmitProposal
 import com.google.gson.GsonBuilder
 import com.upwork.android.core.BasicKeyParceler
 import flow.Flow
+import io.reactivex.Observable
 import io.reactivex.subjects.ReplaySubject
 
 
@@ -28,11 +29,16 @@ class MainActivity : AppCompatActivity() {
 
         val itemDetails = ItemDetails("1234", true, null)
 
+        val cmd2 =
+                Observable.just<SubmitProposal.Command>(SubmitProposal.Command.DATA(itemDetails))
+
         val cmd = ReplaySubject.create<SubmitProposal.Command>()
 
 
-        sp.process(cmd).subscribe()
         cmd.onNext(SubmitProposal.Command.DATA(itemDetails))
+        sp.process(cmd2).materialize().subscribe {
+            println("MAT: $it")
+        }
 
 
     }

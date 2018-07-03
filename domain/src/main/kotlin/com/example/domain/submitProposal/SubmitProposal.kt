@@ -12,6 +12,7 @@ import com.example.domain.submitProposal.SubmitProposal.ViewState
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
 
 
 class SubmitProposal(
@@ -27,16 +28,17 @@ class SubmitProposal(
 
     lateinit var results: Observable<UiResult>
 
-    val loopbackCommands = PublishSubject.create<UiCommand>()
+    val loopbackCommands
+            = ReplaySubject.create<UiCommand>()
 
     override fun process(commands: Observable<Command>): Observable<UiResult> {
         val c = commands
                 .doOnNext { println("CMD " + it) }
                 //.takeUntil
                 .cast(UiCommand::class.java)
-                .mergeWith(cmd)
+                //.mergeWith(cmd)
                 .mergeWith(loopbackCommands)
-                .doOnNext { println("RES " + it) }
+                .doOnNext { println("RESWLOOP " + it) }
                 .publish<UiResult> { shared ->
                     Observable.merge<UiResult>(
 

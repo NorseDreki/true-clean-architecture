@@ -20,7 +20,7 @@ class CoverLetter : UiComponent<Command, Result, ViewState> {
 
     override fun process(commands: Observable<Command>): Observable<Result> {
         val cast = commands
-                .mergeWith(cmd)
+                //.mergeWith(cmd)
                 .doOnNext { println("CMDCL " + it) }
                 .compose(coverLetterProcessor)
                 .doOnNext { println("RESCL " + it) }

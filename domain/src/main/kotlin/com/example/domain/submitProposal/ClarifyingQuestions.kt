@@ -26,7 +26,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
 
     override fun process(commands: Observable<Command>): Observable<Result> {
         return commands
-                .mergeWith(cmd)
+                //.mergeWith(cmd)
                 .doOnNext { println("CMDCQ " + it) }
                 .compose(paProcessor)
                 .doOnNext { println("RESCQ " + it) }
