@@ -16,13 +16,15 @@ import io.reactivex.Observable
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var sp: SubmitProposal
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.basic_activity_frame)
 
         val cl = CoverLetter()
         val cq = ClarifyingQuestions()
-        val sp = SubmitProposal(cl, cq)
+        sp = SubmitProposal(cl, cq)
 
         val itemDetails = ItemDetails("1234", false, null)
         val cmd =
@@ -31,12 +33,12 @@ class MainActivity : AppCompatActivity() {
 
         sp.process(cmd).subscribe()
 
-        sp.render().subscribe(this::changeKey)
+
     }
 
     fun changeKey(state: UiState) {
-        //Flow.get(this).set(state)
-        println("11111111111 $state")
+        Flow.get(this).set(state)
+        //println("11111111111 $state")
     }
 
     override fun attachBaseContext(baseContext: Context) {
@@ -53,13 +55,17 @@ class MainActivity : AppCompatActivity() {
                 .defaultKey(WelcomeScreen()) //
                 .keyParceler(p) //
                 .install()
+
         super.attachBaseContext(baseContext)
     }
 
     override fun onBackPressed() {
-        if (!Flow.get(this).goBack()) {
+        sp.render().subscribe(this::changeKey)
+        //Flow.get(this).set(WelcomeScreen())
+
+        /*if (!Flow.get(this).goBack()) {
             super.onBackPressed()
-        }
+        }*/
     }
 
 }
