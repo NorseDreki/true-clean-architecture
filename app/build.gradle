@@ -21,12 +21,17 @@ android {
         }
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 }
 
 dependencies {
+    kapt "com.android.databinding:compiler:3.0.1"
 
     implementation "io.reactivex.rxjava2:rxjava:2.1.14"
 
