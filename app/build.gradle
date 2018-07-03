@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -21,6 +23,10 @@ android {
         }
     }
 
+    defaultConfig {
+        multiDexEnabled true
+    }
+
     dataBinding {
         enabled = true
     }
@@ -36,13 +42,18 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:2.1.14"
 
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    compile project(':domain')
+    implementation project(':domain')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation "com.android.support:cardview-v7:27.1.1"
 
     implementation "com.squareup.flow:flow:1.0.0-alpha3"
     implementation "com.google.code.gson:gson:2.3.1"
+
+    implementation "me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:2.0.1"
+    implementation "me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:2.0.1"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
