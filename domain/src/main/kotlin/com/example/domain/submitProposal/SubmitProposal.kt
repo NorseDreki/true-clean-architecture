@@ -224,8 +224,8 @@ class SubmitProposal(
     }
 
     data class ViewState(
-            val coverLetterViewState: CoverLetter.ViewState,
-            val pineappleQuestionsViewState: ClarifyingQuestions.ViewState
+            val coverLetter: CoverLetter.ViewState,
+            val clarifyingQuestions: ClarifyingQuestions.ViewState
     ) : UiState {
         companion object {
             /*fun initial() = SubmitProposalViewState(

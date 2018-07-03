@@ -21,11 +21,11 @@ class CoverLetter : UiComponent<Command, Result, ViewState> {
     override fun process(commands: Observable<Command>): Observable<Result> {
         val cast = commands
                 .mergeWith(cmd)
-                .doOnNext { println("CMD " + it) }
+                .doOnNext { println("CMDCL " + it) }
                 .compose(coverLetterProcessor)
-                .doOnNext { println("RES " + it) }
+                .doOnNext { println("RESCL " + it) }
                 .cast(Result::class.java)
-                .publish()
+                .replay()
                 .refCount()
 
         results = cast
@@ -107,7 +107,7 @@ class CoverLetter : UiComponent<Command, Result, ViewState> {
                         is Result.Valid -> state.copy(result.coverLetter, false)
                         is Result.Empty -> state.copy("", false)
                         is Result.LengthExceeded -> state.copy(result.coverLetter, true)
-                        else -> throw IllegalStateException("sdaf")
+                        else -> throw IllegalStateException("sdaf $state")
                     }
                 }
             }

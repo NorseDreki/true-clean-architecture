@@ -27,9 +27,9 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
     override fun process(commands: Observable<Command>): Observable<Result> {
         return commands
                 .mergeWith(cmd)
-                .doOnNext { println("CMD " + it) }
+                .doOnNext { println("CMDCQ " + it) }
                 .compose(paProcessor)
-                .doOnNext { println("RES " + it) }
+                .doOnNext { println("RESCQ " + it) }
                 .cast(Result::class.java)
                 .publish { shared ->
                     Observable.merge(
@@ -37,6 +37,8 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                             shared.doOnNext { println("input222") }.compose(paAnsweredProcessor)//.skip(1)
                     ).doOnNext { println("COMB $it") }
                 }
+                /*.replay()
+                .share()*/
         //.share()
     }
 

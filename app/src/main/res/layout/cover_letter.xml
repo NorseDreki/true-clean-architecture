@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.domain.UiState"/>
+            type="com.example.domain.submitProposal.SubmitProposal.ViewState"/>
 
     </data>
 
@@ -40,6 +40,7 @@
                     android:inputType="text|textMultiLine|textCapSentences"
                     android:minHeight="300dp"
                     android:padding="16dp"
+                    android:text="@{viewModel.coverLetter.coverLetter}"
                     android:textColor="@color/gray5"
                     android:textColorHint="@color/gray3"
                     android:textSize="14sp"/>

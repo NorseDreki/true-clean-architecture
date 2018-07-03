@@ -69,7 +69,7 @@ private fun createItemOpportunity(itemDetails: ItemDetails): ItemOpportunity {
 
     return ItemOpportunity(
             itemDetails,
-            Proposal(0, null, "")
+            Proposal(0, null, "123423423")
     )
 }
 /*
