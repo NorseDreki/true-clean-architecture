@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#f6f6f6</color>
+    <color name="colorPrimaryDark">#e7e7e7</color>
+    <color name="colorPrimary_translucent">#3000AEEC</color>
+
     <color name="colorAccent">#FF4081</color>
+
+    <color name="colorSecondary">#5BBC2E</color>
+    <color name="colorSecondaryDark">#008329</color>
+    <color name="colorSecondaryLight">#B0E44F</color>
+    <color name="blue">#14bff4</color>
+    <color name="red">#d50000</color>
+
+    <color name="colorDivider">#1f000000</color>
+
+    <!--<color name="colorSecondary">#7bd454</color>
+    <color name="colorSecondaryDark">#097835</color>-->
+
+    <color name="windowBackgroundColor">#ffffff</color>
+    <color name="black_translucent">#80000000</color>
+    <color name="black_translucent_light">#59000000</color>
+
+    <color name="gray0">#f9f9f9</color>
+    <color name="gray1">#f2f2f2</color>
+    <color name="gray2">#e0e0e0</color>
+    <color name="gray3">#b2b2b2</color>
+    <color name="gray4">#666666</color>
+    <color name="gray5">#494949</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+
+    <color name="warning">#ffb000</color>
+    <color name="error">#f36200</color>
+
+    <color name="button_outline_dark_normal">@android:color/transparent</color>
+    <color name="button_outline_dark_pressed">#44000000</color>
+    <color name="button_outline_dark_material_pressed">#66000000</color>
+    <color name="button_outline_dark_border">@android:color/white</color>
+
+    <color name="buttonSecondaryColor">@color/gray2</color>
+    <color name="buttonSecondaryColorHighlight">@color/gray1</color>
+
 </resources>

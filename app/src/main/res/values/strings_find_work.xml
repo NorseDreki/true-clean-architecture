@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="find_work_feed_title">Feed</string>
+    <string name="find_work_searches_title">Searches</string>
+    <string name="find_work_saved_title">Saved</string>
+
+    <string name="find_work_searches_my_categories">My Categories</string>
+    <string name="find_work_searches_recent">Recent Searches</string>
+
+    <!-- Job Details -->
+    <string name="find_work_job_details_title">Description</string>
+    <string name="find_work_job_details_connects">Required Connects - %1$d (%2$d available)</string>
+    <string name="find_work_job_details_section_details">Details</string>
+    <string name="find_work_job_details_section_questions">You will be asked to answer the following questions when applying:</string>
+    <string name="find_work_job_details_section_qualifications">Preferred qualifications:</string>
+    <string name="find_work_job_details_submit_action">Submit Proposal</string>
+    <string name="find_work_job_details_client_activity_block_title">Client Activity on this Job</string>
+    <string name="find_work_job_details_last_viewed">Last viewed:</string>
+    <string name="find_work_job_details_looking_to_hire">Looking to hire:</string>
+    <string name="find_work_job_details_interviewing">Interviewing:</string>
+    <string name="find_work_job_details_hired">Hired:</string>
+    <string name="find_work_job_details_proposals">Proposals:</string>
+    <string name="find_work_job_details_fixed_price_due_date">Due %1$s</string>
+    <string name="find_work_job_details_hourly">Hourly</string>
+    <string name="find_work_job_details_fixed_price">Fixed Price</string>
+    <string name="find_work_job_details_member_since">Member since %1$s</string>
+    <string name="find_work_job_details_total_spent">Total Spent</string>
+    <string name="find_work_job_details_avg_hourly_rate">Avg Hourly Rate</string>
+    <string name="find_work_job_details_jobs_posted">Jobs Posted</string>
+    <string name="find_work_job_details_budget_not_set">Not set</string>
+    <string name="find_work_job_details_already_applied_to_this_job">You\'ve already applied to this job</string>
+    <string name="find_work_job_details_offer_pending_for_this_job">You have an offer pending for this job</string>
+    <string name="find_work_job_details_already_hired_for_this_job">You are hired for this job</string>
+    <string name="find_work_job_details_job_unavailable">This job is no longer available</string>
+    <string name="find_work_job_details_proposal_draft_saved_message">A draft of your proposal is available under the Saved tab</string>
+    <string name="find_work_job_details_error_dialog_learn_more_button_title">Learn More</string>
+
+    <!-- Job Details Private Job State -->
+    <string name="find_work_job_details_private_job_title">This job is private</string>
+    <string name="find_work_job_details_private_job_message">Only freelancers this client has invited can access this job post.</string>
+
+    <!-- Job -->
+    <string name="find_work_job_skill_level">Skill Level</string>
+    <string name="find_work_job_skill_level_any">Any</string>
+    <string name="find_work_job_budget">Budget</string>
+    <string name="find_work_job_payment_verified">Payment Verified</string>
+    <string name="find_work_job_payment_unverified">Payment Unverified</string>
+    <string name="find_work_job_no_data">N/A</string>
+    <string name="find_work_job_action_browse_categories">Browse Categories</string>
+    <string name="find_work_job_action_save_job_title">Save job</string>
+    <string name="find_work_job_action_unsave_job_title">Unsave job</string>
+    <string name="find_work_job_error_save">Failed to save job. Please try again later</string>
+    <string name="find_work_job_error_save_does_not_exist">Failed to save job. This job no longer exists</string>
+    <string name="find_work_job_error_save_cant_access">Failed to save job. You don\'t have access to this job</string>
+    <string name="find_work_job_error_unsave">Failed to un-save job. Please try again later</string>
+    <string name="find_work_job_error_unsave_does_not_exist">Failed to un-save job. This job no longer exists</string>
+    <string name="find_work_job_error_unsave_cant_access">Failed to un-save job. You don\'t have access to this job</string>
+    <plurals name="find_work_job_timezone_ahead">
+        <item quantity="one">1 hour ahead</item>
+        <item quantity="other">%1$s hours ahead</item>
+    </plurals>
+    <plurals name="find_work_job_timezone_behind">
+        <item quantity="one">1 hour behind</item>
+        <item quantity="other">%1$s hours behind</item>
+    </plurals>
+    <string name="find_work_job_client_no_ratings_yet">No Ratings Yet</string>
+    <string name="find_work_job_client_ratings">%1$.2f (%2$d)</string>
+
+    <!-- Feed Empty State -->
+    <string name="find_work_feed_empty_title">No Matching Jobs</string>
+    <string name="find_work_feed_empty_message">Save a search or add categories to your profile to see matching jobs in your feed.</string>
+
+    <!-- Categories Empty State -->
+    <string name="find_work_categories_empty_title">No Categories</string>
+    <string name="find_work_categories_empty_message">Add categories to your profile\nto see matching jobs in your feed.</string>
+
+    <!-- Categories Content -->
+    <string name="find_work_categories_all">All Categories</string>
+
+    <!-- Saved Jobs Empty State -->
+    <string name="find_work_saved_jobs_empty_title">No Saved Jobs</string>
+    <string name="find_work_saved_jobs_empty_message">Save jobs you like and submit proposals to them later.</string>
+
+    <!-- Saved Jobs Content -->
+    <plurals name="find_work_saved_jobs_count">
+        <item quantity="one">%d Saved Job</item>
+        <item quantity="other">%d Saved Jobs</item>
+    </plurals>
+
+    <!-- Saved Proposals Empty State -->
+    <string name="find_work_saved_proposals_empty_title">No Saved Proposals</string>
+    <string name="find_work_saved_proposals_empty_message">You don\'t have any draft proposals.</string>
+
+    <!-- Saved Proposals Section -->
+    <string name="find_work_saved_proposals_section_title">Saved Proposals</string>
+
+    <!-- Saved Proposals Content -->
+    <string name="find_work_saved_proposals_title">Saved Proposals</string>
+    <string name="find_work_saved_proposals_created_date_value">" - Saved %s"</string>
+    <string name="find_work_saved_proposals_item_undo">Undo</string>
+    <string name="find_work_saved_proposals_item_removed_message">Proposal removed</string>
+    <plurals name="find_work_saved_proposals_count">
+        <item quantity="one">%d Saved Proposal</item>
+        <item quantity="other">%d Saved Proposals</item>
+    </plurals>
+
+    <!-- Saved Proposals Analytics -->
+    <string name="find_work_saved_proposals_title_ga" translatable="false">Android: Find Work: Saved Proposals</string>
+    <string name="find_work_saved_proposals_list_delete_proposal_draft_action_ga" translatable="false">Delete Proposal Draft</string>
+    <string name="find_work_saved_proposals_list_undo_delete_proposal_draft_action_ga" translatable="false">Undo Delete Proposal Draft</string>
+
+    <!-- Job Search -->
+    <string name="find_work_search_results_save_search">Save Search</string>
+    <string name="find_work_search_results_saved_search">Saved Search</string>
+    <plurals name="find_work_search_results_count">
+        <item quantity="one">%d Job</item>
+        <item quantity="other">%d Jobs</item>
+    </plurals>
+    <string name="find_work_search_results_empty_message">We didn’t find any jobs that match your search. Please modify your search to expand it.</string>
+
+    <!-- Save Search -->
+    <string name="find_work_searches_save_dialog_title">Save Search</string>
+    <string name="find_work_searches_save_dialog_name">Name your search</string>
+    <string name="find_work_searches_save_dialog_keywords">Keywords</string>
+    <string name="find_work_searches_save_dialog_filters">Filters</string>
+    <string name="find_work_searches_save_dialog_save">Save</string>
+    <string name="find_work_searches_save_dialog_cancel">Cancel</string>
+    <string name="find_work_searches_save_keywords_none">None</string>
+
+    <!-- Searches Page -->
+    <string name="find_work_no_saved_searches_title">No Saved Searches</string>
+    <string name="find_work_no_saved_searches_text">Save a search to see matching\njobs in your feed.</string>
+    <string name="find_work_searches_saved_searches">Saved Searches</string>
+    <string name="find_work_searches_show_more">Show More</string>
+    <string name="find_work_searches_show_less">Show Less</string>
+
+    <!-- Search Filters -->
+    <string name="find_work_search_filters_title">Filter</string>
+    <string name="find_work_search_filters_category">Category</string>
+    <string name="find_work_search_filters_any_option">Any %1$s</string>
+    <string name="find_work_search_filters_subcategories">Subcategories</string>
+    <string name="find_work_search_filters_all_subcategories">All Subcategories</string>
+    <string name="find_work_search_filters_apply">Apply</string>
+    <string name="find_work_search_filters_reset">Reset</string>
+
+    <!-- Search Filters Select Options -->
+    <string name="find_work_search_filters_select_options_save">Save</string>
+    <string name="find_work_search_filters_select_options_category_title">Select Category</string>
+    <string name="find_work_search_filters_select_options_subcategory_title">Select Subcategory</string>
+    <string name="find_work_search_filters_select_options_filter_title">Select %1$s</string>
+
+    <!-- Analytics -->
+    <string name="find_work_ga_action_job_details" translatable="false">View Job Details</string>
+    <string name="find_work_ga_action_job_details_more_client_info" translatable="false">See More Client Info</string>
+    <string name="find_work_ga_where_job_deeplink" translatable="false">deeplink</string>
+    <string name="find_work_title_ga" translatable="false">Android: Find Work</string>
+    <string name="find_work_feed_title_ga" translatable="false">Android: Find Work: Job Feed</string>
+    <string name="find_work_searches_title_ga" translatable="false">Android: Find Work: Searches</string>
+    <string name="find_work_saved_jobs_title_ga" translatable="false">Android: Find Work: Saved Jobs</string>
+    <string name="find_work_saved_title_ga" translatable="false">Android: Find Work: Saved</string>
+    <string name="find_work_job_search_keyword_ga" translatable="false">Search by Keyword</string>
+    <string name="find_work_job_search_autocomplete_ga" translatable="false">Search with Autocomplete</string>
+    <string name="find_work_job_details_title_ga" translatable="false">Android: Find Work: Job Details</string>
+    <string name="find_work_search_results_ga" translatable="false">Android: Find Work: Search Results</string>
+    <string name="find_work_my_categories_ga" translatable="false">My Categories</string>
+    <string name="find_work_ga_action_browse_categories" translatable="false">Browse Categories</string>
+    <string name="find_work_ga_action_search_by_subcategory" translatable="false">Search by Subcategory</string>
+    <string name="find_work_categories_referrer_all_ga" translatable="false">All Categories</string>
+    <string name="find_work_categories_referrer_my_categories_ga" translatable="false">My Categories</string>
+    <string name="find_work_searches_recent_action_ga" translatable="false">Search by Recent Search</string>
+    <string name="find_work_ga_action_search_by_saved_search" translatable="false">Search by Saved Search</string>
+    <string name="find_work_search_results_filter_action_ga" translatable="false">Filter Icon Pressed</string>
+    <string name="find_work_search_results_filter_search_action_ga" translatable="false">Filter Search</string>
+    <string name="find_work_search_results_save_search_action_ga" translatable="false">Save Search</string>
+    <string name="find_work_pull_to_refresh_action_ga" translatable="false">Pull to Refresh</string>
+    <string name="find_work_filter_ga" translatable="false">Android: Find Work: Filters</string>
+    <string name="find_work_categories_ga" translatable="false">Android: Find Work: Categories</string>
+    <string name="find_work_subcategories_ga" translatable="false">Android: Find Work: Subcategories</string>
+
+    <!-- Submit Proposal -->
+    <string name="find_work_submit_proposal_title">Submit Proposal</string>
+    <string name="find_work_submit_proposal_continue">Continue Proposal</string>
+    <string name="find_work_submit_proposal_next">Next</string>
+
+    <!-- Propose Terms-->
+    <string name="find_work_submit_proposal_propose_terms_title">Propose Terms</string>
+    <string name="find_work_submit_proposal_propose_terms_your_bid">Your Bid</string>
+    <string name="find_work_submit_proposal_propose_terms_dollar">$</string>
+    <string name="find_work_submit_proposal_propose_terms_hr">/hr</string>
+    <string name="find_work_submit_proposal_propose_terms_client_sees">This is what the client sees</string>
+    <string name="find_work_submit_proposal_propose_terms_freelancer_earns">You\'ll receive</string>
+    <string name="find_work_submit_proposal_propose_terms_engagement_duration">Est. Duration</string>
+    <string name="find_work_submit_proposal_propose_terms_connects">Required Connects (%1$d available)</string>
+    <string name="find_work_submit_proposal_propose_terms_error">Amount must be between %1$.2f and %2$.2f</string>
+
+    <!-- Cover Letter -->
+    <string name="find_work_submit_proposal_cover_letter_title">Cover Letter</string>
+    <string name="find_work_submit_proposal_cover_letter_placeholder">Introduce yourself, highlight your skills and experience, and tell the client exactly why they should hire you</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_add">Add attachment</string>
+
+    <!-- Cover Letter Attachments Analytics -->
+    <string name="find_work_submit_proposal_cover_letter_attachment_file_attached_action_ga" translatable="false">File Attached</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_file_attachment_retry_action_ga" translatable="false">File Attachment Retry</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_file_attachment_failed_action_ga" translatable="false">File Attachment Failed</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_file_attachment_failed_mime_type_missing_error" translatable="false">missing MIME type</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_file_attachment_failed_uri_missing_error" translatable="false">missing URI</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_file_attachment_failed_upload_error" translatable="false">file upload error</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_file_attachment_failed_limit_error" translatable="false">file exceeds %1$s</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_file_attachment_failed_storage_error" translatable="false">insufficient storage available</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_attach_file_action_ga" translatable="false">Attach File</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_delete_file_action_ga" translatable="false">Delete File</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_import_failure_retry_reason" translatable="false">import failure</string>
+    <string name="find_work_submit_proposal_cover_letter_attachment_upload_failure_retry_reason" translatable="false">upload failure</string>
+
+    <!-- Pineapple Questions -->
+    <string name="find_work_submit_proposal_pineapple_questions_title">Additional Questions</string>
+    <string name="find_work_submit_proposal_pineapple_questions_hint">Please enter your answer</string>
+
+    <!-- Proposal Summary-->
+    <string name="find_work_submit_proposal_summary_title">Proposal Summary</string>
+    <string name="find_work_submit_proposal_summary_proposed_terms_caption">Proposal Terms</string>
+    <string name="find_work_submit_proposal_summary_proposed_terms">Your bid is $%1$.2f. You\'ll earn $%2$.2f.</string>
+    <string name="find_work_submit_proposal_summary_proposed_terms_error">Please enter a valid bid</string>
+    <string name="find_work_submit_proposal_summary_cover_letter_caption">Cover Letter</string>
+    <string name="find_work_submit_proposal_summary_cover_letter_error">Please enter a cover letter</string>
+    <string name="find_work_submit_proposal_summary_questions_caption">Additional Questions</string>
+    <string name="find_work_submit_proposal_summary_questions">%1$d out of %2$d answered</string>
+    <string name="find_work_submit_proposal_summary_submit">Submit</string>
+    <string name="find_work_submit_proposal_summary_attachments_error">Some attachments are not uploaded</string>
+
+    <!-- Submit Proposal -->
+    <string name="find_work_submit_proposal_discard_dialog_title">Discard Draft?</string>
+    <string name="find_work_submit_proposal_discard_dialog_message">Your proposal was automatically saved, do you want to discard it?</string>
+    <string name="find_work_submit_proposal_discard_dialog_positive_button_title">Discard</string>
+    <string name="find_work_submit_proposal_discard_dialog_negative_button_title">Cancel</string>
+    <string name="find_work_submit_proposal_submitting_message">Submitting your proposal</string>
+    <string name="find_work_submit_proposal_submitting_error_retry">Try again</string>
+    <string name="find_work_submit_proposal_submitting_error_cancel">Cancel</string>
+    <string name="find_work_submit_proposal_service_fee_update_dialog_title">Update service fee</string>
+    <string name="find_work_submit_proposal_service_fee_update_dialog_message">Your estimated service fee has been updated. Check your bid again.</string>
+
+    <!-- Proposal Confirmation -->
+    <string name="find_work_submit_proposal_confirmation_title">Confirmation</string>
+    <string name="find_work_submit_proposal_confirmation_subtitle">Proposal Submitted!</string>
+    <string name="find_work_submit_proposal_confirmation_bid_fixed">Your bid is $%1$.2f. You’ll earn $%2$.2f.</string>
+    <string name="find_work_submit_proposal_confirmation_bid_hourly">Your bid is $%1$.2f/hr. You’ll earn $%2$.2f/hr.</string>
+    <string name="find_work_submit_proposal_confirmation_done">Done</string>
+
+    <!-- Submit Proposal Analytics -->
+    <string name="submit_proposal_title_ga" translatable="false">Android: Find Work: Submit Proposal</string>
+    <string name="submit_proposal_ga_action_start_proposal" translatable="false">Tap Start Proposal Button</string>
+    <string name="submit_proposal_ga_action_discard_draft" translatable="false">Discard draft</string>
+    <string name="submit_proposal_ga_action_refer_to_job" translatable="false">Refer to Job Detail: %1$s</string>
+    <string name="submit_proposal_ga_action_exit_proposal" translatable="false">Leave Job Details with In-Progress Proposal</string>
+    <string name="find_work_submit_proposal_title_ga" translatable="false">Android: Find Work: Submit Proposal</string>
+    <string name="find_work_submit_proposal_propose_terms_title_ga" translatable="false">Android: Find Work: Bid Proposal</string>
+    <string name="find_work_submit_proposal_cover_letter_title_ga" translatable="false">Android: Find Work: Add Cover Letter</string>
+    <string name="find_work_submit_proposal_propose_terms_revise_bid_action_ga" translatable="false">Revise bid</string>
+    <string name="find_work_submit_proposal_propose_terms_learn_more_action_ga" translatable="false">Learn about Fees</string>
+    <string name="find_work_submit_proposal_pineapple_questions_title_ga">Android: Find Work: Answer Additional Questions</string>
+    <string name="find_work_submit_proposal_summary_title_ga">Android: Find Work: Proposal Summary</string>
+    <string name="find_work_submit_proposal_summary_review_from_summary_action_ga" translatable="false">Review from Summary</string>
+    <string name="find_work_submit_proposal_submit_proposal_qa" translatable="false">Submit Proposal</string>
+    <string name="find_work_submit_proposal_mismatch_fees_qa" translatable="false">Mismatch Fees</string>
+    <string name="find_work_submit_proposal_confirmation_title_ga" translatable="false">Android: Find Work: Proposal Confirmation</string>
+    <string name="find_work_submit_proposal_saved_proposals_title_ga" translatable="false">Android: Find Work: Saved Proposals</string>
+
+    <!-- Submit Proposal Agency Contractor Cannot Apply -->
+    <string name="find_work_submit_proposal_ac_cannot_apply_dialog_title">Applying as Agency is not supported</string>
+    <string name="find_work_submit_proposal_ac_cannot_apply_dialog_message">Please visit upwork.com to submit a proposal on behalf of your agency. We\'re working on adding agency capabilities soon.</string>
+    <string name="find_work_submit_proposal_ac_cannot_apply_dialog_continue">Submit as Freelancer</string>
+    <string name="find_work_submit_proposal_ace_cannot_apply_dialog_message">We currently do not support submitting proposals from mobile as an exclusive agency freelancer. Please visit upwork.com to submit a proposal on behalf of your agency.</string>
+    <string name="find_work_submit_proposal_agent_cannot_apply_dialog_message">You do not have permission to apply to this job. Please check your agency role.</string>
+</resources>

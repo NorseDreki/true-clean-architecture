@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.clean.ViewModel"/>
+
+    </data>
+
+    <!-- Putting ViewFlipper in a dedicated layout is a workaround for Android data binding bug -->
+
+    <ViewFlipper
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- CONTENT(0) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--<me.relex.circleindicator.CircleIndicator
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_centerInParent="true"
+                android:background="@color/gray1"
+                app:ci_drawable="@drawable/indicator"
+                app:ci_drawable_unselected="@drawable/indicator_unselected"/>-->
+
+            <!--<android.support.v4.view.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                bind:indicatorId="@{@id/indicator}"
+                bind:keys="@{viewModel.screenPaths}"
+                bind:selectedItemPosition="@{viewModel.selectedPath}"/>-->
+
+        </LinearLayout>
+
+    </ViewFlipper>
+
+</layout>
