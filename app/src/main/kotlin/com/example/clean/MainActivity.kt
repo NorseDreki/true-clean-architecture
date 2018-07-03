@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         val p =  BasicKeyParceler(gson)
 
         baseContext = Flow.configure(baseContext, this) //
-                .dispatcher(BasicDispatcher(this)) //
+                .dispatcher(BasicDispatcher(this, DefaultDataBinder())) //
                 .defaultKey(WelcomeScreen()) //
                 .keyParceler(p) //
                 .install()

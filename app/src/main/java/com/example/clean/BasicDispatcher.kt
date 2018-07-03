@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.domain.UiState
 import com.example.domain.submitProposal.SubmitProposal
 
 import flow.Dispatcher
@@ -13,7 +14,10 @@ import flow.Flow
 import flow.Traversal
 import flow.TraversalCallback
 
-internal class BasicDispatcher(private val activity: Activity) : Dispatcher {
+internal class BasicDispatcher(
+        private val activity: Activity,
+        val dataBinder: DataBinder
+) : Dispatcher {
 
     override fun dispatch(traversal: Traversal, callback: TraversalCallback) {
         Log.d("BasicDispatcher", "dispatching " + traversal)
@@ -51,6 +55,9 @@ internal class BasicDispatcher(private val activity: Activity) : Dispatcher {
 
         val incomingView = LayoutInflater.from(traversal.createContext(destKey, activity)) //
                 .inflate(layout, frame, false)
+
+        if (destKey is UiState)
+            dataBinder.bind(incomingView, destKey as UiState)
 
         frame.addView(incomingView)
         traversal.getState(traversal.destination.top()).restore(incomingView)
