@@ -20,13 +20,11 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
         cmd.onNext(command)
     }
 
-
     lateinit var results: Observable<Result>
 
-
     override fun process(commands: Observable<Command>): Observable<Result> {
-        return commands
-                //.mergeWith(cmd)
+        val cast = commands
+                .mergeWith(cmd.doOnNext { println("CL MERGEd CMD") })
                 .doOnNext { println("CMDCQ " + it) }
                 .compose(paProcessor)
                 .doOnNext { println("RESCQ " + it) }
@@ -37,14 +35,16 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                             shared.doOnNext { println("input222") }.compose(paAnsweredProcessor)//.skip(1)
                     ).doOnNext { println("COMB $it") }
                 }
-                /*.replay()
-                .share()*/
-        //.share()
+                .replay()
+                .refCount()
+
+        results = cast
+
+        return cast
     }
 
     override fun render(): Observable<ViewState> {
-        return Observable.just(ViewState(arrayListOf()))
-        //return results//.compose<ViewState> { pineappleQuestionsReducer() }
+        return results.compose<ViewState>(clarifyingQuestionsReducer)
     }
 
     data class AllQuestionsAnswered(
@@ -142,22 +142,54 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
         data class UpdateAnswer(val id: String, val answer: String) : Command()
     }
 
-    val pineappleQuestionsReducer =
-            { state: ViewState, result: UiResult ->
-                when (result) {
-                    is Result.ValidAnswer -> {
-                        val old =
-                                //state.items.find { it.question == result.question }
-
-                        //old?.apply { answer = result.answer }
-
-                        state
+    val clarifyingQuestionsReducer =
+            ObservableTransformer<Result, ViewState> {
+                it.scan(ViewState()) { state, result ->
+                    when(result) {
+                        is Result.QuestionsLoaded ->
+                                ViewState(
+                                        result.questions.map {
+                                            QuestionViewState(it.id, it.question, null)
+                                        }
+                                )
+                        is Result.ValidAnswer ->
+                                ViewState(
+                                        //state.items.find { it.id == result.id }.answer!! = result.answer
+                                        state.items.map {
+                                            if (it.id == result.id) {
+                                                QuestionViewState(it.id, it.question, result.answer)
+                                            } else {
+                                                it
+                                            }
+                                        }
+                                )
+                        is Result.EmptyAnswer ->
+                            ViewState(
+                                    //state.items.find { it.id == result.id }.answer!! = result.answer
+                                    state.items.map {
+                                        if (it.id == result.id) {
+                                            QuestionViewState(it.id, it.question, null)
+                                        } else {
+                                            it
+                                        }
+                                    }
+                            )
+                        else -> state
                     }
-                    else -> throw IllegalStateException("sdaf")
                 }
+
             }
 
+
+
+    data class QuestionViewState(val id: String, val question: String, val answer: String?)
+
     data class ViewState(
-            val items: List<Question>
+            val items: List<QuestionViewState> = listOf(
+                    /*QuestionViewStateEvents(
+                            "fd",
+                            QuestionViewState("!2","123", null)
+                    )*/
+            )
     ) : UiState
 }

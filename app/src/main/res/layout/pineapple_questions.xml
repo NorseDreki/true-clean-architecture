@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -9,20 +8,35 @@
 
         <variable
             name="viewModel"
-            type="com.example.clean.ViewModel"/>
+            type="com.example.clean.MainActivity.QuestionsViewStateEvents"/>
+
+        <variable
+            name="events"
+            type="com.example.clean.ClarifyingQuestionsEvents"/>
 
     </data>
 
-    <!--<TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
+<!--                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:cursorVisible="true"
+                    android:gravity="top"
+                    android:hint="@string/find_work_submit_proposal_cover_letter_placeholder"
+                    android:inputType="text|textMultiLine|textCapSentences"
+                    android:minHeight="300dp"
+                    android:padding="16dp"
+                    android:text="@{viewModel.coverLetter.coverLetter}"
+                    android:textColor="@color/gray5"
+                    android:textColorHint="@color/gray3"
+                    bind:onTextChanged="@{events.onTextChanged}"
+                    android:textSize="14sp"/>-->
+
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        bind:layoutManager="@{LayoutManagers.linear()}">
-
-    </android.support.v7.widget.RecyclerView>
-
+        bind:itemBinding="@{events.itemBinding}"
+        bind:items="@{viewModel.items}"
+        bind:layoutManager="@{LayoutManagers.linear()}"/>
 </layout>

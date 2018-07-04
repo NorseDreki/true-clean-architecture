@@ -8,8 +8,8 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.example.clean.ViewModel"/>
+            name="v"
+            type="com.example.clean.MainActivity.QuestionViewStateEvents"/>
 
     </data>
 
@@ -55,6 +55,7 @@
                         android:paddingTop="4dp"
                         android:textAppearance="@style/MediumFontWeight"
                         android:textColor="@color/black"
+                        android:text="@{v.wrapped.question}"
                         android:textSize="14sp"
                         tools:text="Why do you think you are a good fit for this particular project?"/>
 
@@ -72,6 +73,8 @@
                     android:padding="16dp"
                     android:textColor="@color/gray5"
                     android:textColorHint="@color/gray3"
+                    android:text="@{v.wrapped.answer}"
+                    bind:onTextChanged="@{v.onChanged}"
                     android:textSize="14sp"
                     tools:text="When I started a Maecenas sed diam eget risus varius blandit sit amet non magna. Donec sed odio dui."/>
 
