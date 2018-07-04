@@ -73,26 +73,49 @@ class MainActivity : AppCompatActivity() {
     data class QuestionsViewStateEvents(
             val items: List<MainActivity.QuestionViewStateEvents> = listOf())
 
+    private var st: List<QuestionViewStateEvents>? = null
+
     fun changeKey(state: UiState) {
         //cle = CoverLetterEvents(cl)
 
-        val st = (state as SubmitProposal.ViewState)
+
+
+        val items = (state as SubmitProposal.ViewState)
                 .clarifyingQuestions
                 .items
-                .map {
-                    val qvs = QuestionViewStateEvents(onChanged = ObservableProperty(), wrapped = it)
-                    qvs.onChanged.observe().subscribe {
-                        println("!!!!! changed $it")
-                        cqe.onChanged.onNext(
-                                qvs
-                        )
+
+        if (items.isEmpty()) return
+
+        if (st == null && items.isNotEmpty()) {
+            println("was null")
+            st = (state as SubmitProposal.ViewState)
+                    .clarifyingQuestions
+                    .items
+                    .map {
+                        val qvs = QuestionViewStateEvents(onChanged = ObservableProperty(), wrapped = it)
+                        qvs.onChanged.observe().subscribe {
+                            println("!!!!! changed $it for $qvs")
+                            cqe.onChanged.onNext(
+                                    qvs
+                            )
+                        }
+                        println("mapping $qvs")
+
+                        qvs
                     }
-                    println("mapping $qvs")
+        } else {
+            println("notnull")
+            st =
+                    (state as SubmitProposal.ViewState).clarifyingQuestions.items
+                            .zip(st!!)
+                            .map {
+                                println("mapping")
+                                QuestionViewStateEvents(it.second.onChanged, it.first)
+                            }
 
-                    qvs
-                }
+        }
 
-        val screen = Screen(QuestionsViewStateEvents(st),
+        val screen = Screen(QuestionsViewStateEvents(st!!),
                 cqe)
 
         println("resulting $st")
