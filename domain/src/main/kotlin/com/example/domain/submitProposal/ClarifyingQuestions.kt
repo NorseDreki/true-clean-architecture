@@ -177,6 +177,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                         else -> state
                     }
                 }
+                        .distinctUntilChanged()
 
             }
 
