@@ -31,8 +31,10 @@ object ModelBindingAdapters {
 
         val watcher = object : AfterTextChangedListener() {
             override fun afterTextChanged(s: Editable) {
+                println("text changed to $s")
+
                 val value = s.toString()
-                observableString.set(if (value.length > 0) value else null)
+                observableString.set(if (value.length > 0) value else "")
             }
         }
 
