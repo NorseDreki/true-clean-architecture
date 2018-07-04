@@ -6,9 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.domain.UiState
-import com.example.domain.submitProposal.SubmitProposal
-
 import flow.Dispatcher
 import flow.Flow
 import flow.Traversal
@@ -37,16 +34,25 @@ internal class BasicDispatcher(
             // Short circuit if we would just be showing the same view again.
             val currentKey = Flow.getKey<Any>(currentView)
             if (destKey == currentKey) {
+                println("same stuff")
                 callback.onTraversalCompleted()
                 return
             }
 
+            if (destKey is MainActivity.Screen && currentKey is MainActivity.Screen) {
+                dataBinder.bind(currentView, destKey.state, destKey.events)
+                println("same stuff for sure")
+                callback.onTraversalCompleted()
+                return
+            }
+
+            println("clean stuff")
             frame.removeAllViews()
         }
 
         @LayoutRes val layout: Int = when (destKey) {
             is WelcomeScreen -> R.layout.welcome_screen
-            is SubmitProposal.ViewState -> {
+            is MainActivity.Screen -> {
                 println("zzzzzz $destKey")
                 R.layout.cover_letter
             }
@@ -56,8 +62,10 @@ internal class BasicDispatcher(
         val incomingView = LayoutInflater.from(traversal.createContext(destKey, activity)) //
                 .inflate(layout, frame, false)
 
-        if (destKey is UiState)
-            dataBinder.bind(incomingView, destKey as UiState)
+        if (destKey is MainActivity.Screen) {
+
+            dataBinder.bind(incomingView, destKey.state, destKey.events)
+        }
 
         frame.addView(incomingView)
         traversal.getState(traversal.destination.top()).restore(incomingView)
