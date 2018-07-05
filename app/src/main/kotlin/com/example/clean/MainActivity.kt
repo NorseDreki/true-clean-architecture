@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         cl = CoverLetter()
         cle = CoverLetterEvents(cl)
         val cq = ClarifyingQuestions()
-        cqe = ClarifyingQuestionsEvents(cq, ItemBinding.of(BR.v, R.layout.pineapple_question_item), this)
+        cqe = ClarifyingQuestionsEvents(cq, ItemBinding.of(BR.v, R.layout.clarifying_question_item), this)
         sp = SubmitProposal(cl, cq)
 
         val questions = listOf(

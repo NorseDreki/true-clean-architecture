@@ -85,7 +85,7 @@ internal class BasicDispatcher(
             is WelcomeScreen -> R.layout.welcome_screen
             is MainActivity.Screen -> {
                 println("zzzzzz $destKey")
-                R.layout.pineapple_questions
+                R.layout.clarifying_questions
             }
             else -> throw AssertionError("Unrecognized screen " + destKey)
         }
