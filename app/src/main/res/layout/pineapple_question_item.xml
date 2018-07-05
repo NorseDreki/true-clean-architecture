@@ -73,7 +73,9 @@
                     android:padding="16dp"
                     android:textColor="@color/gray5"
                     android:textColorHint="@color/gray3"
+                    android:tag="@{v.wrapped.question}"
                     android:text="@{v.wrapped.answer}"
+
                     bind:onTextChanged="@{v.onChanged}"
                     android:textSize="14sp"
                     tools:text="When I started a Maecenas sed diam eget risus varius blandit sit amet non magna. Donec sed odio dui."/>

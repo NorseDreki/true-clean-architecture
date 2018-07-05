@@ -37,7 +37,8 @@ class MainActivity : AppCompatActivity() {
 
         val questions = listOf(
                 Question("1", "q1"),
-                Question("2", "q2")
+                Question("2", "q2"),
+                Question("3", "q3")
         )
 
 
@@ -105,6 +106,9 @@ class MainActivity : AppCompatActivity() {
                     }
         } else {
             println("notnull")
+            /*st = st!!.map { QuestionViewStateEvents(it.onChanged, ClarifyingQuestions.QuestionViewState(
+                    it.wrapped.id, it.wrapped.question+it.wrapped.id, it.wrapped.answer
+            )) }*/
             st =
                     (state as SubmitProposal.ViewState).clarifyingQuestions.items
                             .zip(st!!)

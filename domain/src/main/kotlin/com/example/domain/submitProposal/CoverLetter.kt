@@ -34,7 +34,7 @@ class CoverLetter : UiComponent<Command, Result, ViewState> {
     }
 
     override fun render(): Observable<ViewState> {
-        return results.compose<ViewState>(coverLetterReducer)
+        return results.compose<ViewState>(coverLetterReducer)//.distinctUntilChanged()
     }
 
     val coverLetterProcessor =

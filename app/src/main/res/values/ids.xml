@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="webViewClient" type="id"/>
+    <item name="upwork_view_offset_helper" type="id"/>
+    <item name="onAppBarLayoutOffsetChangedListener" type="id"/>
+    <item name="canScrollBehavior" type="id"/>
+    <item name="afterTextChangeListener" type="id"/>
+    <item name="onScrollStateChangedListener" type="id"/>
+    <item name="onItemSwipe" type="id"/>
+    <item name="onScrolledToEndListener" type="id"/>
+    <item name="onPageChangeListener" type="id"/>
+</resources>

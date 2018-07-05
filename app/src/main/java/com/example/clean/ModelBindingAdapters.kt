@@ -1,6 +1,7 @@
 package com.example.clean
 
 import android.databinding.BindingAdapter
+import android.databinding.adapters.ListenerUtil
 import android.text.Editable
 import android.widget.EditText
 import java.text.NumberFormat
@@ -30,22 +31,41 @@ object ModelBindingAdapters {
     fun bindEditText(view: EditText, observableString: ObservableProperty<String>) {
 
         val watcher = object : AfterTextChangedListener() {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
             override fun afterTextChanged(s: Editable) {
-                println("text changed to $s")
+                println("text changed to $s, ${view.tag}, $observableString, $view")
+                println("editext ${view.text}")
+
+                //view.setText("changed")
+                //view.selectAll()
 
                 val value = s.toString()
+
+                //view.postDelayed(
                 observableString.set(if (value.length > 0) value else "")
+                //)
             }
         }
 
-/*
         val oldListener = ListenerUtil.trackListener(view, watcher, R.id.afterTextChangeListener)
 
         if (oldListener != null) {
             view.removeTextChangedListener(oldListener)
         }
-*/
 
+        if (view.tag.toString() == "q2") {
+            println("setting error ${view.tag}")
+            view.setError(view.tag.toString())
+        }
+
+        println("added watcher for $observableString ${view.tag} $view")
         view.addTextChangedListener(watcher)
 
         /*val newValue = observableString.get()
