@@ -7,8 +7,7 @@ import me.tatarka.bindingcollectionadapter2.ItemBinding
 
 class ClarifyingQuestionsEvents(
         val clarifyingQuestions: ClarifyingQuestions,
-        val itemBinding: ItemBinding<MainActivity.QuestionViewStateEvents>,
-        val activity: MainActivity
+        val itemBinding: ItemBinding<MainActivity.QuestionViewStateEvents>
 ) {
 
     val onTextChanged = ObservableProperty<String>()
