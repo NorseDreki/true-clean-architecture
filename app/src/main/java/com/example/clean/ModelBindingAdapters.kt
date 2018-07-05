@@ -31,14 +31,6 @@ object ModelBindingAdapters {
     fun bindEditText(view: EditText, observableString: ObservableProperty<String>) {
 
         val watcher = object : AfterTextChangedListener() {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
             override fun afterTextChanged(s: Editable) {
                 println("text changed to $s, ${view.tag}, $observableString, $view")
                 println("editext ${view.text}")
