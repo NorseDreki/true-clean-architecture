@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             val wrapped: ClarifyingQuestions.QuestionViewState)//: ClarifyingQuestions.QuestionViewState(wrapped.id, wrapped.question, wrapped.answer)
 
     data class QuestionsViewStateEvents(
-            val items: List<MainActivity.QuestionViewStateEvents> = listOf())
+            val items: List<MainActivity.QuestionViewStateEvents> = listOf()): UiState
 
     private var st: List<QuestionViewStateEvents>? = null
 
