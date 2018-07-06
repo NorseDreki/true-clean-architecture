@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import com.example.clean.screens.Screen
 import flow.Dispatcher
 import flow.Flow
 import flow.Traversal
@@ -51,7 +52,7 @@ internal class BasicDispatcher(
                 return
             }
 
-            if (destKey is MainActivity.Screen && currentKey is MainActivity.Screen) {
+            if (destKey is Screen && currentKey is Screen) {
                 /*val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(frame.windowToken, 0)*/
 
@@ -87,13 +88,17 @@ internal class BasicDispatcher(
                 println("zzzzzz $destKey")
                 R.layout.clarifying_questions
             }
+            is Screen -> {
+                println("zzzzzz $destKey")
+                destKey.layout
+            }
             else -> throw AssertionError("Unrecognized screen " + destKey)
         }
 
         val incomingView = LayoutInflater.from(traversal.createContext(destKey, activity)) //
                 .inflate(layout, frame, false)
 
-        if (destKey is MainActivity.Screen) {
+        if (destKey is Screen) {
 
             dataBinder.bind(incomingView, destKey.state, destKey.events)
         }

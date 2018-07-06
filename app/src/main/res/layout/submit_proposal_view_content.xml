@@ -28,18 +28,20 @@
         android:layout_height="match_parent">
 
         <include
+            layout="@layout/clarifying_questions"
+            bind:viewModel="@{viewModel.clarifyingQuestions}"
+            bind:events="@{events.clarifyingQuestions}"/>
+
+        <!--<include
             layout="@layout/cover_letter"
             bind:viewModel="@{viewModel.coverLetter}"
-            bind:events="@{events.coverLetter}"/>
+            bind:events="@{events.coverLetter}"/>-->
 
     </FrameLayout>
 <!--
 
 
-<include
-            layout="@layout/clarifying_questions"
-            bind:viewModel="@{viewModel.clarifyingQuestions}"
-            bind:events="@{events.clarifyingQuestions}"/>
+
 
     </ViewFlipper>
 -->

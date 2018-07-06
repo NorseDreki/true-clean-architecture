@@ -18,13 +18,13 @@ data class SubmitProposalScreen(
 
 
     companion object {
-        lateinit var screen: SubmitProposalScreen
+        var screen: SubmitProposalScreen? = null
         lateinit var events: SubmitProposalScreenEvents
 
-        lateinit var questions: List<MainActivity.QuestionViewStateEvents>
+        var questions: List<MainActivity.QuestionViewStateEvents>? = listOf()
 
         fun fromState(submitProposal: SubmitProposal, state: SubmitProposal.ViewState): SubmitProposalScreen {
-            if (!::screen.isInitialized) {
+            if (screen == null) {
 
                 val cqe = ClarifyingQuestionsEvents(
                         submitProposal.clarifyingQuestions,
@@ -39,7 +39,7 @@ data class SubmitProposalScreen(
                         (state.clarifyingQuestions as ClarifyingQuestions.ViewState).items
 
                 when {
-                    !::questions.isInitialized && items.isNotEmpty() -> {
+                    questions == null && items.isNotEmpty() -> {
                         questions = items
                                 .map {
                                     val qvs = MainActivity.QuestionViewStateEvents(onChanged = ObservableProperty(), wrapped = it)
@@ -54,9 +54,9 @@ data class SubmitProposalScreen(
                                     qvs
                                 }
                     }
-                    ::questions.isInitialized && items.isNotEmpty() -> {
+                    questions == null && items.isNotEmpty() -> {
                         questions = items
-                                .zip(questions)
+                                .zip(questions!!)
                                 .map {
                                     println("mapping")
                                     MainActivity.QuestionViewStateEvents(it.second.onChanged, it.first)
@@ -68,17 +68,23 @@ data class SubmitProposalScreen(
                 val newState =
                         ViewStateEvents(
                                 state.coverLetter,
-                                MainActivity.QuestionsViewStateEvents(questions)
+                                MainActivity.QuestionsViewStateEvents(questions!!)
                         )
 
                 screen = SubmitProposalScreen(newState, events)
 
             } else {
 
-                screen = screen.copy(state)
+                val newState =
+                        ViewStateEvents(
+                                state.coverLetter,
+                                MainActivity.QuestionsViewStateEvents(questions!!)
+                        )
+
+                screen = screen!!.copy(newState)
             }
 
-            return screen
+            return screen!!
         }
 
         fun wrapCQ() {
