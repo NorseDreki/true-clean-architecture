@@ -84,6 +84,8 @@ class MainActivity : AppCompatActivity() {
         val screen =
                 SubmitProposalScreen.fromState(sp, state as SubmitProposal.ViewState)
 
+        println("changing key to $screen")
+
 
         Flow.get(this).set(screen)
         //println("11111111111 $state")

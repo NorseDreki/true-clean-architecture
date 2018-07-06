@@ -23,10 +23,12 @@ data class SubmitProposalScreen(
 
         var questions: List<MainActivity.QuestionViewStateEvents>? = listOf()
 
+        private lateinit var cqe: ClarifyingQuestionsEvents
+
         fun fromState(submitProposal: SubmitProposal, state: SubmitProposal.ViewState): SubmitProposalScreen {
             if (screen == null) {
 
-                val cqe = ClarifyingQuestionsEvents(
+                cqe = ClarifyingQuestionsEvents(
                         submitProposal.clarifyingQuestions,
                         ItemBinding.of(BR.v, R.layout.clarifying_question_item)
                 )
@@ -38,8 +40,30 @@ data class SubmitProposalScreen(
                 val items =
                         (state.clarifyingQuestions as ClarifyingQuestions.ViewState).items
 
+
+                println("questions are emoty? ${items.isEmpty()}")
+
+
+
+                val newState =
+                        ViewStateEvents(
+                                state.coverLetter,
+                                MainActivity.QuestionsViewStateEvents(questions!!)
+                        )
+
+                screen = SubmitProposalScreen(newState, events)
+
+            } else {
+
+                val items =
+                        (state.clarifyingQuestions as ClarifyingQuestions.ViewState).items
+
+
+                println("questions are emoty? ${items.isEmpty()}")
+
                 when {
-                    questions == null && items.isNotEmpty() -> {
+                    questions!!.isEmpty() && items.isNotEmpty() -> {
+                        println("filling questions")
                         questions = items
                                 .map {
                                     val qvs = MainActivity.QuestionViewStateEvents(onChanged = ObservableProperty(), wrapped = it)
@@ -54,7 +78,7 @@ data class SubmitProposalScreen(
                                     qvs
                                 }
                     }
-                    questions == null && items.isNotEmpty() -> {
+                    questions!!.isNotEmpty() && items.isNotEmpty() -> {
                         questions = items
                                 .zip(questions!!)
                                 .map {
@@ -64,16 +88,6 @@ data class SubmitProposalScreen(
                     }
 
                 }
-
-                val newState =
-                        ViewStateEvents(
-                                state.coverLetter,
-                                MainActivity.QuestionsViewStateEvents(questions!!)
-                        )
-
-                screen = SubmitProposalScreen(newState, events)
-
-            } else {
 
                 val newState =
                         ViewStateEvents(

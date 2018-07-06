@@ -47,7 +47,7 @@ internal class BasicDispatcher(
             // Short circuit if we would just be showing the same view again.
             val currentKey = Flow.getKey<Any>(currentView)
             if (destKey == currentKey) {
-                println("same stuff")
+                println("same stuff, not doing anything")
                 callback.onTraversalCompleted()
                 return
             }
@@ -89,7 +89,7 @@ internal class BasicDispatcher(
                 R.layout.clarifying_questions
             }
             is Screen -> {
-                println("zzzzzz $destKey")
+                println("switched to key $destKey")
                 destKey.layout
             }
             else -> throw AssertionError("Unrecognized screen " + destKey)
