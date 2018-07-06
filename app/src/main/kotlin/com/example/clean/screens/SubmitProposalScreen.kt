@@ -5,7 +5,6 @@ import com.example.domain.UiState
 import com.example.domain.submitProposal.ClarifyingQuestions
 import com.example.domain.submitProposal.CoverLetter
 import com.example.domain.submitProposal.SubmitProposal
-import me.tatarka.bindingcollectionadapter2.ItemBinding
 
 data class SubmitProposalScreen(
         override val state: ViewStateEvents,
@@ -29,8 +28,7 @@ data class SubmitProposalScreen(
             if (screen == null) {
 
                 cqe = ClarifyingQuestionsEvents(
-                        submitProposal.clarifyingQuestions,
-                        ItemBinding.of(BR.v, R.layout.clarifying_question_item)
+                        submitProposal.clarifyingQuestions
                 )
                 events = SubmitProposalScreenEvents(
                         CoverLetterScreenEvents(submitProposal.coverLetter),

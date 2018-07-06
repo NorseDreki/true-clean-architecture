@@ -11,6 +11,10 @@
             name="v"
             type="com.example.clean.MainActivity.QuestionViewStateEvents"/>
 
+        <variable
+            name="listener"
+            type="com.example.clean.ClarifyingQuestionsEvents"/>
+
     </data>
 
     <FrameLayout
@@ -76,7 +80,7 @@
                     android:tag="@{v.wrapped.question}"
                     android:text="@{v.wrapped.answer}"
 
-                    bind:onTextChanged="@{v.onChanged}"
+                    bind:onTextChanged="@{listener.onTextChanged}"
                     android:textSize="14sp"
                     tools:text="When I started a Maecenas sed diam eget risus varius blandit sit amet non magna. Donec sed odio dui."/>
 

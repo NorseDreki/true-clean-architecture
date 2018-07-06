@@ -15,7 +15,6 @@ import com.upwork.android.core.BasicKeyParceler
 import flow.Flow
 import io.reactivex.Observable
 import io.reactivex.subjects.ReplaySubject
-import me.tatarka.bindingcollectionadapter2.ItemBinding
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         cl = CoverLetter()
         cle = CoverLetterEvents(cl)
         val cq = ClarifyingQuestions()
-        cqe = ClarifyingQuestionsEvents(cq, ItemBinding.of(BR.v, R.layout.clarifying_question_item))
+        cqe = ClarifyingQuestionsEvents(cq)
         sp = SubmitProposal(cl, cq)
 
         val questions = listOf(
