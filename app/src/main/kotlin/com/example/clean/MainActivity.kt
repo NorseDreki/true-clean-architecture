@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             val onChanged: ObservableProperty<String>,
             val wrapped: ClarifyingQuestions.QuestionViewState)//: ClarifyingQuestions.QuestionViewState(wrapped.id, wrapped.question, wrapped.answer)
 
+    @Greeter(greet = "greet")
     data class QuestionsViewStateEvents(
             val items: List<MainActivity.QuestionViewStateEvents> = listOf()): UiState
 

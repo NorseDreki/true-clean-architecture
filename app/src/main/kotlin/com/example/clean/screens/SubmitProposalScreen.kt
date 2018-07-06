@@ -61,6 +61,12 @@ data class SubmitProposalScreen(
 
                 println("questions are emoty? ${items.isEmpty()}")
 
+                println("ready to alter annotations")
+                Annotations.alterAnnotationValueJDK7(
+                        MainActivity.QuestionViewStateEvents::class.java,
+                        Greeter::class.java,
+                        DynamicGreeter("123"))
+
                 when {
                     questions!!.isEmpty() && items.isNotEmpty() -> {
                         println("filling questions")
