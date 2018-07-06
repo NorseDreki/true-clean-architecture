@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.clean.MainActivity.QuestionsViewStateEvents"/>
+            type="com.example.domain.submitProposal.ClarifyingQuestions.ViewState"/>
 
         <variable
             name="events"

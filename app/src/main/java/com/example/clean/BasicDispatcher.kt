@@ -84,10 +84,10 @@ internal class BasicDispatcher(
 
         @LayoutRes val layout: Int = when (destKey) {
             is WelcomeScreen -> R.layout.welcome_screen
-            is MainActivity.Screen -> {
+            /*is MainActivity.Screen -> {
                 println("zzzzzz $destKey")
                 R.layout.clarifying_questions
-            }
+            }*/
             is Screen -> {
                 println("switched to key $destKey")
                 destKey.layout

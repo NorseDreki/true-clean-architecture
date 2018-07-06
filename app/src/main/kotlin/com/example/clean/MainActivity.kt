@@ -59,23 +59,25 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+/*
     data class Screen(val state: QuestionsViewStateEvents,
                       val events: ClarifyingQuestionsEvents
 
     )
+*/
 
     private lateinit var cle: CoverLetterEvents
 
 
-    data class QuestionViewStateEvents(
+    /*data class QuestionViewStateEvents(
             val onChanged: ObservableProperty<String>,
             val wrapped: ClarifyingQuestions.QuestionViewState)//: ClarifyingQuestions.QuestionViewState(wrapped.id, wrapped.question, wrapped.answer)
 
     @Greeter(greet = "greet")
     data class QuestionsViewStateEvents(
-            val items: List<MainActivity.QuestionViewStateEvents> = listOf()): UiState
+            val items: List<MainActivity.QuestionViewStateEvents> = listOf()): UiState*/
 
-    private var st: List<QuestionViewStateEvents>? = null
+    //private var st: List<QuestionViewStateEvents>? = null
 
     fun changeKey(state: UiState) {
         //cle = CoverLetterEvents(cl)

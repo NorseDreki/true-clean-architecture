@@ -9,7 +9,7 @@
 
         <variable
             name="v"
-            type="com.example.clean.MainActivity.QuestionViewStateEvents"/>
+            type="com.example.domain.submitProposal.ClarifyingQuestions.QuestionViewState"/>
 
         <variable
             name="listener"
@@ -59,7 +59,7 @@
                         android:paddingTop="4dp"
                         android:textAppearance="@style/MediumFontWeight"
                         android:textColor="@color/black"
-                        android:text="@{v.wrapped.question}"
+                        android:text="@{v.question}"
                         android:textSize="14sp"
                         tools:text="Why do you think you are a good fit for this particular project?"/>
 
@@ -77,8 +77,8 @@
                     android:padding="16dp"
                     android:textColor="@color/gray5"
                     android:textColorHint="@color/gray3"
-                    android:tag="@{v.wrapped.question}"
-                    android:text="@{v.wrapped.answer}"
+                    android:tag="@{v.question}"
+                    android:text="@{v.answer}"
 
                     bind:onTextChanged="@{listener.onTextChanged}"
                     android:textSize="14sp"

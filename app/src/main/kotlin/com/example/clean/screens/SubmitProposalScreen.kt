@@ -1,13 +1,12 @@
 package com.example.clean.screens
 
-import com.example.clean.*
-import com.example.domain.UiState
+import com.example.clean.ClarifyingQuestionsEvents
+import com.example.clean.R
 import com.example.domain.submitProposal.ClarifyingQuestions
-import com.example.domain.submitProposal.CoverLetter
 import com.example.domain.submitProposal.SubmitProposal
 
 data class SubmitProposalScreen(
-        override val state: ViewStateEvents,
+        override val state: SubmitProposal.ViewState,//ViewStateEvents,
         override val events: SubmitProposalScreenEvents
 ) : Screen {
 
@@ -20,7 +19,7 @@ data class SubmitProposalScreen(
         var screen: SubmitProposalScreen? = null
         lateinit var events: SubmitProposalScreenEvents
 
-        var questions: List<MainActivity.QuestionViewStateEvents>? = listOf()
+        //var questions: List<MainActivity.QuestionViewStateEvents>? = listOf()
 
         private lateinit var cqe: ClarifyingQuestionsEvents
 
@@ -43,13 +42,13 @@ data class SubmitProposalScreen(
 
 
 
-                val newState =
+                /*val newState =
                         ViewStateEvents(
                                 state.coverLetter,
                                 MainActivity.QuestionsViewStateEvents(questions!!)
-                        )
+                        )*/
 
-                screen = SubmitProposalScreen(newState, events)
+                screen = SubmitProposalScreen(state, events)
 
             } else {
 
@@ -59,7 +58,7 @@ data class SubmitProposalScreen(
 
                 println("questions are emoty? ${items.isEmpty()}")
 
-                println("ready to alter annotations")
+                /*println("ready to alter annotations")
                 Annotations.alterAnnotationValueJDK7(
                         MainActivity.QuestionViewStateEvents::class.java,
                         Greeter::class.java,
@@ -97,9 +96,9 @@ data class SubmitProposalScreen(
                         ViewStateEvents(
                                 state.coverLetter,
                                 MainActivity.QuestionsViewStateEvents(questions!!)
-                        )
+                        )*/
 
-                screen = screen!!.copy(newState)
+                screen = screen!!.copy(state)
             }
 
             return screen!!
@@ -112,7 +111,8 @@ data class SubmitProposalScreen(
 }
 
 
+/*
 data class ViewStateEvents(
         val coverLetter: CoverLetter.ViewState,
         val clarifyingQuestions: MainActivity.QuestionsViewStateEvents
-) : UiState
+) : UiState*/

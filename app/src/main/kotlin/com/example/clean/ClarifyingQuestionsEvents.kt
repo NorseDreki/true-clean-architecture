@@ -1,8 +1,6 @@
 package com.example.clean
 
 import com.example.domain.submitProposal.ClarifyingQuestions
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import me.tatarka.bindingcollectionadapter2.ItemBinding
 
 class ClarifyingQuestionsEvents(
@@ -10,7 +8,7 @@ class ClarifyingQuestionsEvents(
 
 ) : OnItemClickListener {
 
-    val itemBinding: ItemBinding<MainActivity.QuestionViewStateEvents>
+    val itemBinding: ItemBinding<ClarifyingQuestions.QuestionViewState>
 
 
     override fun onItemClick(item: ClarifyingQuestions.QuestionViewState) {
@@ -21,19 +19,21 @@ class ClarifyingQuestionsEvents(
 
     val onTextChanged = ObservableProperty<String>()
 
-    val onChanged = PublishSubject.create<MainActivity.QuestionViewStateEvents>()
+    //val onChanged = PublishSubject.create<MainActivity.QuestionViewStateEvents>()
 
     init {
-        itemBinding = ItemBinding.of<MainActivity.QuestionViewStateEvents>(BR.v, R.layout.clarifying_question_item)
+        itemBinding = ItemBinding.of<ClarifyingQuestions.QuestionViewState>(BR.v, R.layout.clarifying_question_item)
                 .bindExtra(BR.listener, this)
 
         println("init CLE")
         onTextChanged.observe().subscribe {
             println("00000000CQ change $it");
+
+            //clarifyingQuestions.fromEvent(ClarifyingQuestions.Command.UpdateAnswer(it.id, it.onChanged.get()
             //coverLetter.fromEvent(CoverLetter.Command.UpdateCoverLetter(it))
         }
 
-        onChanged.onErrorResumeNext(
+        /*onChanged.onErrorResumeNext(
                 Observable.empty<MainActivity.QuestionViewStateEvents>()
         ).subscribe {
             println("CUMCHNAGE")
@@ -42,7 +42,7 @@ class ClarifyingQuestionsEvents(
                 clarifyingQuestions.fromEvent(ClarifyingQuestions.Command.UpdateAnswer(it.wrapped.id, it.onChanged.get()
                         ?: ""))
             //}
-        }
+        }*/
     }
 
 
