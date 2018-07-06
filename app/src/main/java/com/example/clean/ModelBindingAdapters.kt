@@ -52,10 +52,12 @@ object ModelBindingAdapters {
             view.removeTextChangedListener(oldListener)
         }
 
+/*
         if (view.tag.toString() == "q2") {
             println("setting error ${view.tag}")
             view.setError(view.tag.toString())
         }
+*/
 
         println("added watcher for $observableString ${view.tag} $view")
         view.addTextChangedListener(watcher)
