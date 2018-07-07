@@ -14,7 +14,7 @@ class DefaultDataBinder : DataBinder {
             setVariable(BR.viewModel, state)
             setVariable(BR.events, events)
             //do not run this on each iteration?
-            executePendingBindings()
+            //executePendingBindings()
         }
     }
 }

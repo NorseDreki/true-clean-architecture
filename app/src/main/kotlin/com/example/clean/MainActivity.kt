@@ -3,8 +3,8 @@ package com.example.clean
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.example.clean.screens.SubmitProposalScreen
-import com.example.domain.UiState
+import com.example.clean.screens.Screen
+import com.example.clean.screens.ToScreen
 import com.example.domain.models.ItemDetails
 import com.example.domain.models.Question
 import com.example.domain.submitProposal.ClarifyingQuestions
@@ -14,7 +14,6 @@ import com.google.gson.GsonBuilder
 import com.upwork.android.core.BasicKeyParceler
 import flow.Flow
 import io.reactivex.Observable
-import io.reactivex.subjects.ReplaySubject
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,17 +22,17 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var cl: CoverLetter
 
-    private lateinit var cqe: ClarifyingQuestionsEvents
+    lateinit var toScreen: ToScreen
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.basic_activity_frame)
 
         cl = CoverLetter()
-        cle = CoverLetterEvents(cl)
         val cq = ClarifyingQuestions()
-        cqe = ClarifyingQuestionsEvents(cq)
         sp = SubmitProposal(cl, cq)
+        toScreen = ToScreen(sp)
 
         val questions = listOf(
                 Question("1", "q1"),
@@ -47,50 +46,15 @@ class MainActivity : AppCompatActivity() {
         val cmd2 =
                 Observable.just<SubmitProposal.Command>(SubmitProposal.Command.DATA(itemDetails))
 
-        val cmd = ReplaySubject.create<SubmitProposal.Command>()
-
-
-        cmd.onNext(SubmitProposal.Command.DATA(itemDetails))
         sp.process(cmd2).materialize().subscribe {
             println("MAT: $it")
         }
-
-
     }
 
-
-/*
-    data class Screen(val state: QuestionsViewStateEvents,
-                      val events: ClarifyingQuestionsEvents
-
-    )
-*/
-
-    private lateinit var cle: CoverLetterEvents
-
-
-    /*data class QuestionViewStateEvents(
-            val onChanged: ObservableProperty<String>,
-            val wrapped: ClarifyingQuestions.QuestionViewState)//: ClarifyingQuestions.QuestionViewState(wrapped.id, wrapped.question, wrapped.answer)
-
-    @Greeter(greet = "greet")
-    data class QuestionsViewStateEvents(
-            val items: List<MainActivity.QuestionViewStateEvents> = listOf()): UiState*/
-
-    //private var st: List<QuestionViewStateEvents>? = null
-
-    fun changeKey(state: UiState) {
-        //cle = CoverLetterEvents(cl)
-
-
-        val screen =
-                SubmitProposalScreen.fromState(sp, state as SubmitProposal.ViewState)
-
-        println("changing key to $screen")
-
+    fun changeKey(screen: Screen) {
+        println(">>>>>>>>>>>>>>>> changing key to $screen")
 
         Flow.get(this).set(screen)
-        //println("11111111111 $state")
     }
 
     override fun attachBaseContext(baseContext: Context) {
@@ -111,14 +75,13 @@ class MainActivity : AppCompatActivity() {
         super.attachBaseContext(baseContext)
     }
 
+
     override fun onBackPressed() {
-        sp.render().subscribe(this::changeKey)
+        sp.render().compose(toScreen).subscribe(this::changeKey)
         //Flow.get(this).set(WelcomeScreen())
 
         /*if (!Flow.get(this).goBack()) {
             super.onBackPressed()
         }*/
     }
-
 }
-

@@ -1,6 +1,7 @@
 package com.example.clean.screens
 
 import com.example.clean.R
+import com.example.clean.screens.SubmitProposalScreen.Events
 import com.example.domain.submitProposal.SubmitProposal
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
@@ -9,43 +10,23 @@ import io.reactivex.functions.BiFunction
 
 data class SubmitProposalScreen(
         override val state: SubmitProposal.ViewState,
-        override val events: SubmitProposalScreenEvents
+        override val events: Events
 ) : Screen {
 
     override val layout: Int
         get() = R.layout.submit_proposal_view_content
 
-    companion object {
-        var screen: SubmitProposalScreen? = null
-        lateinit var events: SubmitProposalScreenEvents
-
-        fun fromState(submitProposal: SubmitProposal, state: SubmitProposal.ViewState): SubmitProposalScreen {
-            if (screen == null) {
-
-                events = SubmitProposalScreenEvents(
-                        CoverLetterScreenEvents(
-                                submitProposal.coverLetter
-                        ),
-                        ClarifyingQuestionsEvents(
-                                submitProposal.clarifyingQuestions
-                        )
-                )
-                screen = SubmitProposalScreen(state, events)
-
-            } else {
-                screen = screen!!.copy(state)
-            }
-
-            return screen!!
-        }
-
-    }
+    data class Events(
+            val coverLetter: CoverLetterScreenEvents,
+            val clarifyingQuestions: ClarifyingQuestionsEvents
+    ) : ScreenEvents
 }
 
-class ToScreen(val submitProposal: SubmitProposal) :
-        ObservableTransformer<SubmitProposal.ViewState, SubmitProposalScreen> {
+class ToScreen(
+        val submitProposal: SubmitProposal
+) : ObservableTransformer<SubmitProposal.ViewState, SubmitProposalScreen> {
 
-    val events = SubmitProposalScreenEvents(
+    val events = Events(
             CoverLetterScreenEvents(
                     submitProposal.coverLetter
             ),
