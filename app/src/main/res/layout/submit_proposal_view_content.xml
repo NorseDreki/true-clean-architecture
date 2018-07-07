@@ -16,34 +16,22 @@
 
     <!-- Putting ViewFlipper in a dedicated layout is a workaround for Android data binding bug -->
 
-<!--
     <ViewFlipper
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:measureAllChildren="true"
-        bind:displayedChild="@{1}">
--->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        bind:displayedChild="@{0}">
 
         <include
             layout="@layout/clarifying_questions"
             bind:viewModel="@{viewModel.clarifyingQuestions}"
             bind:events="@{events.clarifyingQuestions}"/>
 
-        <!--<include
+        <include
             layout="@layout/cover_letter"
             bind:viewModel="@{viewModel.coverLetter}"
-            bind:events="@{events.coverLetter}"/>-->
-
-    </FrameLayout>
-<!--
-
-
-
+            bind:events="@{events.coverLetter}"/>
 
     </ViewFlipper>
--->
 
 </layout>
