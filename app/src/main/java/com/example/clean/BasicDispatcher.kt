@@ -46,11 +46,13 @@ internal class BasicDispatcher(
 
             // Short circuit if we would just be showing the same view again.
             val currentKey = Flow.getKey<Any>(currentView)
-            if (destKey == currentKey) {
-                println("same stuff, not doing anything")
+            /*if (destKey == currentKey) {
+                println("SAME STUFF, not doing anything VVVV")
+                println("current: $currentKey")
+                println("dest: $destKey")
                 callback.onTraversalCompleted()
                 return
-            }
+            }*/
 
             if (destKey is Screen && currentKey is Screen) {
                 /*val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
