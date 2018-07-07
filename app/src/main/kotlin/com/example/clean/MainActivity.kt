@@ -3,6 +3,7 @@ package com.example.clean
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.example.clean.screens.Screen
 import com.example.clean.screens.ToScreen
 import com.example.domain.models.ItemDetails
@@ -49,6 +50,11 @@ class MainActivity : AppCompatActivity() {
         sp.process(cmd2).materialize().subscribe {
             println("MAT: $it")
         }
+
+        val view = findViewById<View>(android.R.id.content)
+        view.postDelayed(
+                {sp.render().compose(toScreen).subscribe(this::changeKey)}, 1500
+        )
     }
 
     fun changeKey(screen: Screen) {
@@ -77,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        sp.render().compose(toScreen).subscribe(this::changeKey)
+        //sp.render().compose(toScreen).subscribe(this::changeKey)
         //Flow.get(this).set(WelcomeScreen())
 
         /*if (!Flow.get(this).goBack()) {
