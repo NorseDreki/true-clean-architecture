@@ -76,7 +76,7 @@ class SubmitProposal(
                 //.startWith(Result.Dummy)
                 //.share()
                 //.publish().autoConnect(2).doOnNext { println(">>>> AFTER SHARE: $it") }
-                .publish().refCount().doOnNext { println(">>>> AFTER SHARE: $it") }
+                .replay().refCount().doOnNext { println(">>>> AFTER SHARE: $it") }
 
 
         //properly unsubscribe?
@@ -99,14 +99,18 @@ class SubmitProposal(
         return Observable.combineLatest(
                 arrayOf(
                         coverLetter.render().doOnNext { println("render CL: $it") },
-                        clarifyingQuestions.render().doOnNext { println("render CQ: $it") }/*,
+                        clarifyingQuestions.render().doOnNext { println("render CQ: $it") },
 
-                        results.ofType(SubmitProposal.Result.NavigatedTo::class.java).map { it.index }*/
+                        results.ofType(SubmitProposal.Result.NavigatedTo::class.java)
+                                .map {
+                                    println(">>>>>><<<<<<<< index ${it.index}")
+                                    it.index
+                                }
                 )
         ) {
             val cl = it[0] as CoverLetter.ViewState
             val cq = it[1] as ClarifyingQuestions.ViewState
-            val index =0// it[2] as Int
+            val index = it[2] as Int
             ViewState(cl, cq, index)
         }
     }

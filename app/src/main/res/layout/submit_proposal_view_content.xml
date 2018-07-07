@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:measureAllChildren="true"
-        bind:displayedChild="@{0}">
+        bind:displayedChild="@{viewModel.index}">
 
         <include
             layout="@layout/clarifying_questions"
