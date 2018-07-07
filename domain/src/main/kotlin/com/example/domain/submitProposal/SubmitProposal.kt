@@ -44,14 +44,15 @@ class SubmitProposal(
 
                             shared.ofType(SubmitProposal.Command::class.java)
                                     .compose(storageLoader),
-
+                            shared.ofType(SubmitProposal.Command.ToNextStep::class.java)
+                                    .compose(navigationProcessor),
 
                             shared.ofType(CoverLetter.Command::class.java)
                                     .compose { coverLetter.process(it) },
                             shared.ofType(ClarifyingQuestions.Command::class.java)
-                                    .compose { clarifyingQuestions.process(it) },
-                            shared.ofType(DoSubmitProposalCommand::class.java)
-                                    .compose(doSubmitProposalProcessor)
+                                    .compose { clarifyingQuestions.process(it) }
+                            /*shared.ofType(DoSubmitProposalCommand::class.java)
+                                    .compose(doSubmitProposalProcessor)*/
                             /*,
 
 
@@ -98,18 +99,23 @@ class SubmitProposal(
         return Observable.combineLatest(
                 arrayOf(
                         coverLetter.render().doOnNext { println("render CL: $it") },
-                        clarifyingQuestions.render().doOnNext { println("render CQ: $it") }
+                        clarifyingQuestions.render().doOnNext { println("render CQ: $it") }/*,
+
+                        results.ofType(SubmitProposal.Result.NavigatedTo::class.java).map { it.index }*/
                 )
         ) {
             val cl = it[0] as CoverLetter.ViewState
             val cq = it[1] as ClarifyingQuestions.ViewState
-            ViewState(cl, cq)
+            val index =0// it[2] as Int
+            ViewState(cl, cq, index)
         }
     }
 
     sealed class Command : UiCommand {
 
         data class DATA(val itemDetails: ItemDetails) : Command()
+
+        object ToNextStep : Command()
 
         object RemoveProposal : Command() //when job became private
     }
@@ -227,12 +233,16 @@ class SubmitProposal(
         object JobIsPrivate : Result()
         object JobNoLongerAvailable : Result()
 
+
+        data class NavigatedTo(val index: Int): Result()
+
         object Dummy : Result()
     }
 
     data class ViewState(
             val coverLetter: CoverLetter.ViewState,
-            val clarifyingQuestions: ClarifyingQuestions.ViewState
+            val clarifyingQuestions: ClarifyingQuestions.ViewState,
+            val index: Int
     ) : UiState {
         companion object {
             /*fun initial() = SubmitProposalViewState(
