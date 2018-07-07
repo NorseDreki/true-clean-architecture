@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
+        sp.fromEvent(SubmitProposal.Command.ToNextStep)
         //sp.render().compose(toScreen).subscribe(this::changeKey)
         //Flow.get(this).set(WelcomeScreen())
 

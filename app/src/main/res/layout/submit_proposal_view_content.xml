@@ -23,14 +23,15 @@
         bind:displayedChild="@{viewModel.index}">
 
         <include
+            layout="@layout/cover_letter"
+            bind:viewModel="@{viewModel.coverLetter}"
+            bind:events="@{events.coverLetter}"/>
+
+        <include
             layout="@layout/clarifying_questions"
             bind:viewModel="@{viewModel.clarifyingQuestions}"
             bind:events="@{events.clarifyingQuestions}"/>
 
-        <include
-            layout="@layout/cover_letter"
-            bind:viewModel="@{viewModel.coverLetter}"
-            bind:events="@{events.coverLetter}"/>
 
     </ViewFlipper>
 

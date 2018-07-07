@@ -20,9 +20,9 @@ class SubmitProposal(
         val clarifyingQuestions: ClarifyingQuestions
 ) : UiComponent<Command, UiResult, ViewState> {
 
-    val cmd = PublishSubject.create<DoSubmitProposalCommand>()
+    val cmd = PublishSubject.create<SubmitProposal.Command>()
 
-    fun fromEvent(command: DoSubmitProposalCommand) {
+    fun fromEvent(command: SubmitProposal.Command) {
         cmd.onNext(command)
     }
 
