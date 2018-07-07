@@ -13,7 +13,7 @@
 
         <variable
             name="listener"
-            type="com.example.clean.ClarifyingQuestionsEvents"/>
+            type="com.example.clean.screens.ClarifyingQuestionsEvents"/>
 
     </data>
 

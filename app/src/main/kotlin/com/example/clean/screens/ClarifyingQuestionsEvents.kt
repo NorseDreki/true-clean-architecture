@@ -1,5 +1,8 @@
-package com.example.clean
+package com.example.clean.screens
 
+import com.example.clean.BR
+import com.example.clean.ObservableProperty
+import com.example.clean.R
 import com.example.domain.submitProposal.ClarifyingQuestions
 import me.tatarka.bindingcollectionadapter2.ItemBinding
 
