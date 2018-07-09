@@ -9,11 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-
+import com.example.domain.submitProposal.DialogState
 import io.reactivex.subjects.Subject
 
 
 object ViewBindingAdapters {
+
+    @JvmStatic
+    @BindingAdapter(value = *arrayOf("ddd"))
+    fun bindDialogState(view: View, dialogState: DialogState) {
+        println("!!!!!! bind dialog state")
+    }
+
 
     @JvmStatic
     @BindingAdapter("dialog")
