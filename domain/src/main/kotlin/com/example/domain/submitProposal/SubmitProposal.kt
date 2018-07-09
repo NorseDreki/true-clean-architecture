@@ -44,8 +44,7 @@ class SubmitProposal(
 
     lateinit var results: Observable<UiResult>
 
-    val loopbackCommands
-            = ReplaySubject.create<UiCommand>()
+    val loopbackCommands = ReplaySubject.create<UiCommand>()
 
     override fun process(commands: Observable<Command>): Observable<UiResult> {
         val c = commands
@@ -57,18 +56,20 @@ class SubmitProposal(
                 .doOnNext { println("RESSP " + it) }
                 .publish<UiResult> { shared ->
                     Observable.merge<UiResult>(
+                            Observable.just(
 
-                            shared.ofType(SubmitProposal.Command::class.java)
-                                    .compose(storageLoader),
-                            shared.ofType(SubmitProposal.Command.ToNextStep::class.java)
-                                    .compose(navigationProcessor),
+                                    shared.ofType(SubmitProposal.Command::class.java)
+                                            .compose(storageLoader),
+                                    shared.ofType(SubmitProposal.Command.ToNextStep::class.java)
+                                            .compose(navigationProcessor),
 
-                            shared.ofType(CoverLetter.Command::class.java)
-                                    .compose { coverLetter.process(it) },
-                            shared.ofType(ClarifyingQuestions.Command::class.java)
-                                    .compose { clarifyingQuestions.process(it) }
-                            /*shared.ofType(DoSubmitProposalCommand::class.java)
-                                    .compose(doSubmitProposalProcessor)*/
+                                    shared.ofType(CoverLetter.Command::class.java)
+                                            .compose { coverLetter.process(it) },
+                                    shared.ofType(ClarifyingQuestions.Command::class.java)
+                                            .compose { clarifyingQuestions.process(it) },
+                                    shared.ofType(DoSubmitProposalCommand::class.java)
+                                            .compose(doSubmitProposalProcessor)
+                            )
                             /*,
 
 
@@ -127,21 +128,22 @@ class SubmitProposal(
 
                         results.ofType(DoSubmitProposalResult::class.java)
                                 .map {
+                                    println("GOT DSP RESULT")
                                     when (it) {
                                         is DoSubmitProposalResult.InProgress ->
-                                                DialogState.Progress(
-                                                        "progress",
-                                                        "message"
-                                                )
+                                            DialogState.Progress(
+                                                    "progress",
+                                                    "message"
+                                            )
                                         is DoSubmitProposalResult.Error ->
-                                                DialogState.Alert(
-                                                        "wrong",
-                                                        "blah",
-                                                        "retry",
-                                                        "cancel"
-                                                )
+                                            DialogState.Alert(
+                                                    "wrong",
+                                                    "blah",
+                                                    "retry",
+                                                    "cancel"
+                                            )
                                         is DoSubmitProposalResult.Success ->
-                                                DialogState.Dismiss
+                                            DialogState.Dismiss
                                     }
                                 }
                                 .startWith(DialogState.Dismiss)
@@ -195,6 +197,7 @@ class SubmitProposal(
                             Observable.empty<UiCommand>()
                         }
                         is DoSubmitProposalResult.Success -> {
+                            println("SUCCESS")
                             Observable.just(SubmitProposal.Command.RemoveProposal)
                         }
 
@@ -279,7 +282,7 @@ class SubmitProposal(
         object JobNoLongerAvailable : Result()
 
 
-        data class NavigatedTo(val index: Int): Result()
+        data class NavigatedTo(val index: Int) : Result()
 
         object Dummy : Result()
     }

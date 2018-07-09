@@ -4,6 +4,7 @@ import com.example.domain.UiCommand
 import com.example.domain.UiResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import java.util.concurrent.TimeUnit
 
 sealed class DoSubmitProposalCommand : UiCommand {
     data class DoSubmit(val id: String) : DoSubmitProposalCommand()
@@ -38,6 +39,7 @@ val doSubmitProposalProcessor =
                         val api: Api? = SomeApi()
 
                         api!!.submitProposal("123", "dsf")
+                                .delay(3, TimeUnit.SECONDS)
                                 .map(DoSubmitProposalResult::Success)
                                 .cast(UiResult::class.java)
                                 .onErrorReturn(DoSubmitProposalResult::Error)

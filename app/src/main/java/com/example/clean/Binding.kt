@@ -1,5 +1,7 @@
 package com.example.clean
 
+import android.app.Dialog
+import android.app.ProgressDialog
 import android.databinding.BindingAdapter
 import android.view.View
 import com.example.domain.submitProposal.DialogEvents
@@ -12,6 +14,21 @@ object Binding {
     fun bindAbc(view: View, ds: DialogState, plot: DialogEvents) {
         println("111111 bound $ds")
         println("111111 bound $plot")
+
+        var dialog: Dialog? = view.getTag(R.id.afterTextChangeListener) as? Dialog
+
+        when (ds) {
+            is DialogState.Progress -> {
+                val d = ProgressDialog.show(view.context, ds.title, ds.message, true, false)
+                view.setTag(R.id.afterTextChangeListener, d)
+            }
+            is DialogState.Dismiss -> {
+                if (dialog != null) dialog.dismiss()
+            }
+            is DialogState.Alert -> {
+                println("none yet")
+            }
+        }
 
         //ProgressDialog.show(view.context, "title", "message", true)
     }
