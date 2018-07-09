@@ -68,4 +68,11 @@ object ModelBindingAdapters {
             view.setSelection(if (view.text != null) view.text.length else 0)
         }*/
     }
+
+    @JvmStatic
+    @BindingAdapter("onTextChanged2")
+    fun bindEditText2(view: EditText, callback: (() -> Unit)?) {
+
+        println("do nothing")
+    }
 }
