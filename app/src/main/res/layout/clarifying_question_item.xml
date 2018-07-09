@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -14,6 +12,10 @@
         <variable
             name="listener"
             type="com.example.clean.screens.ClarifyingQuestionsEvents"/>
+
+        <variable
+            name="some"
+            type="com.example.clean.screens.Some"/>
 
     </data>
 
@@ -80,7 +82,7 @@
                     android:tag="@{v.question}"
                     android:text="@{v.answer}"
 
-                    bind:onTextChanged="@{listener.onTextChanged}"
+                    android:onTextChanged="@{(text, start, before, count) -> listener.onItemClick(v, text)}"
                     android:textSize="14sp"
                     tools:text="When I started a Maecenas sed diam eget risus varius blandit sit amet non magna. Donec sed odio dui."/>
 

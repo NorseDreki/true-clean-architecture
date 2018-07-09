@@ -13,10 +13,15 @@ class ClarifyingQuestionsEvents(
 
     val itemBinding: ItemBinding<ClarifyingQuestions.QuestionViewState>
 
+    fun blah() {
+        println("blah")
+    }
 
-    override fun onItemClick(item: ClarifyingQuestions.QuestionViewState) {
 
-        println("item click")
+    override fun onItemClick(item: ClarifyingQuestions.QuestionViewState?, text: CharSequence) {
+        clarifyingQuestions.fromEvent(ClarifyingQuestions.Command.UpdateAnswer(item!!.id, text.toString()))
+
+//        println("item click")
         //clarifyingQuestions.fromEvent(ClarifyingQuestions.Command.UpdateAnswer(item.id, item.onChanged.get()
     }
 
@@ -27,6 +32,7 @@ class ClarifyingQuestionsEvents(
     init {
         itemBinding = ItemBinding.of<ClarifyingQuestions.QuestionViewState>(BR.v, R.layout.clarifying_question_item)
                 .bindExtra(BR.listener, this)
+                .bindExtra(BR.some, Some())
 
         println("init CLE")
         onTextChanged.observe().subscribe {
@@ -50,8 +56,17 @@ class ClarifyingQuestionsEvents(
 
 
 
+
 }
 
+class Some :Runnable {
+    override fun run() {
+        println("dsfads")
+    }
+}
+
+val some = { println("23421")}
+
 interface OnItemClickListener {
-    fun onItemClick(item: ClarifyingQuestions.QuestionViewState)
+    fun onItemClick(item: ClarifyingQuestions.QuestionViewState?, text: CharSequence)
 }

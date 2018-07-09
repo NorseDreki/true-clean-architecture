@@ -18,7 +18,21 @@ import io.reactivex.subjects.ReplaySubject
 class SubmitProposal(
         val coverLetter: CoverLetter,
         val clarifyingQuestions: ClarifyingQuestions
-) : UiComponent<Command, UiResult, ViewState> {
+) : UiComponent<Command, UiResult, ViewState>, ProposalSummaryEventHandler {
+
+    override fun handleProposalSummaryEvent(event: ProposalSummaryEventHandler.Event) {
+        Observable.just(event)
+    }
+
+    val eventProcessor =
+            ObservableTransformer<ProposalSummaryEventHandler.Event, Command> {
+                it.map {
+                    when (it) {
+                        is ProposalSummaryEventHandler.Event.OnSubmit ->
+                                DoSubmitProposalCommand.DoSubmit()
+                    }
+                }
+            }
 
     val cmd = PublishSubject.create<SubmitProposal.Command>()
 
@@ -101,6 +115,8 @@ class SubmitProposal(
                         coverLetter.render().doOnNext { println("render CL: $it") },
                         clarifyingQuestions.render().doOnNext { println("render CQ: $it") },
 
+                        results.compose(psReducer),
+
                         results.ofType(SubmitProposal.Result.NavigatedTo::class.java)
                                 .map {
                                     println(">>>>>><<<<<<<< index ${it.index}")
@@ -110,8 +126,9 @@ class SubmitProposal(
         ) {
             val cl = it[0] as CoverLetter.ViewState
             val cq = it[1] as ClarifyingQuestions.ViewState
-            val index = it[2] as Int
-            ViewState(cl, cq, index)
+            val ps = it[2] as ProposalSummaryViewState
+            val index = it[3] as Int
+            ViewState(cl, cq, ps, index)
         }
     }
 
@@ -246,6 +263,7 @@ class SubmitProposal(
     data class ViewState(
             val coverLetter: CoverLetter.ViewState,
             val clarifyingQuestions: ClarifyingQuestions.ViewState,
+            val proposalSummary: ProposalSummaryViewState,
             val index: Int
     ) : UiState {
         companion object {

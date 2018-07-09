@@ -63,7 +63,7 @@ class ProposalSummary : UiComponent<ProposalSummary.Command, ProposalSummary.Res
     val psProcessor =
             ObservableTransformer<UiCommand, UiResult> {
                 it.map {
-                    when(it) {
+                    when (it) {
                         is Command.INIT -> Result.INITResult(it.itemOpportunity)
                         is Command.ToggleSubmitEnabled -> Result.SubmitEnabled(it.enabled)
                         else -> throw IllegalStateException("sdf")
@@ -82,31 +82,94 @@ data class JobInfoViewState(
     }
 }
 
+val psReducer =
+        ObservableTransformer<UiResult, ProposalSummaryViewState> {
+            it.scan(ProposalSummaryViewState.init()) { state, result ->
+                val s = state as ProposalSummaryViewState
+                when (result) {
+                    is SubmitAllowedResult.Enabled -> {
+                        s.copy(isSubmitEnabled = true)
+                    }
+                    is SubmitAllowedResult.Disabled -> {
+                        s.copy(isSubmitEnabled = false)
+                    }
+                /*is CoverLetter.Result.NoCoverLetterRequired -> {
+                    s.copy(hasCoverLetter = false)
+                }*/
+                    is SubmitProposal.Result.ProposalLoaded -> {
+                        s.copy(hasCoverLetter = result.itemOpportunity.itemDetails.isCoverLetterRequired)
+                    }
+                    is CoverLetter.Result.Valid -> {
+                        s.copy(
+                                coverLetter = result.coverLetter,
+                                isCoverLetterValid = true
+                        )
+                    }
+                    is CoverLetter.Result.LengthExceeded ->
+                        s.copy(
+                                coverLetter = result.coverLetter,
+                                isCoverLetterValid = false
+                        )
+                    CoverLetter.Result.Empty ->
+                        s.copy(
+                                coverLetter = "",
+                                isCoverLetterValid = false
+                        )
+                    ClarifyingQuestions.Result.NoQuestionsRequired -> {
+                        s.copy(
+                                hasQuestions = false
+                        )
+                    }
+                    is ClarifyingQuestions.Result.QuestionsLoaded -> {
+                        s.copy(
+                                hasQuestions = true,
+                                questions = result.questions.map {
+                                    ClarifyingQuestions.QuestionViewState(it.id, it.question, null)
+                                },
+                                totalQuestions = result.questions.size
+                        )
+                    }
+                    is ClarifyingQuestions.Result.ValidAnswer -> {
+                        val count = s.answeredQuestions + 1
+                        s.copy(
+                                answeredQuestions = count,
+                                areQuestionsValid = count == s.totalQuestions
+                        )
+                    }
+                    is ClarifyingQuestions.Result.EmptyAnswer -> {
+                        val count = s.answeredQuestions - 1
+                        s.copy(
+                                answeredQuestions = count,
+                                areQuestionsValid = false
+                        )
+                    }
+                    else -> {
+                        s
+                    }
+                }
+            }
+                    .distinctUntilChanged()
+        }
+
 
 data class ProposalSummaryViewState(
-        val jobType: JobTypeViewState,
-        val bid: Int,
-        val earn: Int,
-
         val hasCoverLetter: Boolean,
         val hasQuestions: Boolean,
 
         val isSubmitEnabled: Boolean,
         val coverLetter: String,
-        val isCoverLetterFilledCorrectly: Boolean,
+        val isCoverLetterValid: Boolean,
+
         val answeredQuestions: Int,
         val totalQuestions: Int,
         val areQuestionsValid: Boolean,
-        val isCoverLetterAttValid: Boolean,
 
-        val questions: List<String>
+        val questions: List<ClarifyingQuestions.QuestionViewState>
 ) : UiState {
     companion object {
         fun init() = ProposalSummaryViewState(
-                JobTypeViewState.init(),
-                0, 0, false, false, false, "",
-                false, 0, 0, false, false,
-                listOf()
+                false, false, false, "", false,
+                0, 0, false, listOf()
         )
     }
 }
