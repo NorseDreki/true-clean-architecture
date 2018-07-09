@@ -2,12 +2,11 @@ package com.example.domain.submitProposal
 
 import com.example.domain.UiCommand
 import com.example.domain.UiResult
-import com.example.domain.models.Proposal
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
 sealed class DoSubmitProposalCommand : UiCommand {
-    data class DoSubmit(val proposal: Proposal) : DoSubmitProposalCommand()
+    data class DoSubmit(val id: String) : DoSubmitProposalCommand()
 }
 
 sealed class DoSubmitProposalResult : UiResult {
@@ -46,5 +45,4 @@ val doSubmitProposalProcessor =
                     }
                 }
             }
-
         }

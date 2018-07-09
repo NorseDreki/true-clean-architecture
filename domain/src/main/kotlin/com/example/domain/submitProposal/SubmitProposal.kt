@@ -21,20 +21,22 @@ class SubmitProposal(
 ) : UiComponent<Command, UiResult, ViewState>, ProposalSummaryEventHandler {
 
     override fun handleProposalSummaryEvent(event: ProposalSummaryEventHandler.Event) {
-        Observable.just(event)
+        Observable.just(event).compose(eventProcessor).subscribe(cmd)
     }
 
-    /*val eventProcessor =
-            ObservableTransformer<ProposalSummaryEventHandler.Event, Command> {
+    val eventProcessor =
+            ObservableTransformer<ProposalSummaryEventHandler.Event, UiCommand> {
                 it.map {
                     when (it) {
-                        is ProposalSummaryEventHandler.Event.OnSubmit ->
-                                DoSubmitProposalCommand.DoSubmit()
+                        is ProposalSummaryEventHandler.Event.OnSubmit -> {
+                            println("DOSUBMIT")
+                            DoSubmitProposalCommand.DoSubmit("sadf")
+                        }
                     }
                 }
-            }*/
+            }
 
-    val cmd = PublishSubject.create<SubmitProposal.Command>()
+    val cmd = PublishSubject.create<UiCommand>()
 
     fun fromEvent(command: SubmitProposal.Command) {
         cmd.onNext(command)
