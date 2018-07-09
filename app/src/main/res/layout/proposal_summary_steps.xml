@@ -10,6 +10,10 @@
             name="viewModel"
             type="com.example.domain.submitProposal.ProposalSummaryViewState"/>
 
+        <variable
+            name="events"
+            type="com.example.clean.screens.ProposalSummaryEvents"/>
+
     </data>
 
     <android.support.v7.widget.CardView
@@ -32,10 +36,12 @@
             <include
                 layout="@layout/proposal_summary_questions"
                 bind:viewModel="@{viewModel}"/>
-
+<!--
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                bind:dialogState="@{viewModel.submittingState}"
+                bind:dialogEvents="@{events.dialogEvents"/>
 
             <Button
                 android:layout_width="match_parent"
@@ -44,7 +50,7 @@
                 android:enabled="@{viewModel.isSubmitEnabled}"
                 android:text="@string/find_work_submit_proposal_summary_submit"
                 android:textColor="@color/white"
-                android:textSize="16sp"/>
+                android:textSize="16sp"/>-->
 
         </LinearLayout>
 

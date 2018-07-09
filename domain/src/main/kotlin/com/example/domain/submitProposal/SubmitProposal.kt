@@ -24,7 +24,7 @@ class SubmitProposal(
         Observable.just(event)
     }
 
-    val eventProcessor =
+    /*val eventProcessor =
             ObservableTransformer<ProposalSummaryEventHandler.Event, Command> {
                 it.map {
                     when (it) {
@@ -32,7 +32,7 @@ class SubmitProposal(
                                 DoSubmitProposalCommand.DoSubmit()
                     }
                 }
-            }
+            }*/
 
     val cmd = PublishSubject.create<SubmitProposal.Command>()
 
@@ -121,14 +121,36 @@ class SubmitProposal(
                                 .map {
                                     println(">>>>>><<<<<<<< index ${it.index}")
                                     it.index
+                                },
+
+                        results.ofType(DoSubmitProposalResult::class.java)
+                                .map {
+                                    when (it) {
+                                        is DoSubmitProposalResult.InProgress ->
+                                                DialogState.Progress(
+                                                        "progress",
+                                                        "message"
+                                                )
+                                        is DoSubmitProposalResult.Error ->
+                                                DialogState.Alert(
+                                                        "wrong",
+                                                        "blah",
+                                                        "retry",
+                                                        "cancel"
+                                                )
+                                        is DoSubmitProposalResult.Success ->
+                                                DialogState.Dismiss
+                                    }
                                 }
+                                .startWith(DialogState.Dismiss)
                 )
         ) {
             val cl = it[0] as CoverLetter.ViewState
             val cq = it[1] as ClarifyingQuestions.ViewState
             val ps = it[2] as ProposalSummaryViewState
             val index = it[3] as Int
-            ViewState(cl, cq, ps, index)
+            val dialogState = it[4] as DialogState
+            ViewState(cl, cq, ps, index, dialogState)
         }
     }
 
@@ -264,7 +286,8 @@ class SubmitProposal(
             val coverLetter: CoverLetter.ViewState,
             val clarifyingQuestions: ClarifyingQuestions.ViewState,
             val proposalSummary: ProposalSummaryViewState,
-            val index: Int
+            val index: Int,
+            val doSubmitDialog: DialogState
     ) : UiState {
         companion object {
             /*fun initial() = SubmitProposalViewState(

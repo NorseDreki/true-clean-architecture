@@ -34,7 +34,13 @@
 
         <include
             layout="@layout/proposal_summary_steps"
-            bind:viewModel="@{viewModel.proposalSummary}"/>
+            bind:viewModel="@{viewModel.proposalSummary}"
+            bind:events="@{events.proposalSummaryEvents}"/>
+
+        <include
+            layout="@layout/do_submit_proposal"
+            bind:viewModel="@{viewModel}"
+            bind:events="@{events}"/>
 
     </ViewFlipper>
 

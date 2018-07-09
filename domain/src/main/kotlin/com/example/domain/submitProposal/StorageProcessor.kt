@@ -30,7 +30,7 @@ val storageLoader =
             }
         }
 
-data class NavState(val index: Int = 0, val pages: Int = 3)
+data class NavState(val index: Int = 0, val pages: Int = 4)
 
 val navigationProcessor =
         ObservableTransformer<SubmitProposal.Command.ToNextStep, SubmitProposal.Result> {

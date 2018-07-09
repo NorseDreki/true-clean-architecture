@@ -2,6 +2,7 @@ package com.example.clean.screens
 
 import com.example.clean.R
 import com.example.clean.screens.SubmitProposalScreen.Events
+import com.example.domain.submitProposal.DialogEvents
 import com.example.domain.submitProposal.SubmitProposal
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
@@ -18,7 +19,8 @@ data class SubmitProposalScreen(
 
     data class Events(
             val coverLetter: CoverLetterScreenEvents,
-            val clarifyingQuestions: ClarifyingQuestionsEvents
+            val clarifyingQuestions: ClarifyingQuestionsEvents,
+            val proposalSummaryEvents: ProposalSummaryEvents
     ) : ScreenEvents
 }
 
@@ -32,6 +34,13 @@ class ToScreen(
             ),
             ClarifyingQuestionsEvents(
                     submitProposal.clarifyingQuestions
+            ),
+            ProposalSummaryEvents(
+                    submitProposal,
+                    DialogEvents(
+                            { println("positive")},
+                            { println("negative") }
+                    )
             )
     )
 
