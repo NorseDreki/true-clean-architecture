@@ -32,6 +32,9 @@
             bind:viewModel="@{viewModel.clarifyingQuestions}"
             bind:events="@{events.clarifyingQuestions}"/>
 
+        <include
+            layout="@layout/proposal_summary_steps"
+            bind:viewModel="@{viewModel.proposalSummary}"/>
 
     </ViewFlipper>
 
