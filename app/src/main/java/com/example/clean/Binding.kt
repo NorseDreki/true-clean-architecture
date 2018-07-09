@@ -12,5 +12,7 @@ object Binding {
     fun bindAbc(view: View, ds: DialogState, plot: DialogEvents) {
         println("111111 bound $ds")
         println("111111 bound $plot")
+
+        //ProgressDialog.show(view.context, "title", "message", true)
     }
 }

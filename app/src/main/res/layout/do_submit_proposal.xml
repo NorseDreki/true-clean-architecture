@@ -27,6 +27,7 @@
             android:enabled="@{viewModel.proposalSummary.isSubmitEnabled}"
             android:text="@string/find_work_submit_proposal_summary_submit"
             android:textColor="@color/white"
+            android:onClick="@{() -> events.proposalSummaryEvents.onSubmitClicked()}"
             android:textSize="16sp" />
 
         <View

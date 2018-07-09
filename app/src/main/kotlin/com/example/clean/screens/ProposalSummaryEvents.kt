@@ -7,6 +7,7 @@ class ProposalSummaryEvents(val handler: ProposalSummaryEventHandler, val dialog
 
 
     fun onSubmitClicked() {
+        println("submit clicked")
         handler.handleProposalSummaryEvent(ProposalSummaryEventHandler.Event.OnSubmit)
     }
 }
