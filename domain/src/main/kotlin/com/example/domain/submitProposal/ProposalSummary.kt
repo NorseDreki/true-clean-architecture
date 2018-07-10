@@ -87,12 +87,6 @@ val psReducer =
             it.scan(ProposalSummaryViewState.init()) { state, result ->
                 val s = state as ProposalSummaryViewState
                 when (result) {
-                    is SubmitAllowedResult.Enabled -> {
-                        s.copy(isSubmitEnabled = true)
-                    }
-                    is SubmitAllowedResult.Disabled -> {
-                        s.copy(isSubmitEnabled = false)
-                    }
                 /*is CoverLetter.Result.NoCoverLetterRequired -> {
                     s.copy(hasCoverLetter = false)
                 }*/
@@ -168,7 +162,6 @@ data class ProposalSummaryViewState(
         val hasCoverLetter: Boolean,
         val hasQuestions: Boolean,
 
-        val isSubmitEnabled: Boolean,
         val coverLetter: String,
         val isCoverLetterValid: Boolean,
 
@@ -180,7 +173,7 @@ data class ProposalSummaryViewState(
 ) : UiState {
     companion object {
         fun init() = ProposalSummaryViewState(
-                false, false, false, "", false,
+                false, false, "", false,
                 0, 0, false, listOf()
         )
     }

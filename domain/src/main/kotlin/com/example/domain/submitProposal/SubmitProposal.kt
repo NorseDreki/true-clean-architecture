@@ -75,8 +75,6 @@ class SubmitProposal(
                                     shared.ofType(DoSubmitProposal.Command::class.java)
                                             .compose { doSubmitProposal.process(it) }
 
-                                    /*shared.ofType(DoSubmitProposalCommand::class.java)
-                                            .compose(doSubmitProposalProcessor)*/
                             )
                             /*,
 
@@ -135,28 +133,6 @@ class SubmitProposal(
                                 },
 
                         doSubmitProposal.render().doOnNext { println("render DSP: $it") }
-
-                        /*results.ofType(DoSubmitProposalResult::class.java)
-                                .map {
-                                    println("GOT DSP RESULT")
-                                    when (it) {
-                                        is DoSubmitProposalResult.InProgress ->
-                                            DialogState.Progress(
-                                                    "progress",
-                                                    "message"
-                                            )
-                                        is DoSubmitProposalResult.Error ->
-                                            DialogState.Alert(
-                                                    "wrong",
-                                                    "blah",
-                                                    "retry",
-                                                    "cancel"
-                                            )
-                                        is DoSubmitProposalResult.Success ->
-                                            DialogState.Dismissed
-                                    }
-                                }
-                                .startWith(DialogState.Dismissed)*/
                 )
         ) {
             val cl = it[0] as CoverLetter.ViewState
@@ -164,8 +140,7 @@ class SubmitProposal(
             val ps = it[2] as ProposalSummaryViewState
             val index = it[3] as Int
             val dsp = it[4] as DoSubmitProposal.ViewState
-            val dialogState = DialogState.Dismissed//it[4] as DialogState
-            ViewState(cl, cq, ps, dsp, index, dialogState)
+            ViewState(cl, cq, ps, dsp, index)
         }
     }
 
@@ -215,7 +190,7 @@ class SubmitProposal(
                             //ProposeTerms.Command.DATA
                             Observable.empty<UiCommand>()
                         }
-                        is DoSubmitProposalResult.Success -> {
+                        is DoSubmitProposal.Result.Success -> {
                             println("SUCCESS")
                             Observable.just(SubmitProposal.Command.RemoveProposal)
                         }
@@ -279,10 +254,10 @@ class SubmitProposal(
 
                             Observable.just(Result.ProposalUpdated)
 
-                        is DoSubmitProposalResult.Success ->
+                        is DoSubmitProposal.Result.Success ->
                             Observable.just(Result.ProposalSent)
 
-                        is DoSubmitProposalResult.Error ->
+                        is DoSubmitProposal.Result.Error ->
                             Observable.just(Result.JobNoLongerAvailable)
 
                         else -> Observable.empty()
@@ -311,8 +286,7 @@ class SubmitProposal(
             val clarifyingQuestions: ClarifyingQuestions.ViewState,
             val proposalSummary: ProposalSummaryViewState,
             val doSubmitProposal: DoSubmitProposal.ViewState,
-            val index: Int,
-            val doSubmitDialog: DialogState
+            val index: Int
     ) : UiState {
         companion object {
             /*fun initial() = SubmitProposalViewState(
