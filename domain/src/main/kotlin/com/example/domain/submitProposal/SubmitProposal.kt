@@ -21,7 +21,10 @@ class SubmitProposal(
 ) : UiComponent<Command, UiResult, ViewState>, ProposalSummaryEventHandler {
 
     override fun handleProposalSummaryEvent(event: ProposalSummaryEventHandler.Event) {
-        Observable.just(event).compose(eventProcessor).subscribe(cmd)
+        println("handleProposalSummaryEvent")
+        val c = Observable.just(event).compose(eventProcessor).firstOrError().blockingGet()
+
+        cmd.onNext(c)
     }
 
     val eventProcessor =
@@ -173,6 +176,10 @@ class SubmitProposal(
 
                     //memoize itemOpportunity here as well?
                     when (it) {
+                        is Result.ProposalUpdated -> {
+                            println("112233 PROPOSAL UPDATED")
+                            Observable.empty<UiCommand>()
+                        }
                         is SubmitAllowedResult.Enabled -> {
                             Observable.just(ProposalSummary.Command.ToggleSubmitEnabled(true))
                         }

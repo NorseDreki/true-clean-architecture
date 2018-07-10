@@ -132,13 +132,25 @@ val psReducer =
                     is ClarifyingQuestions.Result.ValidAnswer -> {
                         val count = s.answeredQuestions + 1
                         s.copy(
-                                answeredQuestions = count,
+                                questions = s.questions.map {
+                                    if (it.id == result.id)
+                                        ClarifyingQuestions.QuestionViewState(it.id, it.question, result.answer)
+                                    else
+                                        it
+                                },
+                                answeredQuestions = if (count > s.totalQuestions) s.totalQuestions else count,
                                 areQuestionsValid = count == s.totalQuestions
                         )
                     }
                     is ClarifyingQuestions.Result.EmptyAnswer -> {
                         val count = s.answeredQuestions - 1
                         s.copy(
+                                questions = s.questions.map {
+                                    if (it.id == result.id)
+                                        ClarifyingQuestions.QuestionViewState(it.id, it.question, null)
+                                    else
+                                        it
+                                },
                                 answeredQuestions = count,
                                 areQuestionsValid = false
                         )

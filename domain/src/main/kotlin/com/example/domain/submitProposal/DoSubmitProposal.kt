@@ -4,7 +4,6 @@ import com.example.domain.UiCommand
 import com.example.domain.UiResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import java.util.concurrent.TimeUnit
 
 sealed class DoSubmitProposalCommand : UiCommand {
     data class DoSubmit(val id: String) : DoSubmitProposalCommand()
@@ -26,7 +25,8 @@ interface Api {
 
 class SomeApi : Api {
     override fun submitProposal(id: String, some: String): Observable<String> {
-        return Observable.just("response")
+        //return Observable.just("response")
+        return Observable.error(IllegalStateException("sf"))
     }
 
 }
@@ -39,7 +39,7 @@ val doSubmitProposalProcessor =
                         val api: Api? = SomeApi()
 
                         api!!.submitProposal("123", "dsf")
-                                .delay(3, TimeUnit.SECONDS)
+                                //.delay(3, TimeUnit.SECONDS)
                                 .map(DoSubmitProposalResult::Success)
                                 .cast(UiResult::class.java)
                                 .onErrorReturn(DoSubmitProposalResult::Error)
