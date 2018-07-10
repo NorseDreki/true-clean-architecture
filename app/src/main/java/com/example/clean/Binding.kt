@@ -1,5 +1,6 @@
 package com.example.clean
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.databinding.BindingAdapter
@@ -26,6 +27,18 @@ object Binding {
                 if (dialog != null) dialog.dismiss()
             }
             is DialogState.Alert -> {
+                val d = AlertDialog.Builder(view.context)
+                        .setCancelable(false)
+                        //.setTitle(ds.title)
+                        .setMessage(ds.message)
+                        .setPositiveButton(ds.positiveText) { dialog, which ->
+                            plot.onPositive()
+                        }
+                        .setNegativeButton(null) { dialog, which ->
+                            plot.onNegative()
+                        }.show()
+
+
                 println("none yet")
             }
         }

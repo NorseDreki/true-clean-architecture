@@ -3,6 +3,7 @@ package com.example.clean.screens
 import com.example.clean.R
 import com.example.clean.screens.SubmitProposalScreen.Events
 import com.example.domain.submitProposal.DialogEvents
+import com.example.domain.submitProposal.ProposalSummaryEventHandler
 import com.example.domain.submitProposal.SubmitProposal
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
@@ -38,7 +39,9 @@ class ToScreen(
             ProposalSummaryEvents(
                     submitProposal,
                     DialogEvents(
-                            { println("positive")},
+                            { println("positive");
+                                submitProposal.handleProposalSummaryEvent(ProposalSummaryEventHandler.Event.OnSubmit)
+                            },
                             { println("negative") }
                     )
             )
