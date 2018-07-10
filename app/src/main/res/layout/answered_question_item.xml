@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.text.TextUtils"/>
+
+        <variable
+            name="v"
+            type="com.example.domain.submitProposal.ClarifyingQuestions.QuestionViewState"/>
+<!--
+        <variable
+            name="listener"
+            type="com.example.clean.screens.ClarifyingQuestionsEvents"/>-->
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp">
+
+        <ImageView
+            android:id="@+id/answerIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/question"
+            android:layout_alignTop="@+id/question"
+            android:layout_gravity="center"
+            android:src="@{!TextUtils.isEmpty(v.answer) ? @drawable/indicator : @drawable/indicator_empty}"
+            tools:src="@drawable/indicator"/>
+
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/answerIndicator"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text='@{v.question}'
+            android:textColor="@color/gray5"
+            android:textSize="12sp"
+            tools:text="Why do you think you are a good fit for this part?"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/question"
+            android:layout_below="@+id/question"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text='@{v.answer}'
+            android:textColor="@color/gray4"
+            android:textSize="12sp"
+            bind:visible="@{!TextUtils.isEmpty(v.answer)}"
+            tools:text="I have a question about the length of this project"/>
+
+    </RelativeLayout>
+
+</layout>

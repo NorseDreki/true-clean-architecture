@@ -35,7 +35,8 @@
 
             <include
                 layout="@layout/proposal_summary_questions"
-                bind:viewModel="@{viewModel}"/>
+                bind:viewModel="@{viewModel}"
+                bind:events="@{events}"/>
 <!--
             <View
                 android:layout_width="wrap_content"
