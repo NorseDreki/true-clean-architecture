@@ -23,7 +23,7 @@ object Binding {
                 val d = ProgressDialog.show(view.context, ds.title, ds.message, true, false)
                 view.setTag(R.id.afterTextChangeListener, d)
             }
-            is DialogState.Dismiss -> {
+            is DialogState.Dismissed -> {
                 if (dialog != null) dialog.dismiss()
             }
             is DialogState.Alert -> {

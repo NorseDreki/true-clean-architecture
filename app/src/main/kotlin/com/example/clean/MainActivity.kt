@@ -10,6 +10,7 @@ import com.example.domain.models.ItemDetails
 import com.example.domain.models.Question
 import com.example.domain.submitProposal.ClarifyingQuestions
 import com.example.domain.submitProposal.CoverLetter
+import com.example.domain.submitProposal.DoSubmitProposal
 import com.example.domain.submitProposal.SubmitProposal
 import com.google.gson.GsonBuilder
 import com.upwork.android.core.BasicKeyParceler
@@ -32,7 +33,8 @@ class MainActivity : AppCompatActivity() {
 
         cl = CoverLetter()
         val cq = ClarifyingQuestions()
-        sp = SubmitProposal(cl, cq)
+        val dsp = DoSubmitProposal()
+        sp = SubmitProposal(cl, cq, dsp)
         toScreen = ToScreen(sp)
 
         val questions = listOf(

@@ -17,7 +17,8 @@ import io.reactivex.subjects.ReplaySubject
 
 class SubmitProposal(
         val coverLetter: CoverLetter,
-        val clarifyingQuestions: ClarifyingQuestions
+        val clarifyingQuestions: ClarifyingQuestions,
+        val doSubmitProposal: DoSubmitProposal
 ) : UiComponent<Command, UiResult, ViewState>, ProposalSummaryEventHandler {
 
     override fun handleProposalSummaryEvent(event: ProposalSummaryEventHandler.Event) {
@@ -33,7 +34,7 @@ class SubmitProposal(
                     when (it) {
                         is ProposalSummaryEventHandler.Event.OnSubmit -> {
                             println("DOSUBMIT")
-                            DoSubmitProposalCommand.DoSubmit("sadf")
+                            DoSubmitProposal.Command.DoSubmit
                         }
                     }
                 }
@@ -70,8 +71,12 @@ class SubmitProposal(
                                             .compose { coverLetter.process(it) },
                                     shared.ofType(ClarifyingQuestions.Command::class.java)
                                             .compose { clarifyingQuestions.process(it) },
-                                    shared.ofType(DoSubmitProposalCommand::class.java)
-                                            .compose(doSubmitProposalProcessor)
+
+                                    shared.ofType(DoSubmitProposal.Command::class.java)
+                                            .compose { doSubmitProposal.process(it) }
+
+                                    /*shared.ofType(DoSubmitProposalCommand::class.java)
+                                            .compose(doSubmitProposalProcessor)*/
                             )
                             /*,
 
@@ -129,7 +134,9 @@ class SubmitProposal(
                                     it.index
                                 },
 
-                        results.ofType(DoSubmitProposalResult::class.java)
+                        doSubmitProposal.render().doOnNext { println("render DSP: $it") }
+
+                        /*results.ofType(DoSubmitProposalResult::class.java)
                                 .map {
                                     println("GOT DSP RESULT")
                                     when (it) {
@@ -146,18 +153,19 @@ class SubmitProposal(
                                                     "cancel"
                                             )
                                         is DoSubmitProposalResult.Success ->
-                                            DialogState.Dismiss
+                                            DialogState.Dismissed
                                     }
                                 }
-                                .startWith(DialogState.Dismiss)
+                                .startWith(DialogState.Dismissed)*/
                 )
         ) {
             val cl = it[0] as CoverLetter.ViewState
             val cq = it[1] as ClarifyingQuestions.ViewState
             val ps = it[2] as ProposalSummaryViewState
             val index = it[3] as Int
-            val dialogState = it[4] as DialogState
-            ViewState(cl, cq, ps, index, dialogState)
+            val dsp = it[4] as DoSubmitProposal.ViewState
+            val dialogState = DialogState.Dismissed//it[4] as DialogState
+            ViewState(cl, cq, ps, dsp, index, dialogState)
         }
     }
 
@@ -181,14 +189,18 @@ class SubmitProposal(
                             Observable.empty<UiCommand>()
                         }
                         is SubmitAllowedResult.Enabled -> {
-                            Observable.just(ProposalSummary.Command.ToggleSubmitEnabled(true))
+                            //Observable.just(ProposalSummary.Command.ToggleSubmitEnabled(true))
+                            println("SUBMIT ENABLED!")
+
+                            Observable.just(DoSubmitProposal.Command.ToggleSubmitEnabled(true))
                         }
 
                         is Result.ProposalLoaded -> {
                             //hide panel
                             Observable.fromArray(
                                     CoverLetter.Command.DATA(it.itemOpportunity!!),
-                                    ClarifyingQuestions.Command.INIT(it.itemOpportunity)
+                                    ClarifyingQuestions.Command.INIT(it.itemOpportunity),
+                                    DoSubmitProposal.Command.DATA(it.itemOpportunity.proposal)
                             )
                             //AnchoredPanel.Command.Expand
 
@@ -298,6 +310,7 @@ class SubmitProposal(
             val coverLetter: CoverLetter.ViewState,
             val clarifyingQuestions: ClarifyingQuestions.ViewState,
             val proposalSummary: ProposalSummaryViewState,
+            val doSubmitProposal: DoSubmitProposal.ViewState,
             val index: Int,
             val doSubmitDialog: DialogState
     ) : UiState {

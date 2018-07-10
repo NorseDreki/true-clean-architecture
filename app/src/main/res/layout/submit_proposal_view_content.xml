@@ -39,7 +39,7 @@
 
         <include
             layout="@layout/do_submit_proposal"
-            bind:viewModel="@{viewModel}"
+            bind:viewModel="@{viewModel.doSubmitProposal}"
             bind:events="@{events}"/>
 
     </ViewFlipper>

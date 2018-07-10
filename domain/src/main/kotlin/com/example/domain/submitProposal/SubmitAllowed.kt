@@ -68,5 +68,5 @@ val submitAllowedProcessor =
                     .distinctUntilChanged()
                     //.startWith(SubmitAllowedResult.Disabled)
 
-                    .doOnNext { println("----------> $it") }
+                    .doOnNext { println("! ----------> $it") }
         }

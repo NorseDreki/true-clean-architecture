@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.domain.submitProposal.SubmitProposal.ViewState" />
+            type="com.example.domain.submitProposal.DoSubmitProposal.ViewState" />
 
         <variable
             name="events"
@@ -23,8 +23,8 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@{viewModel.proposalSummary.isSubmitEnabled ? @drawable/button_primary_no_inset : @drawable/button_disabled}"
-            android:enabled="@{viewModel.proposalSummary.isSubmitEnabled}"
+            android:background="@{viewModel.isSubmitEnabled ? @drawable/button_primary_no_inset : @drawable/button_disabled}"
+            android:enabled="@{viewModel.isSubmitEnabled}"
             android:text="@string/find_work_submit_proposal_summary_submit"
             android:textColor="@color/white"
             android:onClick="@{() -> events.proposalSummaryEvents.onSubmitClicked()}"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            bind:abc="@{viewModel.doSubmitDialog}"
+            bind:abc="@{viewModel.status}"
             bind:def='@{events.proposalSummaryEvents.dialogEvents}'/>
 
 
