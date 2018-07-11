@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.domain.submitProposal.ProposalConfirmationViewState"/>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/windowBackgroundColor"
+        android:divider="@drawable/list_divider"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <!--<android.support.v7.widget.Toolbar
+            style="@style/Toolbar"
+            bind:hasHome="@{true}"
+            bind:hasUp="@{true}"
+            bind:title="@{@string/find_work_submit_proposal_confirmation_title}"/>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_propose_confirmation_black_144_dp"
+                bind:tint="@{@color/colorSecondary}"
+                tools:src="@drawable/ic_propose_confirmation_black_144_dp"
+                tools:tint="@color/colorSecondary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="4"
+                android:text="@string/find_work_submit_proposal_confirmation_subtitle"
+                android:textColor="@color/gray5"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@{viewModel.title}"
+                android:textColor="@color/gray5"
+                android:textSize="16sp"
+                tools:text="PHP developer for start-up"/>
+
+            <!--<TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{String.format(viewModel.isHourly ? @string/find_work_submit_proposal_confirmation_bid_hourly : @string/find_work_submit_proposal_confirmation_bid_fixed, viewModel.bid.get(), viewModel.earn.get())}"
+                android:textColor="@color/gray3"
+                android:textSize="12sp"
+                tools:text="Your bid is $1800. You'll earn $1530"/>-->
+        </LinearLayout>
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"
+            android:text="@string/find_work_submit_proposal_confirmation_done"
+            android:textColor="@color/colorSecondary"
+            android:textSize="16sp"
+            bind:onClick="@{viewModel.onDoneClicked}"
+            tools:text="@string/find_work_submit_proposal_confirmation_done"/>
+
+    </LinearLayout>
+
+</layout>
