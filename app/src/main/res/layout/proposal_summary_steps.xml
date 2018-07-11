@@ -14,6 +14,10 @@
             name="events"
             type="com.example.clean.screens.ProposalSummaryEventHandler"/>
 
+        <variable
+            name="bindings"
+            type="com.example.clean.screens.SubmitProposalScreen.Bindings.ProposalSummary"/>
+
     </data>
 
     <android.support.v7.widget.CardView

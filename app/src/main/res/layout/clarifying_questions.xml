@@ -14,6 +14,10 @@
             name="events"
             type="com.example.clean.screens.ClarifyingQuestionsEvents"/>
 
+        <variable
+            name="bindings"
+            type="com.example.clean.screens.SubmitProposalScreen.Bindings.ClarifyingQuestions"/>
+
     </data>
 
 <!--                <EditText

@@ -7,6 +7,8 @@ data class ProposalConfirmationScreen(
         override val state: SubmitProposal.ViewState,
         override val events: Events
 ) : Screen {
+    override val listBindings: ListBindings
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
     override val layout: Int
         get() = R.layout.proposal_confirmation_view

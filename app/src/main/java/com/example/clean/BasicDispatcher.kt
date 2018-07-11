@@ -69,7 +69,7 @@ internal class BasicDispatcher(
                         2000
                 )*/
 
-                dataBinder.bind(currentView, destKey.state, destKey.events);
+                dataBinder.bind(currentView, destKey.state, destKey.events, destKey.listBindings);
                 /*currentView.clearFocus()*/
                 currentView.requestFocus()
                 println("same stuff for sure ${destKey.state}")
@@ -98,7 +98,7 @@ internal class BasicDispatcher(
 
         if (destKey is Screen) {
 
-            dataBinder.bind(incomingView, destKey.state, destKey.events)
+            dataBinder.bind(incomingView, destKey.state, destKey.events, destKey.listBindings)
         }
 
         frame.addView(incomingView)

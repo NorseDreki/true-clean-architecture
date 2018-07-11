@@ -12,6 +12,10 @@
             name="events"
             type="com.example.clean.screens.SubmitProposalScreen.Events"/>
 
+        <variable
+            name="bindings"
+            type="com.example.clean.screens.SubmitProposalScreen.Bindings"/>
+
     </data>
 
     <!-- Putting ViewFlipper in a dedicated layout is a workaround for Android data binding bug -->
