@@ -21,7 +21,8 @@ data class SubmitProposalScreen(
     data class Events(
             val coverLetter: CoverLetterScreenEvents,
             val clarifyingQuestions: ClarifyingQuestionsEvents,
-            val proposalSummaryEvents: ProposalSummaryEvents
+            val proposalSummaryEvents: ProposalSummaryEvents,
+            val doSubmitProposal: DoSubmitProposalEvents
     ) : ScreenEvents
 }
 
@@ -44,6 +45,9 @@ class ToScreen(
                             },
                             { println("negative") }
                     )
+            ),
+            DoSubmitProposalEvents(
+                    submitProposal.doSubmitProposal
             )
     )
 
