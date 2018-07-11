@@ -14,7 +14,6 @@ data class ProposalConfirmationScreen(
     data class Events(
             val coverLetter: CoverLetterScreenEvents,
             val clarifyingQuestions: ClarifyingQuestionsEvents,
-            val proposalSummaryEvents: ProposalSummaryEvents,
             val doSubmitProposal: DoSubmitProposalEvents
     ) : ScreenEvents
 

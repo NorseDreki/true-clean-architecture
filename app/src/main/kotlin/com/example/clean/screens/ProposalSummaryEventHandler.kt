@@ -1,4 +1,4 @@
-package com.example.domain.submitProposal
+package com.example.clean.screens
 
 
 interface ProposalSummaryEventHandler {

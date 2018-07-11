@@ -4,7 +4,6 @@ import com.example.clean.BR
 import com.example.clean.R
 import com.example.clean.screens.SubmitProposalScreen.Events
 import com.example.domain.submitProposal.ClarifyingQuestions
-import com.example.domain.submitProposal.ProposalSummaryEventHandler
 import com.example.domain.submitProposal.SubmitProposal
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
