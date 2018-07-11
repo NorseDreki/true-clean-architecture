@@ -39,15 +39,6 @@ class ToScreen(
             ClarifyingQuestionsEvents(
                     submitProposal.clarifyingQuestions
             ),
-            /*ProposalSummaryEvents(
-                    submitProposal,
-                    DialogEvents(
-                            { println("positive");
-                                submitProposal.handleProposalSummaryEvent(ProposalSummaryEventHandler.Event.OnSubmit)
-                            },
-                            { println("negative") }
-                    )
-            ),*/
             SubmitProposalEvents(submitProposal),
             DoSubmitProposalEvents(
                     submitProposal.doSubmitProposal
