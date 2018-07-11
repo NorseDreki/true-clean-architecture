@@ -8,6 +8,6 @@ val pcReducer =
             it.map { ProposalConfirmationViewState(it.itemOpportunity.itemDetails.id) }
         }
 
-class ProposalConfirmationViewState(
-        title: String
+data class ProposalConfirmationViewState(
+        val title: String
 ) : UiState
