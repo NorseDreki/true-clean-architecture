@@ -14,7 +14,7 @@
 
         <variable
             name="events"
-            type="com.example.clean.screens.ProposalSummaryEvents"/>
+            type="com.example.domain.submitProposal.ProposalSummaryEventHandler"/>
 
     </data>
 
@@ -70,7 +70,7 @@
             tools:text="2 out of 3 answered"
             tools:textColor="@color/error"/>
 
-        <android.support.v7.widget.RecyclerView
+        <!--<android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/questionsSubtitle"
@@ -80,7 +80,7 @@
             bind:itemBinding="@{events.itemBinding}"
             bind:items="@{viewModel.questions}"
             bind:layoutManager="@{LayoutManagers.linear()}"
-            tools:layout_height="100dp"/>
+            tools:layout_height="100dp"/>-->
 
     </RelativeLayout>
 

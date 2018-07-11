@@ -19,9 +19,9 @@ class SubmitProposal(
         val coverLetter: CoverLetter,
         val clarifyingQuestions: ClarifyingQuestions,
         val doSubmitProposal: DoSubmitProposal
-) : UiComponent<Command, UiResult, ViewState>, ProposalSummaryEventHandler {
+) : UiComponent<Command, UiResult, ViewState> {
 
-    override fun handleProposalSummaryEvent(event: ProposalSummaryEventHandler.Event) {
+    /*override fun handleProposalSummaryEvent(event: ProposalSummaryEventHandler.Event) {
         println("handleProposalSummaryEvent")
         val c = Observable.just(event).compose(eventProcessor).firstOrError().blockingGet()
 
@@ -39,7 +39,7 @@ class SubmitProposal(
                     }
                 }
             }
-
+*/
     val cmd = PublishSubject.create<UiCommand>()
 
     fun fromEvent(command: SubmitProposal.Command) {
@@ -149,6 +149,8 @@ class SubmitProposal(
         data class DATA(val itemDetails: ItemDetails) : Command()
 
         object ToNextStep : Command()
+        object ToCoverLetter : Command()
+        object ToClarifyingQuestions : Command()
 
         object RemoveProposal : Command() //when job became private
     }

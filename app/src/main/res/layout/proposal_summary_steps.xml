@@ -12,7 +12,7 @@
 
         <variable
             name="events"
-            type="com.example.clean.screens.ProposalSummaryEvents"/>
+            type="com.example.domain.submitProposal.ProposalSummaryEventHandler"/>
 
     </data>
 

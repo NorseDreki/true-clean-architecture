@@ -12,6 +12,10 @@
             name="viewModel"
             type="com.example.domain.submitProposal.ProposalSummaryViewState"/>
 
+        <variable
+            name="events"
+            type="com.example.domain.submitProposal.ProposalSummaryEventHandler"/>
+
     </data>
 
     <RelativeLayout
