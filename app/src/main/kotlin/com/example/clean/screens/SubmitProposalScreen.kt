@@ -33,7 +33,7 @@ data class SubmitProposalScreen(
         }
 
         class ProposalSummary() {
-            val questionBinding: ItemBinding<com.example.domain.submitProposal.ClarifyingQuestions.QuestionViewState> = ItemBinding.of<com.example.domain.submitProposal.ClarifyingQuestions.QuestionViewState>(BR.v, R.layout.answered_question_item)
+            val questionBinding = ItemBinding.of<com.example.domain.submitProposal.ClarifyingQuestions.QuestionViewState>(BR.v, R.layout.answered_question_item)
         }
     }
 

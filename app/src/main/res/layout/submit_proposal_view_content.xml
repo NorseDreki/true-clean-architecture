@@ -34,11 +34,13 @@
         <include
             layout="@layout/clarifying_questions"
             bind:viewModel="@{viewModel.clarifyingQuestions}"
+            bind:bindings="@{bindings.clarifyingQuestions}"
             bind:events="@{events.clarifyingQuestions}"/>
 
         <include
             layout="@layout/proposal_summary_steps"
             bind:viewModel="@{viewModel.proposalSummary}"
+            bind:bindings="@{bindings.proposalSummary}"
             bind:events="@{events.proposalSummaryEvents}"/>
 
         <include

@@ -40,7 +40,7 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        bind:itemBinding="@{events.itemBinding}"
+        bind:itemBinding="@{bindings.questionBinding}"
         bind:items="@{viewModel.items}"
         bind:layoutManager="@{LayoutManagers.linear()}"/>
 </layout>

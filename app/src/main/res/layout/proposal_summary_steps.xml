@@ -40,6 +40,7 @@
             <include
                 layout="@layout/proposal_summary_questions"
                 bind:viewModel="@{viewModel}"
+                bind:bindings="@{bindings}"
                 bind:events="@{events}"/>
 <!--
             <View
