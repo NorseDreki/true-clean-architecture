@@ -1,9 +1,7 @@
 package com.example.domain.submitProposal
 
-import com.example.domain.UiCommand
-import com.example.domain.UiComponent
-import com.example.domain.UiResult
-import com.example.domain.UiState
+import com.example.domain.*
+import com.example.domain.models.ItemOpportunity
 import com.example.domain.models.Proposal
 import com.example.domain.submitProposal.DoSubmitProposal.*
 import io.reactivex.Observable
@@ -11,7 +9,10 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
-class DoSubmitProposal : UiComponent<Command, Result, ViewState> {
+class DoSubmitProposal(
+        val navigator: Navigator,
+        val proposalConfirmation: ProposalConfirmation
+) : UiComponent<Command, Result, ViewState> {
 
     val cmd = PublishSubject.create<Command>()
 
@@ -48,9 +49,12 @@ class DoSubmitProposal : UiComponent<Command, Result, ViewState> {
                         Result.InProgress -> state.copy(
                                 status = DialogState.Progress(null, "In Progress")
                         )
-                        is Result.Success -> state.copy(
-                                status = DialogState.Dismissed
-                        )
+                        is Result.Success -> {
+
+                            state.copy(
+                                    status = DialogState.Dismissed
+                            )
+                        }
                         is Result.Error -> state.copy(
                                 status = DialogState.Alert(
                                         "title",
@@ -68,7 +72,15 @@ class DoSubmitProposal : UiComponent<Command, Result, ViewState> {
                 it.publish { shared ->
                     println("DSP COMMAND $shared")
                     Observable.combineLatest<Proposal, Command, Pair<Proposal, Command>>(
-                            shared.ofType(Command.DATA::class.java).map { it.proposal },
+
+                            shared.ofType(Command.DATA::class.java).map {
+                                /*navigator.display(
+                                        proposalConfirmation,
+                                        ProposalConfirmation.Command.DATA(it.itemOpportunity)
+                                )*/
+                                it.itemOpportunity.proposal
+
+                            },
                             shared.filter { it !is Command.DATA },
 
                             BiFunction { proposal, command ->
@@ -90,18 +102,25 @@ class DoSubmitProposal : UiComponent<Command, Result, ViewState> {
             }
 
     private fun doSubmit(proposal: Proposal): Observable<Result> {
+
+        println("DO SUBMIT")
         val api: Api? = SomeApi()
 
         return api!!.submitProposal("123", "dsf")
                 //.delay(3, TimeUnit.SECONDS)
                 .map(Result::Success)
+                .doOnNext {
+                    navigator.display(
+                            proposalConfirmation,
+                            ProposalConfirmation.Command.DATA("some"))
+                }
                 .cast(Result::class.java)
                 .onErrorReturn(Result::Error)
                 .startWith(Result.InProgress)
     }
 
     sealed class Command : UiCommand {
-        data class DATA(val proposal: Proposal) : Command()
+        data class DATA(val itemOpportunity: ItemOpportunity) : Command()
         data class ToggleSubmitEnabled(val enabled: Boolean) : Command()
         object DoSubmit : Command()
     }
@@ -138,8 +157,8 @@ interface Api {
 
 class SomeApi : Api {
     override fun submitProposal(id: String, some: String): Observable<String> {
-        //return Observable.just("response")
-        return Observable.error(IllegalStateException("sf"))
+        return Observable.just("response")
+        //return Observable.error(IllegalStateException("sf"))
     }
 
 }

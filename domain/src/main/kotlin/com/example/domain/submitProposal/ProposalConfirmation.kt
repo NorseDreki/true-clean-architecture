@@ -4,7 +4,6 @@ import com.example.domain.UiCommand
 import com.example.domain.UiComponent
 import com.example.domain.UiResult
 import com.example.domain.UiState
-import com.example.domain.models.ItemOpportunity
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.PublishSubject
@@ -38,13 +37,13 @@ class ProposalConfirmation : UiComponent<ProposalConfirmation.Command, ProposalC
                 .compose<ViewState>(pcReducer)//.distinctUntilChanged()
     }
     sealed class Command : UiCommand {
-        data class DATA(val itemOpportunity: ItemOpportunity) : Command()
+        data class DATA(val itemOpportunity: String) : Command()
 
         object Dismiss : Command()
     }
 
     sealed class Result : UiResult {
-        data class DATALoaded(val itemOpportunity: ItemOpportunity) : Result()
+        data class DATALoaded(val itemOpportunity: String) : Result()
 
         object Dismissed : Result()
     }
@@ -65,6 +64,6 @@ class ProposalConfirmation : UiComponent<ProposalConfirmation.Command, ProposalC
 
     val pcReducer =
             ObservableTransformer<Result, ViewState> {
-                it.map { ViewState((it as Result.DATALoaded).itemOpportunity.itemDetails.id) }
+                it.map { ViewState((it as Result.DATALoaded).itemOpportunity) }
             }
 }

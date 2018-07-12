@@ -158,7 +158,7 @@ class SubmitProposal(
                             Observable.fromArray(
                                     CoverLetter.Command.DATA(it.itemOpportunity!!),
                                     ClarifyingQuestions.Command.INIT(it.itemOpportunity),
-                                    DoSubmitProposal.Command.DATA(it.itemOpportunity.proposal)
+                                    DoSubmitProposal.Command.DATA(it.itemOpportunity)
                             )
                             //AnchoredPanel.Command.Expand
 
