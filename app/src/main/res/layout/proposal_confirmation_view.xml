@@ -8,7 +8,15 @@
 
         <variable
             name="viewModel"
-            type="com.example.domain.submitProposal.ProposalConfirmationViewState"/>
+            type="com.example.domain.submitProposal.ProposalConfirmation.ViewState"/>
+
+        <variable
+            name="events"
+            type="com.example.clean.screens.ProposalConfirmationEvents"/>
+
+        <variable
+            name="bindings"
+            type="com.example.clean.screens.ListBindings"/>
 
     </data>
 
@@ -86,6 +94,7 @@
             android:text="@string/find_work_submit_proposal_confirmation_done"
             android:textColor="@color/colorSecondary"
             android:textSize="16sp"
+            android:onClick="@{() -> events.onDoneClicked()}"
             tools:text="@string/find_work_submit_proposal_confirmation_done"/>
 
     </LinearLayout>
