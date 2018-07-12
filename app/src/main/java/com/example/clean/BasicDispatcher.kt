@@ -54,7 +54,8 @@ internal class BasicDispatcher(
                 return
             }*/
 
-            if (destKey is Screen && currentKey is Screen) {
+            //if (destKey is Screen && currentKey is Screen) {
+            if (destKey is Screen && destKey::class == currentKey!!::class) {
                 /*val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(frame.windowToken, 0)*/
 
