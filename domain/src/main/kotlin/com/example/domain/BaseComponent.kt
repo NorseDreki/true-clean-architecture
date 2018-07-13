@@ -16,7 +16,8 @@ abstract class BaseComponent<C : UiCommand, R : UiResult, S : UiState> : Actor<C
     private val stream = commands
             .compose(processor)
             .replay()
-            .refCount()
+            .autoConnect(0)
+            //.refCount()
 
     override fun apply(upstream: Observable<C>): ObservableSource<R> {
         upstream.subscribe(commands)
