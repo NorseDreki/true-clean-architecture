@@ -1,18 +1,34 @@
 package com.example.domain
 
 import io.reactivex.Observable
+import io.reactivex.ObservableSource
+import io.reactivex.ObservableTransformer
+import io.reactivex.subjects.PublishSubject
 
-class BaseComponent<C : UiCommand, R : UiResult, S : UiState> : UiComponent<C, R, S> {
+abstract class BaseComponent<C : UiCommand, R : UiResult, S : UiState> : Actor<C, R>, UiRenderer<S> {
 
+    private val commands = PublishSubject.create<C>()
 
+    protected abstract val processor: ObservableTransformer<C, R>
 
+    protected abstract val reducer: ObservableTransformer<R, S>
 
+    private val stream = commands
+            .compose(processor)
+            .replay()
+            .refCount()
 
-    override fun process(commands: Observable<C>): Observable<R> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun apply(upstream: Observable<C>): ObservableSource<R> {
+        upstream.subscribe(commands)
+
+        return stream
     }
 
     override fun render(): Observable<S> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return stream.compose(reducer)
+    }
+
+    fun sendCommand(command: C) {
+        commands.onNext(command)
     }
 }

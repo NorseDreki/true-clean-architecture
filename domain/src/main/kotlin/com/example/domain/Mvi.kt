@@ -1,6 +1,7 @@
 package com.example.domain
 
 import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
 
 
 /*
@@ -24,6 +25,9 @@ interface UiState /*{
     class PartialViewState : UiState()
     class ScreenViewState : UiState()
 }*/
+
+interface Actor<C : UiCommand, R : UiResult> : ObservableTransformer<C, R>
+
 
 interface UiActor<C : UiCommand, R : UiResult> {
 
