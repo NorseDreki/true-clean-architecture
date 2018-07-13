@@ -52,6 +52,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
             val answeredQuestions: MutableSet<String> = mutableSetOf("1234")
     )
 
+
     val paAnsweredProcessor =
             ObservableTransformer<Result, Result> { t ->
                 t.doOnNext { println("111 $it") }
@@ -85,6 +86,7 @@ class ClarifyingQuestions : UiComponent<Command, Result, ViewState> {
                         }
 
             }
+
 
     val paProcessor =
             ObservableTransformer<UiCommand, UiResult> { t ->

@@ -22,7 +22,8 @@ class FlowNavigator(val context: Context) : Navigator {
         )
 
 
-        val toScreen = ProposalConfirmationScreen.ToScreen(component as ProposalConfirmation)
+        val toScreen =
+                ProposalConfirmationScreen.ToScreen(component as ProposalConfirmation)
 
         component.render().compose(toScreen)
                 .doOnComplete {
