@@ -21,6 +21,7 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
                 .compose(processor)
                 .replay()
                 .refCount()
+                //maybe two lines up
                 .takeUntil(upstream.materialize().filter { it.isOnComplete })
 
         results = transformed
