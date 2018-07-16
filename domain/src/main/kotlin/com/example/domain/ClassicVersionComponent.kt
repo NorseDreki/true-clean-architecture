@@ -48,4 +48,8 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
 
         commands.onNext(command)
     }
+
+    fun justStart(command: C) {
+        Observable.just(command).compose(this).subscribe()
+    }
 }
