@@ -13,20 +13,23 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
 
     protected abstract val reducer: ObservableTransformer<R, S>
 
-    private val stream = commands
-            .compose(processor)
-            .replay()
-            .autoConnect(0)
-            //.refCount()
+    private lateinit var results: Observable<R>
 
     override fun apply(upstream: Observable<C>): ObservableSource<R> {
-        upstream.subscribe(commands)
+        val transformed = upstream
+                .mergeWith(commands)
+                .compose(processor)
+                .replay()
+                .refCount()
+                .takeUntil(upstream.materialize().filter { it.isOnComplete })
 
-        return stream
+        results = transformed
+
+        return transformed
     }
 
     override fun render(): Observable<S> {
-        return stream.compose(reducer)
+        return results.compose(reducer)
     }
 
     fun sendCommand(command: C) {
