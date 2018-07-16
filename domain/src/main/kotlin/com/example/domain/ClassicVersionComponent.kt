@@ -42,6 +42,10 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
     }
 
     fun sendCommand(command: C) {
+        check(::results.isInitialized) {
+            "Can't compose component more than once"
+        }
+
         commands.onNext(command)
     }
 }
