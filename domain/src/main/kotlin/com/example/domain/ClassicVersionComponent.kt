@@ -30,6 +30,10 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
     }
 
     override fun render(): Observable<S> {
+        requireNotNull(results) {
+            "Render() must be called only after composing component"
+        }
+
         return results.compose(reducer)
     }
 
