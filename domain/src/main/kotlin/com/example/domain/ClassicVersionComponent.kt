@@ -16,6 +16,10 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
     private lateinit var results: Observable<R>
 
     override fun apply(upstream: Observable<C>): ObservableSource<R> {
+        check(::results.isInitialized) {
+            "Can't compose component more than once"
+        }
+
         val transformed = upstream
                 .mergeWith(commands)
                 .compose(processor)
@@ -30,7 +34,7 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
     }
 
     override fun render(): Observable<S> {
-        requireNotNull(results) {
+        checkNotNull(results) {
             "Render() must be called only after composing component"
         }
 
