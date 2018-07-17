@@ -129,7 +129,21 @@ class DummyComponentSpec : Spek({
                     val command = DummyComponent.Command.DATA("some")
                     deps.component.standalone(command)
 
-                    deps.component.render().takeUntil(deps.scopeExit).subscribe()
+                    deps.component.render().takeUntil(deps.scopeExit).subscribe {
+                        println("render $it 1")
+                    }
+
+                    deps.component.render().takeUntil(deps.scopeExit).subscribe {
+                        println("render $it 2")
+                    }
+
+                    deps.component.render().takeUntil(deps.scopeExit).subscribe {
+                        println("render $it 3")
+                    }
+
+                    deps.component.render().takeUntil(deps.scopeExit).subscribe {
+                        println("render $it 4")
+                    }
 
                     deps.subsciption.dispose()
 
