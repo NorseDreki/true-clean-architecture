@@ -33,6 +33,7 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
                 .doOnLifecycle({ println("onSub")}, { println("onDisp")})
                 .replay()
                 .refCount()
+                .doOnNext{ println("next $it")}
                 .doOnComplete { println("complete2") }
                 .doOnDispose { println("dispose2") }
                 //maybe two lines up
@@ -41,10 +42,17 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
                 .doOnDispose { println("dispose3") }
                 .doOnLifecycle({ println("onSub3")}, { println("onDisp3")})
 
-        results = transformed
+        results = transformed.doOnDispose {
+            println("dispose results")
+            commands.onComplete()
+        }
         println("set results")
 
         return transformed.doOnNext { println("trans $it") }
+                .doOnDispose {
+                    println("transf dispose results")
+                    commands.onComplete()
+                }
                 //.takeUntil(up.materialize().doOnNext { println("MAT $it") }.filter { it.isOnComplete })
                 .doOnComplete { println("trans compl") }
     }
@@ -57,14 +65,20 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
         return results.compose(reducer)
     }
 
-    fun sendCommand(command: C) {
+    fun sendCommand(command: C): Boolean {
         check(::results.isInitialized) {
             "Can't compose component more than once"
         }
 
 
+        //better throw exception
         println("send command")
+        if (commands.hasComplete())
+            return false
+
         commands.onNext(command)
+
+        return true
     }
 
     fun justStart(command: C) {
