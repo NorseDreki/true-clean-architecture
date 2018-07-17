@@ -2,13 +2,13 @@ package com.example.domain
 
 import io.reactivex.ObservableTransformer
 
-class DummyComponent : ClassicVersionComponent<DummyComponent.Command, DummyComponent.Result, DummyComponent.ViewState>() {
+class DummyComponent : ClassicVersion2Component<DummyComponent.Command, DummyComponent.Result, DummyComponent.ViewState>() {
 
     override val processor = ObservableTransformer<Command, Result> {
         it.map { Result.Empty }
     }
     override val reducer = ObservableTransformer<Result, ViewState> {
-        it.map { ViewState() }
+        it.map { println("mapping");ViewState() }
     }
 
 
