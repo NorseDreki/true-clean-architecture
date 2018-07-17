@@ -16,21 +16,33 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
     private lateinit var results: Observable<R>
 
     override fun apply(upstream: Observable<C>): ObservableSource<R> {
+        println("123")
+/*
         check(::results.isInitialized) {
             "Can't compose component more than once"
         }
+*/println("set apply")
 
         val transformed = upstream
                 .mergeWith(commands)
                 .compose(processor)
+                .doOnComplete { println("complete") }
+                .doOnDispose { println("dispose") }
+                .doOnLifecycle({ println("onSub")}, { println("onDisp")})
                 .replay()
                 .refCount()
+                .doOnComplete { println("complete2") }
+                .doOnDispose { println("dispose2") }
                 //maybe two lines up
-                .takeUntil(upstream.materialize().filter { it.isOnComplete })
+                //.takeUntil(upstream.materialize().filter { it.isOnComplete })
+                .doOnComplete { println("complete3") }
+                .doOnDispose { println("dispose3") }
+                .doOnLifecycle({ println("onSub3")}, { println("onDisp3")})
 
         results = transformed
+        println("set results")
 
-        return transformed
+        return transformed//.takeUntil(upstream.materialize().filter { it.isOnComplete })
     }
 
     override fun render(): Observable<S> {
@@ -46,6 +58,8 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
             "Can't compose component more than once"
         }
 
+
+        println("send command")
         commands.onNext(command)
     }
 
