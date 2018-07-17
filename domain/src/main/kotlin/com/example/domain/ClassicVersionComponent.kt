@@ -23,8 +23,10 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
         }
 */println("set apply")
 
-        val transformed = upstream
-                .mergeWith(commands)
+        val up = upstream.publish().refCount()
+
+        val transformed = upstream.doOnComplete { println("upstream complete") }.doOnDispose { println("upstream dispose") }
+                .mergeWith(commands.doOnComplete { println("subj completed") }.doOnDispose { println("subj disposed") })
                 .compose(processor)
                 .doOnComplete { println("complete") }
                 .doOnDispose { println("dispose") }
@@ -42,7 +44,9 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
         results = transformed
         println("set results")
 
-        return transformed//.takeUntil(upstream.materialize().filter { it.isOnComplete })
+        return transformed.doOnNext { println("trans $it") }
+                //.takeUntil(up.materialize().doOnNext { println("MAT $it") }.filter { it.isOnComplete })
+                .doOnComplete { println("trans compl") }
     }
 
     override fun render(): Observable<S> {
@@ -65,5 +69,9 @@ abstract class ClassicVersionComponent<C : UiCommand, R : UiResult, S : UiState>
 
     fun justStart(command: C) {
         Observable.just(command).compose(this).subscribe()
+    }
+
+    fun standalone(command: C) {
+        Observable.just(command).compose(this).firstOrError().subscribe()
     }
 }
