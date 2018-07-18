@@ -1,7 +1,6 @@
 package com.example.domain
 
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.PublishSubject
 
@@ -48,12 +47,51 @@ internal constructor(
         ObservableTransformer<C, R>,
         ViewStateProducer<S> {
 
-    override fun apply(upstream: Observable<C>): ObservableSource<R> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private lateinit var results: Observable<R>
+
+    override fun apply(upstream: Observable<C>): Observable<R> {
+        /*check(!::results.isInitialized) {
+            "Can't compose component more than once"
+        }*/
+
+        val transformed = upstream.doOnComplete { println("upstream complete") }.doOnDispose { println("upstream dispose") }
+                .mergeWith(commands.doOnComplete { println("subj completed") }.doOnDispose { println("subj disposed") })
+                .compose(processor)
+                .doOnComplete { println("complete") }
+                .doOnDispose { println("dispose") }
+                .doOnLifecycle({ println("onSub")}, { println("onDisp")})
+                //.replay(2)
+                .replay()
+                .refCount()
+                //.autoConnect(0)
+                .doOnNext{ println("next $it")}
+                .doOnComplete { println("complete3") }
+                .doOnDispose { println("dispose3") }
+                .doOnLifecycle({ println("onSub3")}, { println("onDisp3")})
+
+        results = transformed/*.doOnDispose {
+            println("dispose results")
+            //commands.onComplete()
+        }.doOnNext { println("res next") }*/
+        println("set results")
+
+        return transformed.doOnNext { println("trans $it") }
+                .doOnDispose {
+                    println("transf dispose results")
+                    //commands.onComplete()
+                }
+                //.takeUntil(up.materialize().doOnNext { println("MAT $it") }.filter { it.isOnComplete })
+                .doOnComplete { println("trans compl") }
     }
 
     override fun viewStates(): Observable<S> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        checkNotNull(results) {
+            "Render() must be called only after composing component"
+        }
+
+        //Thread.sleep(5000)
+
+        return results.compose(reducer)
     }
 
 }
