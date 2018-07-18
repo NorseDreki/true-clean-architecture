@@ -7,31 +7,33 @@ import io.reactivex.subjects.PublishSubject
 abstract class Component<C : UiCommand, R : UiResult, S : UiState> {
 
 
-    private val commands = PublishSubject.create<C>()
+    internal val commands = PublishSubject.create<C>()
 
     protected abstract val processor: ObservableTransformer<C, R>
 
     protected abstract val reducer: ObservableTransformer<R, S>
 
-    private lateinit var results: Observable<R>
-
-    fun sendCommand(command: C): Boolean {
-        check(::results.isInitialized) {
-            "Can't compose component more than once"
-        }
+    internal lateinit var results: Observable<R>
 
 
-        //better throw exception
-        println("send command")
+}
 
-        //if (!commands.hasObservers())
-        /*if (commands.hasComplete())
-            return false*/
+fun <C : UiCommand, R : UiResult, S : UiState> Component<C, R, S>.extraCommand(command: C): Boolean {
+    /*kotlin.check(::results.isInitialized) {
+        "Can't compose component more than once"
+    }*/
 
-        println("do send command")
 
-        commands.onNext(command)
+    //better throw exception
+    kotlin.io.println("send command")
 
-        return true
-    }
+    //if (!commands.hasObservers())
+    /*if (commands.hasComplete())
+        return false*/
+
+    kotlin.io.println("do send command")
+
+    commands.onNext(command)
+
+    return true
 }
