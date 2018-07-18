@@ -6,26 +6,34 @@ import io.reactivex.subjects.PublishSubject
 
 interface Component<C : UiCommand, R : UiResult, S : UiState> {
 
-
-    val commands : PublishSubject<C>
+    val commands: PublishSubject<C>
 
     val processor: ObservableTransformer<C, R>
 
     val reducer: ObservableTransformer<R, S>
 
-    val results: Observable<R>
-
-
 }
 
-fun <C : UiCommand, R : UiResult, S : UiState> Component<C, R, S>.asStandalone() =
-        StandaloneComponent(this)
+fun <C : UiCommand, R : UiResult, S : UiState> Component<C, R, S>.asStandalone(startingCommand: C) =
+        StandaloneComponent(this, startingCommand)
 
 
-class StandaloneComponent<C : UiCommand, R : UiResult, S : UiState>(val component: Component<C, R, S>) :
-        Component<C, R, S> by component {
+class StandaloneComponent<C : UiCommand, R : UiResult, S : UiState>
+internal constructor(
+        private val component: Component<C, R, S>,
+        private val startingCommand: C
+) :
+        Component<C, R, S> by component,
+        ViewStateProducer<S> {
 
-
+    override fun viewStates(): Observable<S> {
+        return Observable.just(startingCommand)
+                .mergeWith(commands)
+                .compose(processor)
+                .compose(reducer)
+        //or subject will be auto-disposed?
+        //.doOnDispose { commands.onComplete() }
+    }
 }
 
 fun <C : UiCommand, R : UiResult, S : UiState> Component<C, R, S>.extraCommand(command: C): Boolean {
