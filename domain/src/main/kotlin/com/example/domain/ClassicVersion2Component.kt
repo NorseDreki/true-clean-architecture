@@ -27,7 +27,7 @@ abstract class ClassicVersion2Component<C : UiCommand, R : UiResult, S : UiState
                 .doOnDispose { println("dispose") }
                 .doOnLifecycle({ println("onSub")}, { println("onDisp")})
                 //.replay(2)
-                .replay(1)
+                .replay()
                 .refCount()
                 //.autoConnect(0)
                 .doOnNext{ println("next $it")}
