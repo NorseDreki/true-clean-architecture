@@ -54,6 +54,13 @@ interface UiThunk<R1 : UiResult, R2 : UiResult>
 
 
 
+//ViewStateSeeder
+interface ViewStateProducer<VS : UiState> {
+
+    fun viewStates(): Observable<VS>
+}
+
+
 
 
 interface UiView {
