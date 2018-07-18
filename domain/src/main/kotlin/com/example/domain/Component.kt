@@ -14,6 +14,8 @@ interface Component<C : UiCommand, R : UiResult, S : UiState> {
 
 }
 
+interface ComponentImplementation
+
 fun <C : UiCommand, R : UiResult, S : UiState> Component<C, R, S>.asStandalone(startingCommand: C) =
         StandaloneComponent(this, startingCommand)
 
@@ -27,6 +29,7 @@ internal constructor(
         private val startingCommand: C
 ) :
         Component<C, R, S> by component,
+        ComponentImplementation,
         ViewStateProducer<S> {
 
     override fun viewStates(): Observable<S> {
@@ -44,6 +47,7 @@ internal constructor(
         private val component: Component<C, R, S>
 ) :
         Component<C, R, S> by component,
+        ComponentImplementation,
         ObservableTransformer<C, R>,
         ViewStateProducer<S> {
 
@@ -59,15 +63,15 @@ internal constructor(
                 .compose(processor)
                 .doOnComplete { println("complete") }
                 .doOnDispose { println("dispose") }
-                .doOnLifecycle({ println("onSub")}, { println("onDisp")})
+                .doOnLifecycle({ println("onSub") }, { println("onDisp") })
                 //.replay(2)
                 .replay()
                 .refCount()
                 //.autoConnect(0)
-                .doOnNext{ println("next $it")}
+                .doOnNext { println("next $it") }
                 .doOnComplete { println("complete3") }
                 .doOnDispose { println("dispose3") }
-                .doOnLifecycle({ println("onSub3")}, { println("onDisp3")})
+                .doOnLifecycle({ println("onSub3") }, { println("onDisp3") })
 
         results = transformed/*.doOnDispose {
             println("dispose results")
@@ -96,7 +100,11 @@ internal constructor(
 
 }
 
-fun <C : UiCommand, R : UiResult, S : UiState> Component<C, R, S>.extraCommand(command: C): Boolean {
+fun <T, C, R, S> T.extraCommand(command: C): Boolean
+        where T : Component<C, R, S>,
+              T : ComponentImplementation,
+              C : UiCommand, R : UiResult, S : UiState {
+
     /*kotlin.check(::results.isInitialized) {
         "Can't compose component more than once"
     }*/
