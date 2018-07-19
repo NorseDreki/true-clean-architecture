@@ -16,6 +16,10 @@ interface Component<C : UiCommand, R : UiResult, S : UiState> {
 
 }
 
+abstract class ExtraCommandsComponent<C : UiCommand, R : UiResult, S : UiState> : Component<C, R, S> {
+    override val commands = PublishSubject.create<C>()
+}
+
 interface ComponentImplementation
 
 fun <C : UiCommand, R : UiResult, S : UiState> Component<C, R, S>.asStandalone(startingCommand: C) =
