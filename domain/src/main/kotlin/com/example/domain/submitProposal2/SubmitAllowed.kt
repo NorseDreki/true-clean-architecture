@@ -23,7 +23,7 @@ val submitAllowedProcessor =
         ObservableTransformer<UiResult, SubmitAllowedResult> {
             it
                     .scan(SubmitAllowedData()) { state, result ->
-                        println("----------> UIRES $result")
+                        println("----------> SUBM ALL UIRES $result")
                         when (result) {
 
                             is CoverLetter.Result.Valid ->

@@ -15,11 +15,11 @@ class Processor(
         val asActor: ObservableTransformer<CoverLetter.Command, CoverLetter.Result>,
         val asActor1: ObservableTransformer<ClarifyingQuestions.Command, ClarifyingQuestions.Result>,
         val asActor2: ObservableTransformer<DoSubmitProposal.Command, DoSubmitProposal.Result>
-) : ObservableTransformer<SubmitProposal.Command, SubmitProposal.Result> {
+) : ObservableTransformer<SubmitProposal.Command, UiResult> {
 
     val loopbackCommands = ReplaySubject.create<UiCommand>()
 
-    override fun apply(upstream: Observable<SubmitProposal.Command>): ObservableSource<SubmitProposal.Result> {
+    override fun apply(upstream: Observable<SubmitProposal.Command>): ObservableSource<UiResult> {
         val c= upstream
                 .cast(UiCommand::class.java)
                 .mergeWith(loopbackCommands.doOnNext { println("GOT LB $it") })
@@ -78,7 +78,7 @@ class Processor(
                     loopbackCommands.onNext(it)
                 }
 
-        return c.filter { it is SubmitProposal.Result }.cast(SubmitProposal.Result::class.java)
+        return c//.filter { it is SubmitProposal.Result }.cast(SubmitProposal.Result::class.java)
     }
 
 
@@ -89,7 +89,7 @@ class Processor(
                     //memoize itemOpportunity here as well?
                     when (it) {
                         is SubmitProposal.Result.ProposalUpdated -> {
-                            println("112233 PROPOSAL UPDATED")
+                            //println("112233 PROPOSAL UPDATED")
                             Observable.empty<UiCommand>()
                         }
                         is SubmitAllowedResult.Enabled -> {

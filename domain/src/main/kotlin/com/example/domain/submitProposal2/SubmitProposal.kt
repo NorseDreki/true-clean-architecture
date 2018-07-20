@@ -18,7 +18,7 @@ class SubmitProposal(
         val coverLetter: CoverLetter,
         val clarifyingQuestions: ClarifyingQuestions,
         val doSubmitProposal: DoSubmitProposal
-): ExtraCommandsComponent<SubmitProposal.Command, SubmitProposal.Result, SubmitProposal.ViewState>() {
+): ExtraCommandsComponent<SubmitProposal.Command, UiResult, SubmitProposal.ViewState>() {
 
     val cle = coverLetter.asEmbedded()
     val cqe = clarifyingQuestions.asEmbedded()

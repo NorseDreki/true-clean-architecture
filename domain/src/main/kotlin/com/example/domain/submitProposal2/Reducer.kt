@@ -1,5 +1,6 @@
 package com.example.domain.submitProposal2
 
+import com.example.domain.UiResult
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
@@ -13,8 +14,8 @@ class Reducer(
         val asReducer: ObservableTransformer<CoverLetter.Result, CoverLetter.ViewState>,
         val asReducer1: ObservableTransformer<ClarifyingQuestions.Result, ClarifyingQuestions.ViewState>,
         val asReducer2: ObservableTransformer<DoSubmitProposal.Result, DoSubmitProposal.ViewState>
-) : ObservableTransformer<SubmitProposal.Result, SubmitProposal.ViewState> {
-    override fun apply(upstream: Observable<SubmitProposal.Result>): ObservableSource<SubmitProposal.ViewState> {
+) : ObservableTransformer<UiResult, SubmitProposal.ViewState> {
+    override fun apply(upstream: Observable<UiResult>): ObservableSource<SubmitProposal.ViewState> {
         return upstream
                 .doOnNext { println("SP reducer $it") }
                 .publish {shared ->
