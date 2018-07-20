@@ -40,7 +40,7 @@ fun failOnFinalComponents(component: Component<*, *, *>) {
 
 fun <T, C, R, S> T.extraCommand(command: C): Boolean
         where T : Component<C, R, S>,
-              T : ComponentImplementation,
+              //T : ComponentImplementation,
               C : UiCommand, R : UiResult, S : UiState {
 
 
