@@ -1,6 +1,5 @@
 package com.example.domain.submitProposal2
 
-import com.example.domain.framework.asEmbedded
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
@@ -11,16 +10,18 @@ import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 
 class Reducer(
-        val coverLetter: com.example.domain.submitProposal2.coverLetter.CoverLetter,
-        val clarifyingQuestions: ClarifyingQuestions,
-        val doSubmitProposal: DoSubmitProposal
+        val asReducer: ObservableTransformer<CoverLetter.Result, CoverLetter.ViewState>,
+        val asReducer1: ObservableTransformer<ClarifyingQuestions.Result, ClarifyingQuestions.ViewState>,
+        val asReducer2: ObservableTransformer<DoSubmitProposal.Result, DoSubmitProposal.ViewState>
 ) : ObservableTransformer<SubmitProposal.Result, SubmitProposal.ViewState> {
     override fun apply(upstream: Observable<SubmitProposal.Result>): ObservableSource<SubmitProposal.ViewState> {
-        return upstream.publish {shared ->
+        return upstream
+                .doOnNext { println("SP reducer $it") }
+                .publish {shared ->
             Observable.combineLatest(
                     arrayOf(
-                            shared.ofType(CoverLetter.Result::class.java).compose(coverLetter.asEmbedded().asReducer).doOnNext { println("render CL: $it") },
-                            shared.ofType(ClarifyingQuestions.Result::class.java).compose(clarifyingQuestions.asEmbedded().asReducer).doOnNext { println("render CQ: $it") },
+                            shared.ofType(CoverLetter.Result::class.java).compose(asReducer).doOnNext { println("render CL: $it") },
+                            shared.ofType(ClarifyingQuestions.Result::class.java).compose(asReducer1).doOnNext { println("render CQ: $it") },
 
                             shared.compose(psReducer),
 
@@ -30,7 +31,7 @@ class Reducer(
                                         it.index
                                     },
 
-                            shared.ofType(DoSubmitProposal.Result::class.java).compose(doSubmitProposal.asEmbedded().asReducer).doOnNext { println("render DSP: $it") }
+                            shared.ofType(DoSubmitProposal.Result::class.java).compose(asReducer2).doOnNext { println("render DSP: $it") }
                     )
             ) {
                 val cl = it[0] as com.example.domain.submitProposal2.coverLetter.CoverLetter.ViewState

@@ -2,7 +2,6 @@ package com.example.domain.submitProposal2
 
 import com.example.domain.UiCommand
 import com.example.domain.UiResult
-import com.example.domain.framework.asEmbedded
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
@@ -13,9 +12,9 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.ReplaySubject
 
 class Processor(
-        val coverLetter: CoverLetter,
-        val clarifyingQuestions: ClarifyingQuestions,
-        val doSubmitProposal: DoSubmitProposal
+        val asActor: ObservableTransformer<CoverLetter.Command, CoverLetter.Result>,
+        val asActor1: ObservableTransformer<ClarifyingQuestions.Command, ClarifyingQuestions.Result>,
+        val asActor2: ObservableTransformer<DoSubmitProposal.Command, DoSubmitProposal.Result>
 ) : ObservableTransformer<SubmitProposal.Command, SubmitProposal.Result> {
 
     val loopbackCommands = ReplaySubject.create<UiCommand>()
@@ -35,12 +34,12 @@ class Processor(
                                             .compose(navigationProcessor),
 
                                     shared.ofType(CoverLetter.Command::class.java)
-                                            .compose(coverLetter.asEmbedded().asActor),
+                                            .compose(asActor),
                                     shared.ofType(ClarifyingQuestions.Command::class.java)
-                                            .compose(clarifyingQuestions.asEmbedded().asActor),
+                                            .compose(asActor1),
 
                                     shared.ofType(DoSubmitProposal.Command::class.java)
-                                            .compose(doSubmitProposal.asEmbedded().asActor)
+                                            .compose(asActor2)
 
                             )
                             /*,

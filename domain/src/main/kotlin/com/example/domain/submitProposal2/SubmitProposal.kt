@@ -5,6 +5,7 @@ import com.example.domain.UiCommand
 import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.framework.ExtraCommandsComponent
+import com.example.domain.framework.asEmbedded
 import com.example.domain.models.ItemDetails
 import com.example.domain.models.ItemOpportunity
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
@@ -19,8 +20,12 @@ class SubmitProposal(
         val doSubmitProposal: DoSubmitProposal
 ): ExtraCommandsComponent<SubmitProposal.Command, SubmitProposal.Result, SubmitProposal.ViewState>() {
 
-    override val processor = Processor(coverLetter, clarifyingQuestions, doSubmitProposal)
-    override val reducer = Reducer(coverLetter, clarifyingQuestions, doSubmitProposal)
+    val cle = coverLetter.asEmbedded()
+    val cqe = clarifyingQuestions.asEmbedded()
+    val dsp = doSubmitProposal.asEmbedded()
+
+    override val processor = Processor(cle.asActor, cqe.asActor, dsp.asActor)
+    override val reducer = Reducer(cle.asReducer, cqe.asReducer, dsp.asReducer)
 
     sealed class Command : UiCommand {
 

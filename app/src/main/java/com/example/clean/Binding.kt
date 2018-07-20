@@ -5,8 +5,8 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.databinding.BindingAdapter
 import android.view.View
-import com.example.domain.submitProposal.DialogEvents
-import com.example.domain.submitProposal.DialogState
+import com.example.domain.submitProposal2.common.DialogEvents
+import com.example.domain.submitProposal2.common.DialogState
 
 object Binding {
 
