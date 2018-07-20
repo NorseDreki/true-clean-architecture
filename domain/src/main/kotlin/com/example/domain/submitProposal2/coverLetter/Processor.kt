@@ -1,11 +1,11 @@
-package com.example.domain.submitProposal.coverLetter2
+package com.example.domain.submitProposal2.coverLetter
 
-import com.example.domain.submitProposal.coverLetter2.CoverLetter2.Command
-import com.example.domain.submitProposal.coverLetter2.CoverLetter2.Result
+import com.example.domain.submitProposal2.coverLetter.CoverLetter.Command
+import com.example.domain.submitProposal2.coverLetter.CoverLetter.Result
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
-class CoverLetterProcessor : ObservableTransformer<Command, Result> {
+class Processor : ObservableTransformer<Command, Result> {
 
     override fun apply(upstream: Observable<Command>) =
         upstream//.debounce(3, TimeUnit.SECONDS)

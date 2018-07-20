@@ -1,12 +1,15 @@
-package com.example.domain.submitProposal.coverLetter2
+package com.example.domain.submitProposal2.coverLetter
 
-import com.example.domain.*
+import com.example.domain.UiCommand
+import com.example.domain.UiDataCommand
+import com.example.domain.UiResult
+import com.example.domain.UiState
+import com.example.domain.framework.ExtraCommandsComponent
 import com.example.domain.models.ItemOpportunity
-import com.example.domain.submitProposal.coverLetter2.CoverLetter2.*
 
 
-class CoverLetter2 : ClassicVersionComponent<Command, Result, ViewState>() {
-    override val processor = CoverLetterProcessor()
+class CoverLetter : ExtraCommandsComponent<CoverLetter.Command, CoverLetter.Result, CoverLetter.ViewState>() {
+    override val processor = Processor()
     override val reducer = Reducer()
 
 
