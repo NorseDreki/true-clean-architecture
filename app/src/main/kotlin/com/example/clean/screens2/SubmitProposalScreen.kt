@@ -6,6 +6,7 @@ import com.example.clean.screens.ListBindings
 import com.example.clean.screens.Screen
 import com.example.clean.screens.ScreenEvents
 import com.example.domain.submitProposal2.SubmitProposal
+import com.example.domain.submitProposal2.common.QuestionViewState
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
@@ -30,12 +31,12 @@ data class SubmitProposalScreen(
         class ClarifyingQuestions(
                 val onItemClickListener: OnItemClickListener
         ) {
-            val questionBinding = ItemBinding.of<com.example.domain.submitProposal.ClarifyingQuestions.QuestionViewState>(BR.v, R.layout.clarifying_question_item)
+            val questionBinding = ItemBinding.of<QuestionViewState>(BR.v, R.layout.clarifying_question_item)
                     .bindExtra(BR.listener, onItemClickListener)
         }
 
         class ProposalSummary() {
-            val questionBinding = ItemBinding.of<com.example.domain.submitProposal.ClarifyingQuestions.QuestionViewState>(BR.v, R.layout.answered_question_item)
+            val questionBinding = ItemBinding.of<QuestionViewState>(BR.v, R.layout.answered_question_item)
         }
     }
 

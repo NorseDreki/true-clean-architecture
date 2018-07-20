@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.example.clean.screens.Screen
-import com.example.clean.screens.SubmitProposalScreen
 import com.example.clean.screens.ToScreen
+import com.example.clean.screens2.SubmitProposalScreen
+import com.example.domain.framework.asStandalone
+import com.example.domain.framework.extraCommand
 import com.example.domain.models.ItemDetails
 import com.example.domain.models.Question
 import com.example.domain.submitProposal.*
@@ -25,12 +27,27 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var toScreen: ToScreen
 
+    private lateinit var sp2: com.example.domain.submitProposal2.SubmitProposal
+
+    fun cr(): com.example.domain.submitProposal2.SubmitProposal {
+        val flowNavigator2 = FlowNavigator2(this)
+        val pc = com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.ProposalConfirmation()
+        val cl = com.example.domain.submitProposal2.coverLetter.CoverLetter()
+        val cq = com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions()
+        val dsp = com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal(flowNavigator2, pc)
+
+        val sp = com.example.domain.submitProposal2.SubmitProposal(cl, cq, dsp)
+
+        return sp
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.basic_activity_frame)
 
         val flowNavigator = FlowNavigator(this)
+        val flowNavigator2 = FlowNavigator2(this)
 
         cl = CoverLetter()
         val cq = ClarifyingQuestions()
@@ -50,13 +67,21 @@ class MainActivity : AppCompatActivity() {
         val cmd2 =
                 Observable.just<SubmitProposal.Command>(SubmitProposal.Command.DATA(itemDetails))
 
-        sp.process(cmd2).materialize().subscribe {
+        /*sp.process(cmd2).materialize().subscribe {
             println("MAT: $it")
-        }
+        }*/
+
+        sp2 = cr()
 
         val view = findViewById<View>(android.R.id.content)
         view.postDelayed(
-                {sp.render().compose(toScreen).subscribe(this::changeKey)}, 1500
+                {
+                    //sp.render().compose(toScreen).subscribe(this::changeKey)
+
+                    sp2.asStandalone(com.example.domain.submitProposal2.SubmitProposal.Command.DATA(itemDetails))
+                            .viewStates().compose(com.example.clean.screens2.ToScreen(sp2)).subscribe(this::changeKey)
+
+                }, 1500
         )
     }
 
@@ -109,6 +134,7 @@ class MainActivity : AppCompatActivity() {
 
         val p =  BasicKeyParceler(gson)
 
+
         baseContext = Flow.configure(baseContext, this) //
                 .dispatcher(BasicDispatcher(this, DefaultDataBinder())) //
                 .defaultKey(WelcomeScreen()) //
@@ -120,7 +146,9 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        sp.fromEvent(SubmitProposal.Command.ToNextStep)
+        //sp.fromEvent(SubmitProposal.Command.ToNextStep)
+        sp2.extraCommand(com.example.domain.submitProposal2.SubmitProposal.Command.ToNextStep)
+
         //sp.render().compose(toScreen).subscribe(this::changeKey)
         //Flow.get(this).set(WelcomeScreen())
 
