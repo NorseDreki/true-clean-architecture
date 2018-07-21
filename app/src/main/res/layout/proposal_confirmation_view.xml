@@ -8,11 +8,11 @@
 
         <variable
             name="viewModel"
-            type="com.example.domain.submitProposal.ProposalConfirmation.ViewState"/>
+            type="com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.ProposalConfirmation.ViewState"/>
 
         <variable
             name="events"
-            type="com.example.clean.screens.ProposalConfirmationEvents"/>
+            type="com.example.clean.screens2.ProposalConfirmationEvents"/>
 
         <variable
             name="bindings"

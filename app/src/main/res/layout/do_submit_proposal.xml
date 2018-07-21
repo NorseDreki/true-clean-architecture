@@ -6,11 +6,11 @@
 
         <variable
             name="viewModel"
-            type="com.example.domain.submitProposal.DoSubmitProposal.ViewState" />
+            type="com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal.ViewState" />
 
         <variable
             name="events"
-            type="com.example.clean.screens.DoSubmitProposalEvents"/>
+            type="com.example.clean.screens2.DoSubmitProposalEvents"/>
 
     </data>
 

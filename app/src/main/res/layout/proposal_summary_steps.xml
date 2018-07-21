@@ -8,15 +8,15 @@
 
         <variable
             name="viewModel"
-            type="com.example.domain.submitProposal.ProposalSummaryViewState"/>
+            type="com.example.domain.submitProposal2.proposalSummary.ProposalSummaryViewState"/>
 
         <variable
             name="events"
-            type="com.example.clean.screens.ProposalSummaryEventHandler"/>
+            type="com.example.clean.screens2.ProposalSummaryEventHandler"/>
 
         <variable
             name="bindings"
-            type="com.example.clean.screens.SubmitProposalScreen.Bindings.ProposalSummary"/>
+            type="com.example.clean.screens2.SubmitProposalScreen.Bindings.ProposalSummary"/>
 
     </data>
 

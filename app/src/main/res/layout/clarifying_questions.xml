@@ -8,15 +8,15 @@
 
         <variable
             name="viewModel"
-            type="com.example.domain.submitProposal.ClarifyingQuestions.ViewState"/>
+            type="com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions.ViewState"/>
 
         <variable
             name="events"
-            type="com.example.clean.screens.ClarifyingQuestionsEvents"/>
+            type="com.example.clean.screens2.ClarifyingQuestionsEvents"/>
 
         <variable
             name="bindings"
-            type="com.example.clean.screens.SubmitProposalScreen.Bindings.ClarifyingQuestions"/>
+            type="com.example.clean.screens2.SubmitProposalScreen.Bindings.ClarifyingQuestions"/>
 
     </data>
 

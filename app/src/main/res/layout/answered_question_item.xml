@@ -10,7 +10,7 @@
 
         <variable
             name="v"
-            type="com.example.domain.submitProposal.ClarifyingQuestions.QuestionViewState"/>
+            type="com.example.domain.submitProposal2.common.QuestionViewState"/>
 <!--
         <variable
             name="listener"

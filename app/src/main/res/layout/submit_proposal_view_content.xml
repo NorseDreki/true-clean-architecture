@@ -6,15 +6,15 @@
 
         <variable
             name="viewModel"
-            type="com.example.domain.submitProposal.SubmitProposal.ViewState"/>
+            type="com.example.domain.submitProposal2.SubmitProposal.ViewState"/>
 
         <variable
             name="events"
-            type="com.example.clean.screens.SubmitProposalScreen.Events"/>
+            type="com.example.clean.screens2.SubmitProposalScreen.Events"/>
 
         <variable
             name="bindings"
-            type="com.example.clean.screens.SubmitProposalScreen.Bindings"/>
+            type="com.example.clean.screens2.SubmitProposalScreen.Bindings"/>
 
     </data>
 

@@ -8,11 +8,11 @@
 
         <variable
             name="viewModel"
-            type="com.example.domain.submitProposal.CoverLetter.ViewState"/>
+            type="com.example.domain.submitProposal2.coverLetter.CoverLetter.ViewState"/>
 
         <variable
             name="events"
-            type="com.example.clean.screens.CoverLetterScreenEvents"/>
+            type="com.example.clean.screens2.CoverLetterScreenEvents"/>
 
     </data>
 
