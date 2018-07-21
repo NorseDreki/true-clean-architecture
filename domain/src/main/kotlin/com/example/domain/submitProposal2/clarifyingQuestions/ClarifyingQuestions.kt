@@ -6,11 +6,16 @@ import com.example.domain.UiState
 import com.example.domain.framework.ExtraCommandsComponent
 import com.example.domain.models.ItemOpportunity
 import com.example.domain.models.Question
+import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions.*
 import com.example.domain.submitProposal2.common.QuestionViewState
 
-class ClarifyingQuestions : ExtraCommandsComponent<ClarifyingQuestions.Command, ClarifyingQuestions.Result, ClarifyingQuestions.ViewState>() {
-    override val processor = Processor()
-    override val reducer = Reducer()
+class ClarifyingQuestions : ExtraCommandsComponent<Command, Result, ViewState>() {
+
+    sealed class Command : UiCommand {
+        data class INIT(val itemOpportunity: ItemOpportunity) : Command()
+
+        data class UpdateAnswer(val id: String, val answer: String) : Command()
+    }
 
     sealed class Result : UiResult {
         data class QuestionsLoaded(val questions: List<Question>) : Result()
@@ -22,20 +27,10 @@ class ClarifyingQuestions : ExtraCommandsComponent<ClarifyingQuestions.Command, 
         data class AllQuestionsAnswered(val answered: Boolean) : Result()
     }
 
-    sealed class Command : UiCommand {
-        data class INIT(val itemOpportunity: ItemOpportunity) : Command()
-
-        //only for internal use? from event
-        data class UpdateAnswer(val id: String, val answer: String) : Command()
-    }
-
-
     data class ViewState(
-            val items: List<QuestionViewState> = listOf(
-                    /*QuestionViewStateEvents(
-                            "fd",
-                            QuestionViewState("!2","123", null)
-                    )*/
-            )
+            val items: List<QuestionViewState> = listOf()
     ) : UiState
+
+    override val processor = Processor()
+    override val reducer = Reducer()
 }

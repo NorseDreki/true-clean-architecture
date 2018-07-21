@@ -1,48 +1,47 @@
 package com.example.domain.submitProposal2.clarifyingQuestions
 
-import com.example.domain.UiCommand
-import com.example.domain.UiResult
+import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions.Command
+import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions.Result
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 
-class Processor : ObservableTransformer<ClarifyingQuestions.Command, ClarifyingQuestions.Result> {
+class Processor : ObservableTransformer<Command, Result> {
 
-    override fun apply(upstream: Observable<ClarifyingQuestions.Command>): ObservableSource<ClarifyingQuestions.Result> {
-        return upstream.compose(paProcessor)
-                .doOnNext { println("RESCQ " + it) }
-                .cast(ClarifyingQuestions.Result::class.java)
-                .publish { shared ->
-                    Observable.merge(
-                            shared,
-                            shared.doOnNext { println("input222") }.compose(paAnsweredProcessor)//.skip(1)
-                    ).doOnNext { println("COMB $it") }
-                }
-    }
+    override fun apply(upstream: Observable<Command>) =
+            upstream.compose(paProcessor)
+                    .publish { shared ->
+                        Observable.merge(
+                                shared,
+                                shared.compose(paAnsweredProcessor)
+                        )
+                    }
+
+
     data class AllQuestionsAnswered(
             val totalQuestions: Int? = null,
             val answeredQuestions: MutableSet<String> = mutableSetOf("1234")
     )
 
     val paAnsweredProcessor =
-            ObservableTransformer<ClarifyingQuestions.Result, ClarifyingQuestions.Result> { t ->
+            ObservableTransformer<Result, Result.AllQuestionsAnswered> { t ->
                 t.doOnNext { println("111 $it") }
                         .scan(AllQuestionsAnswered()) { state, result ->
                             when (result) {
-                                is ClarifyingQuestions.Result.QuestionsLoaded -> {
+                                is Result.QuestionsLoaded -> {
                                     state.copy(result.questions.size, mutableSetOf())
                                 }
-                                is ClarifyingQuestions.Result.NoQuestionsRequired -> {
+                                is Result.NoQuestionsRequired -> {
                                     AllQuestionsAnswered()
                                     //state.copy(0, mutableSetOf())
                                 }
-                                is ClarifyingQuestions.Result.ValidAnswer -> {
+                                is Result.ValidAnswer -> {
                                     state.copy(answeredQuestions = state.answeredQuestions.apply { add(result.id) })
                                 }
-                                is ClarifyingQuestions.Result.EmptyAnswer -> {
+                                is Result.EmptyAnswer -> {
                                     state.copy(answeredQuestions = state.answeredQuestions.apply { remove(result.id) })
                                 }
-                                else -> throw IllegalStateException("sdf")
+                            //else -> throw IllegalStateException("sdf")
+                                is ClarifyingQuestions.Result.AllQuestionsAnswered -> TODO()
                             }
                         }
                         .skip(1)
@@ -50,9 +49,9 @@ class Processor : ObservableTransformer<ClarifyingQuestions.Command, ClarifyingQ
                             //implicitly handles "no questions" case
                             if (it.totalQuestions == null) {
                                 println("value! $it")
-                                Observable.empty<ClarifyingQuestions.Result>()
+                                Observable.empty<Result.AllQuestionsAnswered>()
                             } else {
-                                Observable.just(ClarifyingQuestions.Result.AllQuestionsAnswered(it.totalQuestions == it.answeredQuestions.size))
+                                Observable.just(Result.AllQuestionsAnswered(it.totalQuestions == it.answeredQuestions.size))
                             }
                         }
 
@@ -60,40 +59,37 @@ class Processor : ObservableTransformer<ClarifyingQuestions.Command, ClarifyingQ
 
 
     val paProcessor =
-            ObservableTransformer<UiCommand, UiResult> { t ->
+            ObservableTransformer<Command, Result> { t ->
                 t.flatMap {
                     when (it) {
-                        is ClarifyingQuestions.Command.INIT -> {
+                        is Command.INIT -> {
                             val questions = it.itemOpportunity.itemDetails.questions
                             val answers = it.itemOpportunity.proposal.questionAnswers
 
                             when {
                                 questions != null && answers != null -> {
                                     Observable
-                                            .just(ClarifyingQuestions.Result.QuestionsLoaded(questions))
-                                            .cast(UiResult::class.java)
+                                            .just(Result.QuestionsLoaded(questions))
+                                            .cast(Result::class.java)
                                             .mergeWith(
                                                     Observable
                                                             .fromIterable(answers)
-                                                            .map { ClarifyingQuestions.Result.ValidAnswer(it.id, it.answer) }
+                                                            .map { Result.ValidAnswer(it.id, it.answer) }
                                             )
-                                    //Observable.fromArray(Result.Questions(questions))
                                 }
-                                questions != null -> Observable.just(ClarifyingQuestions.Result.QuestionsLoaded(questions))
-                                else -> Observable.just(ClarifyingQuestions.Result.NoQuestionsRequired)
+                                questions != null -> Observable.just(Result.QuestionsLoaded(questions))
+                                else -> Observable.just(Result.NoQuestionsRequired)
                             }
                         }
-                        is ClarifyingQuestions.Command.UpdateAnswer -> {
+                        is Command.UpdateAnswer -> {
                             val validated = it.answer.trim()
 
-
                             if (validated.isNotEmpty()) {
-                                Observable.just(ClarifyingQuestions.Result.ValidAnswer(it.id, validated))
+                                Observable.just(Result.ValidAnswer(it.id, validated))
                             } else {
-                                Observable.just(ClarifyingQuestions.Result.EmptyAnswer(it.id))
+                                Observable.just(Result.EmptyAnswer(it.id))
                             }
                         }
-                        else -> throw IllegalStateException("sdf")
                     }
                 }
             }
