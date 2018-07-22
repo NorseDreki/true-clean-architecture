@@ -6,12 +6,10 @@ import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.framework.ExtraCommandsComponent
 import com.example.domain.models.ItemOpportunity
+import com.example.domain.submitProposal2.coverLetter.CoverLetter.*
 
 
-class CoverLetter : ExtraCommandsComponent<CoverLetter.Command, CoverLetter.Result, CoverLetter.ViewState>() {
-    override val processor = Processor()
-    override val reducer = Reducer()
-
+class CoverLetter : ExtraCommandsComponent<Command, Result, ViewState>() {
 
     sealed class Command : UiCommand {
         data class DATA(val itemOpportunity: ItemOpportunity) : Command(), UiDataCommand
@@ -37,4 +35,8 @@ class CoverLetter : ExtraCommandsComponent<CoverLetter.Command, CoverLetter.Resu
             val coverLetter: String = "default",
             val isLengthExceeded: Boolean = false
     ) : UiState
+
+
+    override val processor = Processor()
+    override val reducer = Reducer()
 }

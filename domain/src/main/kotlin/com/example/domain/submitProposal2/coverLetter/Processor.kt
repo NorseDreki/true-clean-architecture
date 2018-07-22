@@ -22,7 +22,7 @@ class Processor : ObservableTransformer<Command, Result> {
                             result(it.coverLetter)
                         }
                     }
-                }
+                }!!
 
     private fun result(coverLetter: String): Result {
         //save cover letter to submit proposal storage?
