@@ -6,6 +6,7 @@ import com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
+import java.util.concurrent.TimeUnit
 
 class Processor(
         val navigator: Navigator,
@@ -51,7 +52,7 @@ class Processor(
         val api: Api? = SomeApi()
 
         return api!!.submitProposal("123", "dsf")
-                //.delay(3, TimeUnit.SECONDS)
+                .delay(3, TimeUnit.SECONDS)
                 .map(DoSubmitProposal.Result::Success)
                 .doOnNext {
                     navigator.display(
