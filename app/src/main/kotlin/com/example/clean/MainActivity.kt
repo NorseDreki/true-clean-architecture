@@ -17,6 +17,7 @@ import com.upwork.android.core.BasicKeyParceler
 import flow.Direction
 import flow.Flow
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 
 class MainActivity : AppCompatActivity() {
@@ -79,7 +80,10 @@ class MainActivity : AppCompatActivity() {
                     //sp.render().compose(toScreen).subscribe(this::changeKey)
 
                     sp2.asStandalone(com.example.domain.submitProposal2.SubmitProposal.Command.DATA(itemDetails))
-                            .viewStates().compose(com.example.clean.screens2.ToScreen(sp2)).subscribe(this::changeKey)
+                            .viewStates()
+                            .compose(com.example.clean.screens2.ToScreen(sp2))
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::changeKey)
 
                 }, 1500
         )
