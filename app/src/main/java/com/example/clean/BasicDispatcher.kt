@@ -55,6 +55,8 @@ internal class BasicDispatcher(
             }*/
 
             //if (destKey is Screen && currentKey is Screen) {
+            println("dest key is ${destKey::class}")
+            println("current key is ${currentKey!!::class}")
             if (destKey is Screen && destKey::class == currentKey!!::class) {
                 /*val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(frame.windowToken, 0)*/
@@ -99,10 +101,12 @@ internal class BasicDispatcher(
 
         if (destKey is Screen) {
 
+            println("data binding $destKey")
             dataBinder.bind(incomingView, destKey.state, destKey.events, destKey.listBindings)
         }
 
         frame.addView(incomingView)
+        println("added new view to frame, $destKey")
         traversal.getState(traversal.destination.top()).restore(incomingView)
 
         callback.onTraversalCompleted()

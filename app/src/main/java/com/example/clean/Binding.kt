@@ -15,16 +15,29 @@ object Binding {
     fun bindAbc(view: View, ds: DialogState, plot: DialogEvents) {
         println("111111 bound $ds")
         println("111111 bound $plot")
+        println("111111 to view $view")
 
-        var dialog: Dialog? = view.getTag(R.id.afterTextChangeListener) as? Dialog
+
+        val rootView = view.rootView
+        println("root view is $rootView")
+
+        val content = rootView.findViewById<View>(android.R.id.content)
+        println("content view is $content")
+
+        var dialog: Dialog? = rootView.getTag(R.id.afterTextChangeListener) as? Dialog
 
         when (ds) {
             is DialogState.Progress -> {
                 val d = ProgressDialog.show(view.context, ds.title, ds.message, true, false)
-                view.setTag(R.id.afterTextChangeListener, d)
+                println("setting tag on $rootView")
+                rootView.setTag(R.id.afterTextChangeListener, d)
             }
             is DialogState.Dismissed -> {
-                if (dialog != null) dialog.dismiss()
+                println("should dismiss")
+                if (dialog != null) {
+                    println("dismissing")
+                    dialog.dismiss()
+                }
             }
             is DialogState.Alert -> {
                 val d = AlertDialog.Builder(view.context)

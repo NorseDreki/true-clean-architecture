@@ -30,6 +30,7 @@ class FlowNavigator2(val context: Context) : Navigator {
                 .observeOn(AndroidSchedulers.mainThread())
                 //.observeOn(Andr)
                 .subscribe {
+                    println("flow nav 2 set")
                     flow.set(it)
                 }
     }
