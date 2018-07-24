@@ -60,12 +60,5 @@ class SubmitProposal(
             val proposalSummary: ProposalSummaryViewState,
             val doSubmitProposal: DoSubmitProposal.ViewState,
             val index: Int
-    ) : UiState {
-        companion object {
-            /*fun initial() = SubmitProposalViewState(
-                    CoverLetterViewState("2312", false),
-                    PineappleQuestionsViewState(listOf())
-            )*/
-        }
-    }
+    ) : UiState
 }
