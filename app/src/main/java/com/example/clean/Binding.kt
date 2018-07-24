@@ -28,7 +28,7 @@ object Binding {
 
         when (ds) {
             is DialogState.Progress -> {
-                val d = ProgressDialog.show(view.context, ds.title, ds.message, true, false)
+                val d = ProgressDialog.show(view.context, ds.title, ds.message, true, true)
                 println("setting tag on $rootView")
                 rootView.setTag(R.id.afterTextChangeListener, d)
             }
