@@ -1,8 +1,10 @@
-package com.example.domain.framework
+package com.example.clean
 
+import com.example.clean.screens.Screen
 import com.example.domain.UiState
 import io.reactivex.Notification
 import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.ReplaySubject
 import java.util.*
@@ -16,17 +18,25 @@ class Changer {
 
     val stack = Stack<Class<UiState>>()
 
-    fun setTop(viewStates: Observable<UiState>) {
+    val toScreens =
+            hashMapOf<Class<UiState>, ObservableTransformer<UiState, Screen>>()
+
+    fun setTop(viewStates: Observable<UiState>, toS: Pair<Class<UiState>, ObservableTransformer<UiState, Screen>>) {
+        toScreens.put(toS.first, toS.second)
+        println("TOSCREENS $toScreens")
+
         viewStates.materialize()
                 .withLatestFrom<UiState, Pair<Class<out UiState>, Notification<UiState>>>(
                         viewStates
                                 .firstOrError()
                                 .toObservable()
                                 .doOnNext {
+                                    println("NEW VIEWSTATES FIRST OR ERR $it")
                                     stack.push(it::class.java as Class<UiState>)
                                     pointer.onNext(stack)
                                 },
                         BiFunction { notification, uiState ->
+                            println("COMBINING")
                             uiState::class.java to notification
                         }
                 )
@@ -40,7 +50,7 @@ class Changer {
         //viewStates.subscribe(allViewStates)
     }
 
-    fun screens(): Observable<UiState> {
+    fun screens(): Observable<Screen> {
         val s =
                 allViewStates
                         //.groupBy { it.first }
@@ -66,6 +76,10 @@ class Changer {
                             println("ALL VIEW STATES: $it")
                         }
 
-        return s
+        return s.compose {
+            it.map {
+                Observable.just(it).compose(toScreens.get(it::class.java))
+            }
+        }.flatMap { it }
     }
 }
