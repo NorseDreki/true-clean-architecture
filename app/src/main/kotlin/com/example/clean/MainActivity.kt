@@ -7,6 +7,8 @@ import android.view.View
 import com.example.clean.screens.Screen
 import com.example.clean.screens.ToScreen
 import com.example.clean.screens2.SubmitProposalScreen
+import com.example.domain.UiState
+import com.example.domain.framework.Changer
 import com.example.domain.framework.asStandalone
 import com.example.domain.framework.extraCommand
 import com.example.domain.models.ItemDetails
@@ -17,7 +19,6 @@ import com.upwork.android.core.BasicKeyParceler
 import flow.Direction
 import flow.Flow
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,6 +57,8 @@ class MainActivity : AppCompatActivity() {
         sp = SubmitProposal(cl, cq, dsp)
         toScreen = ToScreen(sp)
 
+        val changer = Changer()
+
         val questions = listOf(
                 Question("1", "q1"),
                 Question("2", "q2"),
@@ -77,13 +80,33 @@ class MainActivity : AppCompatActivity() {
         val view = findViewById<View>(android.R.id.content)
         view.postDelayed(
                 {
+                    val flow = Flow.get(this)
                     //sp.render().compose(toScreen).subscribe(this::changeKey)
 
-                    sp2.asStandalone(com.example.domain.submitProposal2.SubmitProposal.Command.DATA(itemDetails))
+                    /*sp2.asStandalone(com.example.domain.submitProposal2.SubmitProposal.Command.DATA(itemDetails))
                             .viewStates()
                             .compose(com.example.clean.screens2.ToScreen(sp2))
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(this::changeKey)
+                            .subscribe(this::changeKey)*/
+
+                    changer.setTop(sp2.asStandalone(com.example.domain.submitProposal2.SubmitProposal.Command.DATA(itemDetails))
+                            .viewStates().cast(UiState::class.java))
+
+                    changer.screens().compose { obs ->
+                        obs.map {
+                            when (it) {
+                                is com.example.domain.submitProposal2.SubmitProposal.ViewState ->
+                                    Observable.just(it).compose(com.example.clean.screens2.ToScreen(sp2))
+                            /*is ProposalConfirmation.ViewState ->
+                                    Observable.just(it).compose()*/
+                                else -> throw IllegalStateException("sddf")
+                            }
+                        }
+                    }.flatMap { it }
+                            .subscribe {
+                                println("flow set")
+                                flow.set(it)
+                            }
 
                 }, 1500
         )
@@ -119,7 +142,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
         /*val top = flow.history.iterator().next()
         println("top is $top")
 
@@ -136,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                 .registerTypeAdapter(Key::class.java, KeyTypeAdapter())
                 .create()
 
-        val p =  BasicKeyParceler(gson)
+        val p = BasicKeyParceler(gson)
 
 
         baseContext = Flow.configure(baseContext, this) //
