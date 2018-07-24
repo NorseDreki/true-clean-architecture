@@ -4,15 +4,15 @@ import com.example.domain.UiState
 import io.reactivex.Notification
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
 import java.util.*
 
 class Changer {
 
     val allViewStates =
-            PublishSubject.create<Pair<Class<out UiState>, Notification<UiState>>>()
+            ReplaySubject.create<Pair<Class<out UiState>, Notification<UiState>>>()
 
-    val pointer = PublishSubject.create<Stack<Class<UiState>>>()
+    val pointer = ReplaySubject.create<Stack<Class<UiState>>>()
 
     val stack = Stack<Class<UiState>>()
 
@@ -30,6 +30,10 @@ class Changer {
                             uiState::class.java to notification
                         }
                 )
+                .doOnNext {
+                    println("SETTOP next: $it")
+                    println("$stack")
+                }
                 .subscribe(allViewStates)
 
 
@@ -41,6 +45,7 @@ class Changer {
                 allViewStates
                         //.groupBy { it.first }
                         .scan(hashMapOf<Class<UiState>, UiState>()) { map, grouped ->
+                            println("SCAN11")
                             if (grouped.second.isOnComplete || grouped.second.isOnError) {
                                 map.remove(grouped.first)
                                 stack.pop()
@@ -50,13 +55,16 @@ class Changer {
                             }
 
                             map
-                        }
+                        }.skip(1)
                         .withLatestFrom<Stack<Class<UiState>>, UiState>(
                                 pointer,
                                 BiFunction { t1, t2 ->
                                     t1[t2.peek()]!!
                                 }
                         )
+                        .doOnNext {
+                            println("ALL VIEW STATES: $it")
+                        }
 
         return s
     }
