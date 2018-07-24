@@ -8,7 +8,6 @@ import com.example.clean.screens.Screen
 import com.example.clean.screens.ToScreen
 import com.example.clean.screens2.SubmitProposalScreen
 import com.example.domain.UiState
-import com.example.domain.framework.Changer
 import com.example.domain.framework.asStandalone
 import com.example.domain.framework.extraCommand
 import com.example.domain.models.ItemDetails
@@ -19,6 +18,8 @@ import com.upwork.android.core.BasicKeyParceler
 import flow.Direction
 import flow.Flow
 import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,8 +32,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sp2: com.example.domain.submitProposal2.SubmitProposal
 
+    val changer = Changer()
+
     fun cr(): com.example.domain.submitProposal2.SubmitProposal {
-        val flowNavigator2 = FlowNavigator2(this)
+        val flowNavigator2 = FlowNavigator2(this, changer)
         val pc = com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.ProposalConfirmation()
         val cl = com.example.domain.submitProposal2.coverLetter.CoverLetter()
         val cq = com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions()
@@ -49,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.basic_activity_frame)
 
         val flowNavigator = FlowNavigator(this)
-        val flowNavigator2 = FlowNavigator2(this)
+       // val flowNavigator2 = FlowNavigator2(this)
 
         cl = CoverLetter()
         val cq = ClarifyingQuestions()
@@ -57,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         sp = SubmitProposal(cl, cq, dsp)
         toScreen = ToScreen(sp)
 
-        val changer = Changer()
+
 
         val questions = listOf(
                 Question("1", "q1"),
@@ -66,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-        val itemDetails = ItemDetails("1234", true, questions)
+        val itemDetails = ItemDetails("1234", true, null)
 
         val cmd2 =
                 Observable.just<SubmitProposal.Command>(SubmitProposal.Command.DATA(itemDetails))
@@ -89,20 +92,25 @@ class MainActivity : AppCompatActivity() {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::changeKey)*/
 
-                    changer.setTop(sp2.asStandalone(com.example.domain.submitProposal2.SubmitProposal.Command.DATA(itemDetails))
-                            .viewStates().cast(UiState::class.java))
+                    val toS = com.example.domain.submitProposal2.SubmitProposal.ViewState::class.java to com.example.clean.screens2.ToScreen(sp2)
 
-                    changer.screens().compose { obs ->
+                    changer.setTop(sp2.asStandalone(com.example.domain.submitProposal2.SubmitProposal.Command.DATA(itemDetails))
+                            .viewStates().cast(UiState::class.java),
+                            toS as Pair<Class<UiState>, ObservableTransformer<UiState, Screen>>
+                            )
+
+                    changer.screens()/*.compose { obs ->
                         obs.map {
                             when (it) {
                                 is com.example.domain.submitProposal2.SubmitProposal.ViewState ->
                                     Observable.just(it).compose(com.example.clean.screens2.ToScreen(sp2))
-                            /*is ProposalConfirmation.ViewState ->
-                                    Observable.just(it).compose()*/
+                            *//*is ProposalConfirmation.ViewState ->
+                                    Observable.just(it).compose()*//*
                                 else -> throw IllegalStateException("sddf")
                             }
                         }
-                    }.flatMap { it }
+                    }.flatMap { it }*/
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {
                                 println("flow set")
                                 flow.set(it)
