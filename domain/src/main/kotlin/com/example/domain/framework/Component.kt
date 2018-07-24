@@ -8,7 +8,7 @@ import io.reactivex.subjects.PublishSubject
 
 interface Component<C : UiCommand, R : UiResult, S : UiState> {
 
-    val commands: PublishSubject<C>
+    var commands: PublishSubject<C>
 
     val processor: ObservableTransformer<C, R>
 
@@ -17,7 +17,7 @@ interface Component<C : UiCommand, R : UiResult, S : UiState> {
 }
 
 abstract class ExtraCommandsComponent<C : UiCommand, R : UiResult, S : UiState> : Component<C, R, S> {
-    override val commands = PublishSubject.create<C>()
+    override var commands = PublishSubject.create<C>()
 }
 
 interface ComponentImplementation

@@ -26,6 +26,7 @@ class Changer {
         println("TOSCREENS $toScreens")
 
         viewStates.materialize()
+                .doOnNext { println("MAT NEXT SETTOP $it") }
                 .withLatestFrom<UiState, Pair<Class<out UiState>, Notification<UiState>>>(
                         viewStates
                                 .firstOrError()
@@ -44,7 +45,10 @@ class Changer {
                     println("SETTOP next: $it")
                     println("$stack")
                 }
-                .subscribe(allViewStates)
+                .subscribe {
+                    println("onnext TO ALLVIEW ST")
+                    allViewStates.onNext(it)
+                }
 
 
         //viewStates.subscribe(allViewStates)
@@ -53,6 +57,12 @@ class Changer {
     fun screens(): Observable<Screen> {
         val s =
                 allViewStates
+                        .doOnNext {
+                            println("SCREENS NEXT $it")
+                        }
+                        .doOnComplete { println(" SCREENS COMPL") }
+                        .doOnDispose { println(" SCREENS DISP") }
+                        .doOnTerminate { println("SCREENS TERM") }
                         //.groupBy { it.first }
                         .scan(hashMapOf<Class<UiState>, UiState>()) { map, grouped ->
                             println("SCAN11")
@@ -75,11 +85,17 @@ class Changer {
                         .doOnNext {
                             println("ALL VIEW STATES: $it")
                         }
+                        .doOnComplete { println(" SCREENS COMPL") }
+                        .doOnDispose { println(" SCREENS DISP") }
+                        .doOnTerminate { println("SCREENS TERM") }
 
         return s.compose {
             it.map {
                 Observable.just(it).compose(toScreens.get(it::class.java))
             }
         }.flatMap { it }
+                .doOnComplete { println(" SCREENS COMPL") }
+                .doOnDispose { println(" SCREENS DISP") }
+                .doOnTerminate { println("SCREENS TERM") }
     }
 }

@@ -4,6 +4,7 @@ import com.example.domain.UiCommand
 import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.framework.ExtraCommandsComponent
+import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
 class ProposalConfirmation: ExtraCommandsComponent<ProposalConfirmation.Command, ProposalConfirmation.Result, ProposalConfirmation.ViewState>() {
@@ -19,7 +20,15 @@ class ProposalConfirmation: ExtraCommandsComponent<ProposalConfirmation.Command,
 
     val pcReducer =
             ObservableTransformer<Result, ViewState> {
-                it.map { ViewState((it as Result.DATALoaded).itemOpportunity) }
+                it.flatMap {
+                    when (it) {
+                        is Result.DATALoaded -> Observable.just(ViewState(it.itemOpportunity))
+                        is Result.Dismissed -> {
+                            println("DISMISSED")
+                            Observable.empty()
+                        }
+                    }
+                }
             }
 
     override val processor = pcProcessor
