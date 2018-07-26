@@ -1,6 +1,7 @@
 package com.example.clean
 
 import android.app.Activity
+import android.app.Dialog
 import android.support.annotation.LayoutRes
 import android.util.Log
 import android.view.LayoutInflater
@@ -107,8 +108,23 @@ internal class BasicDispatcher(
 
         frame.addView(incomingView)
         println("added new view to frame, $destKey")
+
+        removeDialog(frame)
+
         traversal.getState(traversal.destination.top()).restore(incomingView)
 
         callback.onTraversalCompleted()
+    }
+
+    private fun removeDialog(view: View) {
+        val rootView = view.rootView
+        println("root view is $rootView")
+        var dialog: Dialog? = rootView.getTag(R.id.afterTextChangeListener) as? Dialog
+
+        println("should dismiss")
+        if (dialog != null) {
+            println("dismissing")
+            dialog.dismiss()
+        }
     }
 }
