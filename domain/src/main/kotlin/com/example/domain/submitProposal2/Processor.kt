@@ -2,6 +2,7 @@ package com.example.domain.submitProposal2
 
 import com.example.domain.UiCommand
 import com.example.domain.UiResult
+import com.example.domain.framework.WithResults
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
@@ -49,23 +50,16 @@ class Processor(
                                     .compose(feesProc)*/
                     )
                 }
-                .publish { shared ->
-                    Observable.merge(
-                            shared,
-                            shared.compose(submitAllowedProcessor),//.doOnNext { println(">>>> SAP: $it") },
-                            shared.compose(storageSaver)
-                    )
-                }
-                .publish { shared ->
-                    Observable.merge(
-                            shared,//.doOnNext { println(">>>> SHARED AFTER SAP: $it") },
-                            shared.compose(submitProposalResultsProcessor)
-                    )
-                }//.doOnNext { println(">>>> BEFORE SHARE: $it") }
-                //.startWith(Result.Dummy)
-                //.share()
-                //.publish().autoConnect(2).doOnNext { println(">>>> AFTER SHARE: $it") }
-                .replay().refCount().doOnNext { println(">>>> AFTER SHARE: $it") }
+                .compose(WithResults<UiResult>(
+                        submitAllowedProcessor as ObservableTransformer<UiResult, UiResult>,
+                        storageSaver
+                ))
+                .compose(WithResults<UiResult>(
+                        submitProposalResultsProcessor as ObservableTransformer<UiResult, UiResult>
+                ))
+                .replay()
+                .refCount()
+                .doOnNext { println(">>>> AFTER SHARE: $it") }
 
 
         //properly unsubscribe?
@@ -183,8 +177,10 @@ class Processor(
 
                             Observable.just(SubmitProposal.Result.ProposalUpdated)
 
-                        is DoSubmitProposal.Result.Success ->
+                        is DoSubmitProposal.Result.Success -> {
+                            println("SUCC RES")
                             Observable.just(SubmitProposal.Result.ProposalSent)
+                        }
 
                         is DoSubmitProposal.Result.Error ->
                             Observable.just(SubmitProposal.Result.JobNoLongerAvailable)
