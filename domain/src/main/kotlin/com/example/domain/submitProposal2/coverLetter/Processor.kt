@@ -4,11 +4,13 @@ import com.example.domain.submitProposal2.coverLetter.CoverLetter.Command
 import com.example.domain.submitProposal2.coverLetter.CoverLetter.Result
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import java.util.concurrent.TimeUnit
 
 class Processor : ObservableTransformer<Command, Result> {
 
     override fun apply(upstream: Observable<Command>) =
-        upstream//.debounce(3, TimeUnit.SECONDS)
+        upstream
+                .debounce(3, TimeUnit.SECONDS)
                 .map {
                     when (it) {
                         is Command.DATA -> {
@@ -19,6 +21,7 @@ class Processor : ObservableTransformer<Command, Result> {
                             }
                         }
                         is Command.UpdateCoverLetter -> {
+                            println("UPDATECOVERLETTER")
                             result(it.coverLetter)
                         }
                     }
