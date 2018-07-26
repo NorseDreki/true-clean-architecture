@@ -14,6 +14,7 @@ interface Result
 
 interface ScreenComponent
 
+interface DataCommand : UiCommand
 
 interface UiEvent
 
