@@ -1,5 +1,6 @@
 package com.example.domain.submitProposal2.clarifyingQuestions
 
+import com.example.domain.framework.WithResults
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions.Command
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions.Result
 import io.reactivex.Observable
@@ -9,13 +10,7 @@ class Processor : ObservableTransformer<Command, Result> {
 
     override fun apply(upstream: Observable<Command>) =
             upstream.compose(paProcessor)
-                    .publish { shared ->
-                        Observable.merge(
-                                shared,
-                                shared.compose(paAnsweredProcessor)
-                        )
-                    }
-
+                    .compose(WithResults(paAnsweredProcessor))
 
     data class AllQuestionsAnswered(
             val totalQuestions: Int? = null,
@@ -23,7 +18,7 @@ class Processor : ObservableTransformer<Command, Result> {
     )
 
     val paAnsweredProcessor =
-            ObservableTransformer<Result, Result.AllQuestionsAnswered> { t ->
+            ObservableTransformer<Result, Result> { t ->
                 t.doOnNext { println("111 $it") }
                         .scan(AllQuestionsAnswered()) { state, result ->
                             when (result) {
