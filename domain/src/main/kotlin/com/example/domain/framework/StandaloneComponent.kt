@@ -4,6 +4,7 @@ import com.example.domain.UiCommand
 import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.ViewStateProducer
+import com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.DummyConfirmation
 import com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.ProposalConfirmation
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -30,7 +31,8 @@ internal constructor(
                         .doOnComplete { println("complete st") }
                         .mergeWith(commands
                                 .doOnNext {
-                                    if (it is ProposalConfirmation.Command.Dismiss) {
+                                    if (it is ProposalConfirmation.Command.Dismiss
+                                    || it == DummyConfirmation.Command.Dismiss) {
                                         println("completing commands")
                                         commands.onComplete()
                                     }

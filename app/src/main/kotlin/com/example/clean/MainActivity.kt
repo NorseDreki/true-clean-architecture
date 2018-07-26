@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     fun cr(): com.example.domain.submitProposal2.SubmitProposal {
         val flowNavigator2 = FlowNavigator2(this, changer)
-        val pc = com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.ProposalConfirmation()
+        val pc = com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.ProposalConfirmation(flowNavigator2)
         val cl = com.example.domain.submitProposal2.coverLetter.CoverLetter()
         val cq = com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions()
         val dsp = com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal(flowNavigator2, pc)
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-        val itemDetails = ItemDetails("1234", true, null)
+        val itemDetails = ItemDetails("1234", true, questions)
 
         val cmd2 =
                 Observable.just<SubmitProposal.Command>(SubmitProposal.Command.DATA(itemDetails))

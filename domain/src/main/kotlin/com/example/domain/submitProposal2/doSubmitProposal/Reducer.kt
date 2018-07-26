@@ -17,6 +17,7 @@ class Reducer : ObservableTransformer<DoSubmitProposal.Result, DoSubmitProposal.
                 is DoSubmitProposal.Result.Success -> {
 
                     state.copy(
+                            //isSubmitEnabled = false,
                             status = DialogState.Dismissed
                     )
                 }

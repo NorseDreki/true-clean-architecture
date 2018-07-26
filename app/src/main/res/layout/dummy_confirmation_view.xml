@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.ProposalConfirmation.ViewState"/>
+            type="com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.DummyConfirmation.ViewState"/>
 
         <variable
             name="events"
-            type="com.example.clean.screens2.ProposalConfirmationEvents"/>
+            type="com.example.clean.screens2.dummyConfirmation.DummyConfirmationEvents"/>
 
         <variable
             name="bindings"
@@ -43,25 +41,6 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_propose_confirmation_black_144_dp"
-                bind:tint="@{@color/colorSecondary}"
-                tools:src="@drawable/ic_propose_confirmation_black_144_dp"
-                tools:tint="@color/colorSecondary"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="4"
-                android:text="@string/find_work_submit_proposal_confirmation_subtitle"
-                android:textColor="@color/gray5"
-                android:textSize="24sp"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,18 +51,6 @@
                 android:textColor="@color/gray5"
                 android:textSize="16sp"
                 tools:text="PHP developer for start-up"/>
-
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center"
-                android:text="Another one"
-                android:textColor="@color/colorSecondary"
-                android:textSize="12sp"
-                android:onClick="@{() -> events.onAnotherOneClicked()}"/>
-
 
             <!--<TextView
                 android:layout_width="wrap_content"

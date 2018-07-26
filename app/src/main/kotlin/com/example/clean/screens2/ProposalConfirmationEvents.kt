@@ -12,4 +12,9 @@ class ProposalConfirmationEvents(
         println("done clicked")
         proposalConfirmation.extraCommand(ProposalConfirmation.Command.Dismiss)
     }
+
+    fun onAnotherOneClicked() {
+        println("another one")
+        proposalConfirmation.extraCommand(ProposalConfirmation.Command.AnotherOne)
+    }
 }
