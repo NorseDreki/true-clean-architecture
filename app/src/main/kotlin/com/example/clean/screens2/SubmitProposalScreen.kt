@@ -20,7 +20,7 @@ data class SubmitProposalScreen(
 ) : Screen {
 
     override val layout: Int
-        get() = R.layout.submit_proposal_view_content
+        get() = R.layout.submit_proposal_linear_view_content
 
 
     data class Bindings(

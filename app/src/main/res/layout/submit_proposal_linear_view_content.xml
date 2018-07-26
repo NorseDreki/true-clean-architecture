@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.domain.submitProposal2.SubmitProposal.ViewState" />
+
+        <variable
+            name="events"
+            type="com.example.clean.screens2.SubmitProposalScreen.Events" />
+
+        <variable
+            name="bindings"
+            type="com.example.clean.screens2.SubmitProposalScreen.Bindings" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/cover_letter"
+                bind:events="@{events.coverLetter}"
+                bind:viewModel="@{viewModel.coverLetter}" />
+
+            <include
+                layout="@layout/clarifying_questions"
+                bind:bindings="@{bindings.clarifyingQuestions}"
+                bind:events="@{events.clarifyingQuestions}"
+                bind:viewModel="@{viewModel.clarifyingQuestions}" />
+
+            <include
+                layout="@layout/proposal_summary_steps"
+                bind:bindings="@{bindings.proposalSummary}"
+                bind:events="@{events.proposalSummaryEvents}"
+                bind:viewModel="@{viewModel.proposalSummary}" />
+
+            <include
+                layout="@layout/do_submit_proposal"
+                bind:events="@{events.doSubmitProposal}"
+                bind:viewModel="@{viewModel.doSubmitProposal}" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>
