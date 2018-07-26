@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-        val itemDetails = ItemDetails("1234", true, questions)
+        val itemDetails = ItemDetails("1234", true, null)
 
         val cmd2 =
                 Observable.just<SubmitProposal.Command>(SubmitProposal.Command.DATA(itemDetails))
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                     }.flatMap { it }*/
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {
-                                println("flow set")
+                                println("flow set @ ${Thread.currentThread().name}")
                                 flow.set(it)
                             }
 

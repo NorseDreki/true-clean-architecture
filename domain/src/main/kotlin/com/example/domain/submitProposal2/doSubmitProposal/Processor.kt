@@ -8,7 +8,6 @@ import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal.Resu
 import com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.ProposalConfirmation
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import java.util.concurrent.TimeUnit
 
 class Processor(
         val navigator: Navigator,
@@ -36,7 +35,7 @@ class Processor(
         val api: Api? = SomeApi()
 
         return api!!.submitProposal("123", "dsf")
-                .delay(3, TimeUnit.SECONDS)
+                //.delay(3, TimeUnit.SECONDS)
                 .map(Result::Success)
                 .doOnNext {
                     navigator.display(
