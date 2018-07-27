@@ -17,42 +17,6 @@ class Processor : ObservableTransformer<Command, Result> {
             val answeredQuestions: MutableSet<String> = mutableSetOf("1234")
     )
 
-    val paAnsweredProcessor =
-            ObservableTransformer<Result, Result> { t ->
-                t.doOnNext { println("111 $it") }
-                        .scan(AllQuestionsAnswered()) { state, result ->
-                            when (result) {
-                                is Result.QuestionsLoaded -> {
-                                    state.copy(result.questions.size, mutableSetOf())
-                                }
-                                is Result.NoQuestionsRequired -> {
-                                    AllQuestionsAnswered()
-                                    //state.copy(0, mutableSetOf())
-                                }
-                                is Result.ValidAnswer -> {
-                                    state.copy(answeredQuestions = state.answeredQuestions.apply { add(result.id) })
-                                }
-                                is Result.EmptyAnswer -> {
-                                    state.copy(answeredQuestions = state.answeredQuestions.apply { remove(result.id) })
-                                }
-                            //else -> throw IllegalStateException("sdf")
-                                is ClarifyingQuestions.Result.AllQuestionsAnswered -> TODO()
-                            }
-                        }
-                        .skip(1)
-                        .flatMap {
-                            //implicitly handles "no questions" case
-                            if (it.totalQuestions == null) {
-                                println("value! $it")
-                                Observable.empty<Result.AllQuestionsAnswered>()
-                            } else {
-                                Observable.just(Result.AllQuestionsAnswered(it.totalQuestions == it.answeredQuestions.size))
-                            }
-                        }
-
-            }
-
-
     val paProcessor =
             ObservableTransformer<Command, Result> { t ->
                 t.flatMap {
