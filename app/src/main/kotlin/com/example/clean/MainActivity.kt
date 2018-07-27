@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-        val itemDetails = ItemDetails("1234", true, null)
+        val itemDetails = ItemDetails("1234", true, questions)
 
         val cmd2 =
                 Observable.just<SubmitProposal.Command>(SubmitProposal.Command.DATA(itemDetails))

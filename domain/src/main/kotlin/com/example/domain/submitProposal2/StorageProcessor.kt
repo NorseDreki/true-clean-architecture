@@ -31,18 +31,6 @@ val storageLoader =
             }
         }
 
-data class NavState(val index: Int = 0, val pages: Int = 4)
-
-val navigationProcessor =
-        ObservableTransformer<SubmitProposal.Command.ToNextStep, SubmitProposal.Result> {
-            it.scan(NavState()) { state, command ->
-                when {
-                    state.index < state.pages-1 -> state.copy(state.index + 1)
-                    else -> state.copy(index = 0)
-                }
-            }.map { SubmitProposal.Result.NavigatedTo(it.index) }
-        }
-
 var repo: ProposalRepository? = null
 
 val storageSaver =
