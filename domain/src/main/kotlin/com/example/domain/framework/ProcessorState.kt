@@ -15,6 +15,7 @@ val withData =
             it.publish { shared ->
                 shared.withLatestFrom(
                         shared
+                                .skipWhile{ it !is DataCommand }
                                 .firstOrError()
                                 .cast(DataCommand::class.java)
                                 .toObservable(),

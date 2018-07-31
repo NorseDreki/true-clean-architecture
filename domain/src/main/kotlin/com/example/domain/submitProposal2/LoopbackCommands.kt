@@ -27,6 +27,11 @@ class LoopbackCommands : ObservableTransformer<UiResult, UiCommand> {
 
                     Observable.just(DoSubmitProposal.Command.ToggleSubmitEnabled(true))
                 }
+                is SubmitAllowedResult.Disabled -> {
+                    //Observable.just(ProposalSummary.Command.ToggleSubmitEnabled(true))
+
+                    Observable.just(DoSubmitProposal.Command.ToggleSubmitEnabled(false))
+                }
 
                 is SubmitProposal.Result.ProposalLoaded -> {
                     //hide panel
