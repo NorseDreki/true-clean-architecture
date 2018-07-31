@@ -2,6 +2,7 @@ package com.example.domain.submitProposal2
 
 import com.example.domain.UiCommand
 import com.example.domain.UiResult
+import com.example.domain.framework.WithProcessors
 import com.example.domain.framework.WithResults
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
@@ -13,23 +14,6 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.ReplaySubject
 
 typealias NestedProcessor<C> = Pair<Class<C>, ObservableTransformer<C, UiResult>>
-
-class WithProcessors(
-        vararg val nestedProcessors: Pair<Class<Any>, ObservableTransformer<Any, UiResult>>
-) : ObservableTransformer<UiCommand, UiResult> {
-    override fun apply(upstream: Observable<UiCommand>): ObservableSource<UiResult> {
-        return upstream.publish { shared ->
-
-            val composed =
-                    nestedProcessors.map { shared.ofType(it.first).compose<UiResult>(it.second) }.toTypedArray()
-
-            val r = Observable.merge(arrayListOf(*composed))
-
-            r//Observable.empty<UiResult>()
-        }
-    }
-
-}
 
 class WithLoopback(
         val inner: ObservableTransformer<UiCommand, UiResult>,
