@@ -12,44 +12,101 @@ import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.ReplaySubject
 
+typealias NestedProcessor<C> = Pair<Class<C>, ObservableTransformer<C, UiResult>>
+
+class WithProcessors(
+        vararg val nestedProcessors: Pair<Class<Any>, ObservableTransformer<Any, UiResult>>
+) : ObservableTransformer<UiCommand, UiResult> {
+    override fun apply(upstream: Observable<UiCommand>): ObservableSource<UiResult> {
+        return upstream.publish { shared ->
+
+            val composed =
+                    nestedProcessors.map { shared.ofType(it.first).compose<UiResult>(it.second) }.toTypedArray()
+
+            val r = Observable.merge(arrayListOf(*composed))
+
+            r//Observable.empty<UiResult>()
+        }
+    }
+
+}
+
+class WithLoopback(
+        val inner: ObservableTransformer<UiCommand, UiResult>,
+        val resultsToCommands: ObservableTransformer<UiResult, UiCommand>
+)
+    : ObservableTransformer<UiCommand, UiResult> {
+
+    val loopbackCommands = ReplaySubject.create<UiCommand>()
+
+    override fun apply(upstream: Observable<UiCommand>): ObservableSource<UiResult> {
+        val c = upstream
+                .mergeWith(loopbackCommands)
+                .compose(inner)
+                .replay()
+                .refCount()
+
+        c.compose(resultsToCommands as ObservableTransformer<in UiResult, out UiCommand>)
+                //.takeWhile
+                .doOnNext { println("GOT COMMAND: $it") }
+                //.delay(10, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    println("GOT COMMAND SUB $it")
+                    loopbackCommands.onNext(it)
+                }
+
+        return c
+    }
+}
+
 class Processor(
         val asActor: ObservableTransformer<CoverLetter.Command, CoverLetter.Result>,
         val asActor1: ObservableTransformer<ClarifyingQuestions.Command, ClarifyingQuestions.Result>,
         val asActor2: ObservableTransformer<DoSubmitProposal.Command, DoSubmitProposal.Result>
 ) : ObservableTransformer<SubmitProposal.Command, UiResult> {
 
-    val loopbackCommands = ReplaySubject.create<UiCommand>()
+
+    val inner =
+            ObservableTransformer<UiCommand, UiResult> {
+                it
+                        .compose(WithProcessors(
+                                SubmitProposal.Command::class.java as Class<Any> to storageLoader as ObservableTransformer<Any, UiResult>,
+                                SubmitProposal.Command.ToNextStep::class.java as Class<Any> to navigationProcessor as ObservableTransformer<Any, UiResult>,
+                                CoverLetter.Command::class.java as Class<Any> to asActor as ObservableTransformer<Any, UiResult>,
+                                ClarifyingQuestions.Command::class.java as Class<Any> to asActor1 as ObservableTransformer<Any, UiResult>,
+                                DoSubmitProposal.Command::class.java as Class<Any> to asActor2 as ObservableTransformer<Any, UiResult>
+                        ))
+                        .compose(WithResults<UiResult>(
+                                submitAllowedProcessor as ObservableTransformer<UiResult, UiResult>,
+                                storageSaver
+                        ))
+                        .compose(WithResults<UiResult>(
+                                PublishedResults() as ObservableTransformer<UiResult, UiResult>
+                        ))
+            }
+
+
+    override fun apply(upstream: Observable<SubmitProposal.Command>): ObservableSource<UiResult> {
+        return upstream
+                .compose(WithLoopback(inner, LoopbackCommands()))
+    }
+
+
+
+    /*val loopbackCommands = ReplaySubject.create<UiCommand>()
 
     override fun apply(upstream: Observable<SubmitProposal.Command>): ObservableSource<UiResult> {
         val c= upstream
                 .cast(UiCommand::class.java)
                 .mergeWith(loopbackCommands.doOnNext { println("GOT LB $it") })
                 .doOnNext { println("RESSP " + it) }
-                .publish<UiResult> { shared ->
-                    Observable.merge<UiResult>(
-                            Observable.just(
-
-                                    shared.ofType(SubmitProposal.Command::class.java)
-                                            .compose(storageLoader),
-                                    shared.ofType(SubmitProposal.Command.ToNextStep::class.java)
-                                            .compose(navigationProcessor),
-
-                                    shared.ofType(CoverLetter.Command::class.java)
-                                            .compose(asActor),
-                                    shared.ofType(ClarifyingQuestions.Command::class.java)
-                                            .compose(asActor1),
-
-                                    shared.ofType(DoSubmitProposal.Command::class.java)
-                                            .compose(asActor2)
-
-                            )
-                            /*,
-
-
-                            shared.ofType(FeesCommands::class.java)
-                                    .compose(feesProc)*/
-                    )
-                }
+                .compose(WithProcessors(
+                        SubmitProposal.Command::class.java as Class<Any> to storageLoader as ObservableTransformer<Any, UiResult>,
+                        SubmitProposal.Command.ToNextStep::class.java as Class<Any> to navigationProcessor as ObservableTransformer<Any, UiResult>,
+                        CoverLetter.Command::class.java as Class<Any> to asActor as ObservableTransformer<Any, UiResult>,
+                        ClarifyingQuestions.Command::class.java as Class<Any> to asActor1 as ObservableTransformer<Any, UiResult>,
+                        DoSubmitProposal.Command::class.java as Class<Any> to asActor2 as ObservableTransformer<Any, UiResult>
+                ))
                 .compose(WithResults<UiResult>(
                         submitAllowedProcessor as ObservableTransformer<UiResult, UiResult>,
                         storageSaver
@@ -74,7 +131,7 @@ class Processor(
 
         return c//.filter { it is SubmitProposal.Result }.cast(SubmitProposal.Result::class.java)
     }
-
+*/
 
     val fromResultToCommands =
             ObservableTransformer<UiResult, UiCommand> {
