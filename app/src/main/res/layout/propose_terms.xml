@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="me.tatarka.bindingcollectionadapter2.LayoutManagers" />
 
-        <!--<variable
+        <variable
             name="viewModel"
-            type="com.upwork.android.legacy.findWork.submitProposal.proposeTerms.viewModels.ProposeTermsViewModel"/>-->
+            type="com.example.domain.submitProposal2.proposeTip.ProposeTip.ViewState"/>
 
     </data>
 
@@ -42,7 +43,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="-16dp"
                     android:layout_marginRight="-16dp"
-                    android:paddingTop="8dp"/>
+                    android:paddingTop="8dp"
+                    bind:viewModel="@{viewModel}"/>
                     <!--bind:isHourly="@{viewModel.isHourly}"
                     bind:viewModel="@{viewModel.bid}" />-->
 
@@ -126,6 +128,7 @@
                     android:gravity="right"
                     android:singleLine="true"
 
+                    android:text="@{viewModel.tipWithFee}"
                     android:textColor="@color/gray4"
                     tools:text="$1080.00" />
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -12,6 +13,10 @@
         <!--<variable
             name="isHourly"
             type="boolean"/>-->
+
+        <variable
+            name="viewModel"
+            type="com.example.domain.submitProposal2.proposeTip.ProposeTip.ViewState"/>
 
     </data>
 
@@ -54,10 +59,10 @@
                 android:maxEms="4"
                 android:maxLines="1"
                 android:minEms="1"
+                android:text="@{viewModel.tip}"
                 android:minHeight="0dp"
                 android:textColor="@color/colorSecondary"
                 android:textSize="36sp"
-
                 tools:text="1000"/>
         </LinearLayout>
 
@@ -97,16 +102,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/find_work_submit_proposal_propose_terms_client_sees"
                 android:textColor="@color/gray4"
+                bind:visible="@{!viewModel.isRangeError}"
                 android:textSize="12sp"/>
                 <!--bind:visible="@{!viewModel.errorBid}"/>-->
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:text="@{@string/find_work_submit_proposal_propose_terms_error(viewModel.minTip, viewModel.maxTip)}"
                 android:textColor="@color/error"
                 android:textSize="12sp"
-
+                bind:visible="@{viewModel.isRangeError}"
                 tools:text="error"/>
             <!--android:text="@{@string/find_work_submit_proposal_propose_terms_error(viewModel.minBidLimit, viewModel.maxBidLimit)}"-->
             <!--bind:visible="@{viewModel.errorBid}"-->
