@@ -2,6 +2,8 @@ package com.example.domain.framework
 
 import com.example.domain.DataCommand
 import com.example.domain.UiCommand
+import io.reactivex.Observable
+import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 
@@ -26,3 +28,27 @@ val withData =
                 )
             }
         }
+
+data class Memoized<T>(val memo: Memoizable, val current: T) {
+
+}
+
+class WithMemoized<T> : ObservableTransformer<T, Memoized<T>> {
+
+    override fun apply(upstream: Observable<T>): ObservableSource<Memoized<T>> {
+        return upstream.publish { shared ->
+            shared.withLatestFrom(
+                    shared
+                            .skipWhile { it !is Memoizable }
+                            //.firstOrError()
+                            //.cast(DataCommand::class.java)
+                            //.toObservable(),
+                            ,
+
+                    BiFunction<T, T, Memoized<T>> { t1, t2 ->
+                        Memoized(t2 as Memoizable, t1)
+                    }
+            )
+        }
+    }
+}
