@@ -2,4 +2,7 @@
 <resources>
     <dimen name="lineHeight">3px</dimen>
     <dimen name="negativeLineHeight">-3px</dimen>
+
+    <dimen name="propose_terms_large_space">120dp</dimen>
+    <dimen name="propose_terms_space">72dp</dimen>
 </resources>

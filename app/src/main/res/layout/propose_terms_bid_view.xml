@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <!--<variable
+            name="viewModel"
+            type="com.upwork.android.legacy.findWork.submitProposal.proposeTerms.viewModels.BidViewModel"/>
+-->
+        <!--<variable
+            name="isHourly"
+            type="boolean"/>-->
+
+    </data>
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/bidCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/find_work_submit_proposal_propose_terms_your_bid"
+            android:textColor="@color/gray5"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:id="@+id/bid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bidCaption"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="-4dp"
+                android:gravity="center_vertical"
+                android:text="@string/find_work_submit_proposal_propose_terms_dollar"
+                android:textColor="@color/colorSecondary"
+                android:textSize="24sp"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-6dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                android:maxEms="4"
+                android:maxLines="1"
+                android:minEms="1"
+                android:minHeight="0dp"
+                android:textColor="@color/colorSecondary"
+                android:textSize="36sp"
+
+                tools:text="1000"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/bid"
+            android:layout_marginLeft="2dp"
+            android:layout_toRightOf="@+id/bid"
+            android:text="@string/find_work_submit_proposal_propose_terms_hr"
+            android:textColor="@color/gray4"
+            android:textSize="20sp"
+            tools:text="/hr"/>
+
+        <ImageView
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bid"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/list_divider"
+            app:layout_widthPercent="58%"/>
+            <!--bind:tint="@{viewModel.errorBid ? @color/error : @color/colorDivider}"/>-->
+
+        <LinearLayout
+            android:id="@+id/bidInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/line"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/find_work_submit_proposal_propose_terms_client_sees"
+                android:textColor="@color/gray4"
+                android:textSize="12sp"/>
+                <!--bind:visible="@{!viewModel.errorBid}"/>-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textColor="@color/error"
+                android:textSize="12sp"
+
+                tools:text="error"/>
+            <!--android:text="@{@string/find_work_submit_proposal_propose_terms_error(viewModel.minBidLimit, viewModel.maxBidLimit)}"-->
+            <!--bind:visible="@{viewModel.errorBid}"-->
+
+        </LinearLayout>
+
+        <!--<include
+            layout="@layout/suggested_rate_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bidInfo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            bind:viewModel="@{viewModel.suggestedRateViewModel}"/>-->
+
+    </android.support.percent.PercentRelativeLayout>
+
+</layout>
