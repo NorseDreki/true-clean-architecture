@@ -6,6 +6,7 @@ import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.framework.ExtraCommandsComponent
 import com.example.domain.models.ItemOpportunity
+import com.example.domain.submitProposal2.fees.FeesCalculator
 import com.example.domain.submitProposal2.proposeTip.ProposeTip.*
 
 class ProposeTip : ExtraCommandsComponent<Command, Result, ViewState>() {
@@ -13,9 +14,10 @@ class ProposeTip : ExtraCommandsComponent<Command, Result, ViewState>() {
     sealed class Command : UiCommand {
         data class DATA(val itemOpportunity: ItemOpportunity) : Command(), UiDataCommand
 
+        object ForceRecalculateFee : Command()
+
         //from UI
-        data class UpdateBid(val bid: Int) : Command()
-        data class UpdateEngagement(val engagement: String) : Command()
+        data class UpdateTip(val tip: Int) : Command()
     }
 
     sealed class Result : UiResult {
@@ -28,11 +30,15 @@ class ProposeTip : ExtraCommandsComponent<Command, Result, ViewState>() {
         data class ItemGreetingLoaded(val message: String) : Result()
         data class EngagementsLoaded(val message: String) : Result()
 
-        data class BidValid(val bid: Int, val fee: Int) : Result()
-        object BidEmpty : Result()
-        data class BidRangeExceeded(val bid: Int, val min: Int, val max: Int) : Result()
+        data class TipValid(val tip: Int) : Result()
+        object TipNotEntered : Result()
+        data class TipRangeExceeded(val tip: Int, val min: Int, val max: Int) : Result()
+
+        data class FeeCalculated(val tipWithFee: Int) : Result()
+        data class FeeCalculatorLoaded(val feeCalculator: FeesCalculator) : Result()
 
 
+        //calculate connects
         data class EngagementSelected(val engagement: String): Result()
         object EngagementNotSelected: Result()
 
@@ -41,11 +47,13 @@ class ProposeTip : ExtraCommandsComponent<Command, Result, ViewState>() {
 
     data class ViewState(
             val itemDescription: String = "",
-            val bid: Int = 0,
+            val tip: Int = 0,
             val isRangeError: Boolean = false,
-            val fee: Int = 0
+            val minTip: Int = 0,
+            val maxTip: Int = 0,
+            val tipWithFee: Int = 0,
+            val isFeeLoading: Boolean = true
     ) : UiState
-
 
 
     override val processor = Processor()
