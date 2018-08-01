@@ -49,6 +49,7 @@
                     android:layout_marginLeft="-16dp"
                     android:layout_marginRight="-16dp"
                     android:paddingTop="8dp"
+                    bind:events="@{events}"
                     bind:viewModel="@{viewModel}"/>
                     <!--bind:isHourly="@{viewModel.isHourly}"
                     bind:viewModel="@{viewModel.bid}" />-->

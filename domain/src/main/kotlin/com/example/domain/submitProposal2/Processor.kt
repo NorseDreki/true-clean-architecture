@@ -8,10 +8,12 @@ import com.example.domain.framework.WithResults
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
+import com.example.domain.submitProposal2.proposeTip.ProposeTip
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
 class Processor(
+        val proposeTip: ObservableTransformer<ProposeTip.Command, ProposeTip.Result>,
         val asActor: ObservableTransformer<CoverLetter.Command, CoverLetter.Result>,
         val asActor1: ObservableTransformer<ClarifyingQuestions.Command, ClarifyingQuestions.Result>,
         val asActor2: ObservableTransformer<DoSubmitProposal.Command, DoSubmitProposal.Result>
@@ -24,6 +26,7 @@ class Processor(
                         .compose(WithProcessors(
                                 SubmitProposal.Command::class.java as Class<Any> to storageLoader as ObservableTransformer<Any, UiResult>,
                                 SubmitProposal.Command.ToNextStep::class.java as Class<Any> to navigationProcessor as ObservableTransformer<Any, UiResult>,
+                                ProposeTip.Command::class.java as Class<Any> to proposeTip as ObservableTransformer<Any, UiResult>,
                                 CoverLetter.Command::class.java as Class<Any> to asActor as ObservableTransformer<Any, UiResult>,
                                 ClarifyingQuestions.Command::class.java as Class<Any> to asActor1 as ObservableTransformer<Any, UiResult>,
                                 DoSubmitProposal.Command::class.java as Class<Any> to asActor2 as ObservableTransformer<Any, UiResult>

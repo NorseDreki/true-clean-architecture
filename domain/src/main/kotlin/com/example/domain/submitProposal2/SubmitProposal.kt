@@ -12,20 +12,23 @@ import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestion
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
 import com.example.domain.submitProposal2.proposalSummary.ProposalSummaryViewState
+import com.example.domain.submitProposal2.proposeTip.ProposeTip
 
 
 class SubmitProposal(
+        val proposeTip: ProposeTip,
         val coverLetter: CoverLetter,
         val clarifyingQuestions: ClarifyingQuestions,
         val doSubmitProposal: DoSubmitProposal
 ): ExtraCommandsComponent<SubmitProposal.Command, UiResult, SubmitProposal.ViewState>() {
 
+    val pre = proposeTip.asEmbedded()
     val cle = coverLetter.asEmbedded()
     val cqe = clarifyingQuestions.asEmbedded()
     val dsp = doSubmitProposal.asEmbedded()
 
-    override val processor = Processor(cle.asActor, cqe.asActor, dsp.asActor)
-    override val reducer = Reducer(cle.asReducer, cqe.asReducer, dsp.asReducer)
+    override val processor = Processor(pre.asActor, cle.asActor, cqe.asActor, dsp.asActor)
+    override val reducer = Reducer(pre.asReducer, cle.asReducer, cqe.asReducer, dsp.asReducer)
 
     sealed class Command : UiCommand {
 
@@ -55,6 +58,7 @@ class SubmitProposal(
     }
 
     data class ViewState(
+            val proposeTip: ProposeTip.ViewState,
             val coverLetter: CoverLetter.ViewState,
             val clarifyingQuestions: ClarifyingQuestions.ViewState,
             val proposalSummary: ProposalSummaryViewState,

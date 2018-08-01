@@ -10,7 +10,7 @@ class Processor : ObservableTransformer<Command, Result> {
 
     override fun apply(upstream: Observable<Command>) =
             upstream.compose(paProcessor)
-                    .compose(WithResults(paAnsweredProcessor))
+                    .compose(WithResults(paAnsweredProcessor))!!
 
     data class AllQuestionsAnswered(
             val totalQuestions: Int? = null,

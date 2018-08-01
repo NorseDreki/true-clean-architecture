@@ -8,6 +8,7 @@ class ProposeTipEvents(
 ) {
 
     fun onTipUpdated(text: CharSequence) {
+        println("onTipUpdated")
         proposeTip.extraCommand(ProposeTip.Command.UpdateTip(text.toString().toInt()))
     }
 }
