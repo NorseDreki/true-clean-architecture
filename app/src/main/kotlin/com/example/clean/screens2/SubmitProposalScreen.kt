@@ -41,6 +41,7 @@ data class SubmitProposalScreen(
     }
 
     data class Events(
+            val proposeTip: ProposeTipEvents,
             val coverLetter: CoverLetterScreenEvents,
             val clarifyingQuestions: ClarifyingQuestionsEvents,
             val proposalSummaryEvents: ProposalSummaryEventHandler,
@@ -56,6 +57,7 @@ class ToScreen(
             submitProposal.clarifyingQuestions
     )
     val events = SubmitProposalScreen.Events(
+            ProposeTipEvents(submitProposal.proposeTip),
             CoverLetterScreenEvents(
                     submitProposal.coverLetter
             ),
