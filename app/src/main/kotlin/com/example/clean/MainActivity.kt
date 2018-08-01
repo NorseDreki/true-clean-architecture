@@ -36,12 +36,13 @@ class MainActivity : AppCompatActivity() {
 
     fun cr(): com.example.domain.submitProposal2.SubmitProposal {
         val flowNavigator2 = FlowNavigator2(this, changer)
+        val pt = com.example.domain.submitProposal2.proposeTip.ProposeTip()
         val pc = com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.ProposalConfirmation(flowNavigator2)
         val cl = com.example.domain.submitProposal2.coverLetter.CoverLetter()
         val cq = com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions()
         val dsp = com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal(flowNavigator2, pc)
 
-        val sp = com.example.domain.submitProposal2.SubmitProposal(cl, cq, dsp)
+        val sp = com.example.domain.submitProposal2.SubmitProposal(pt, cl, cq, dsp)
 
         return sp
     }

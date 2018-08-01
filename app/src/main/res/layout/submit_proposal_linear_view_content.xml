@@ -28,6 +28,11 @@
             android:orientation="vertical">
 
             <include
+                layout="@layout/propose_terms"
+                bind:events="@{events.proposeTip}"
+                bind:viewModel="@{viewModel.proposeTip}" />
+
+            <include
                 layout="@layout/cover_letter"
                 bind:events="@{events.coverLetter}"
                 bind:viewModel="@{viewModel.coverLetter}" />

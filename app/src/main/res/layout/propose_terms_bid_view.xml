@@ -18,6 +18,10 @@
             name="viewModel"
             type="com.example.domain.submitProposal2.proposeTip.ProposeTip.ViewState"/>
 
+        <variable
+            name="events"
+            type="com.example.clean.screens2.ProposeTipEvents"/>
+
     </data>
 
     <android.support.percent.PercentRelativeLayout
@@ -59,9 +63,10 @@
                 android:maxEms="4"
                 android:maxLines="1"
                 android:minEms="1"
-                android:text="@{viewModel.tip}"
+                
                 android:minHeight="0dp"
                 android:textColor="@color/colorSecondary"
+                android:onTextChanged="@{(text, start, before, count) -> events.onTipUpdated(text)}"
                 android:textSize="36sp"
                 tools:text="1000"/>
         </LinearLayout>

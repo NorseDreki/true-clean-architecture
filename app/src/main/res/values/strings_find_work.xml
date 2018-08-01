@@ -191,7 +191,7 @@
     <string name="find_work_submit_proposal_propose_terms_freelancer_earns">You\'ll receive</string>
     <string name="find_work_submit_proposal_propose_terms_engagement_duration">Est. Duration</string>
     <string name="find_work_submit_proposal_propose_terms_connects">Required Connects (%1$d available)</string>
-    <string name="find_work_submit_proposal_propose_terms_error">Amount must be between %1$.2f and %2$.2f</string>
+    <string name="find_work_submit_proposal_propose_terms_error">Amount must be between %1$d and %2$d</string>
 
     <!-- Cover Letter -->
     <string name="find_work_submit_proposal_cover_letter_title">Cover Letter</string>
