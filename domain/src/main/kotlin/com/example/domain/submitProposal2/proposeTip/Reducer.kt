@@ -23,6 +23,9 @@ class Reducer : ObservableTransformer<Result, ViewState> {
                     is Result.FeeCalculated ->
                             state.copy(tipWithFee = result.tipWithFee, isFeeLoading = false)
 
+                    is Result.FeeCleared ->
+                        state.copy(tipWithFee = 0, isFeeLoading = true)
+
                     //to emit nothing is better
                     else -> state
                 }
