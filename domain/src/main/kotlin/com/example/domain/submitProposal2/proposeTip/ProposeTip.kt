@@ -5,6 +5,7 @@ import com.example.domain.UiDataCommand
 import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.framework.ExtraCommandsComponent
+import com.example.domain.framework.Memoizable
 import com.example.domain.models.ItemOpportunity
 import com.example.domain.submitProposal2.fees.FeesCalculator
 import com.example.domain.submitProposal2.proposeTip.ProposeTip.*
@@ -35,7 +36,9 @@ class ProposeTip : ExtraCommandsComponent<Command, Result, ViewState>() {
         data class TipRangeExceeded(val tip: Int, val min: Int, val max: Int) : Result()
 
         data class FeeCalculated(val tipWithFee: Int) : Result()
-        data class FeeCalculatorLoaded(val feeCalculator: FeesCalculator) : Result()
+        object FeeCleared : Result()
+
+        data class FeeCalculatorLoaded(val feeCalculator: FeesCalculator) : Result(), Memoizable
 
 
         //calculate connects
