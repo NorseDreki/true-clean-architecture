@@ -1,17 +1,11 @@
 package com.example.domain.submitProposal2.proposeTip
 
 import com.example.domain.framework.WithMemoized
-import com.example.domain.submitProposal2.fees.FeesCalculator
 import com.example.domain.submitProposal2.proposeTip.ProposeTip.Result
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
 class Integrator : ObservableTransformer<Result, Result> {
-
-    data class State(
-            val feesCalculator: FeesCalculator? = null,
-            val tipWithFee: Int? = null
-    )
 
     override fun apply(upstream: Observable<Result>) =
             upstream
@@ -42,17 +36,4 @@ class Integrator : ObservableTransformer<Result, Result> {
                             else -> throw IllegalStateException("not expected ${it.current}")
                         }
                     }!!
-            /*upstream.scan(State()) { state, result ->
-                when (result) {
-                    is Result.FeeCalculatorLoaded -> {
-                        //calculate
-                        state.copy(result.feeCalculator)
-                    }
-                    else -> state
-                }
-            }
-                    .skipWhile { it.feesCalculator == null }
-
-            }!!*/
-
 }

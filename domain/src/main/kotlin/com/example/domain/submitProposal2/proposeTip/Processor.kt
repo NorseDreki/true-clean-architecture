@@ -13,18 +13,13 @@ class Processor : ObservableTransformer<Command, Result> {
     override fun apply(upstream: Observable<Command>) =
             upstream
                     .flatMap {
-
                         when (it) {
                             is Command.DATA -> {
                                 Observable.fromArray(
                                         Result.ItemGreetingLoaded("greeting"),
                                         calculate(it.itemOpportunity.proposal.bid)
                                 ).flatMap {
-                                    Observable.fromCallable {
-                                        Thread.sleep(3000)
-                                        println("CALC LOADED")
-                                        Result.FeeCalculatorLoaded(object : FeesCalculator {})
-                                    }.subscribeOn(Schedulers.io())
+                                    calculatorLoaded()
                                 }
 
                             }
@@ -32,18 +27,21 @@ class Processor : ObservableTransformer<Command, Result> {
                                 Observable.just(calculate(it.tip))
                             }
                             is Command.ForceRecalculateFee -> {
-                                Observable.fromCallable {
-                                    Thread.sleep(3000)
-                                    println("CALC LOADED")
-                                    Result.FeeCalculatorLoaded(object : FeesCalculator {})
-                                }.subscribeOn(Schedulers.io())
+                                calculatorLoaded()
                             }
                         }
                     }
                     .compose(WithResults(Integrator()))!!
 
-    fun calculate(tip: Int): Result {
+    private fun calculatorLoaded(): Observable<Result.FeeCalculatorLoaded> {
+        return Observable.fromCallable {
+            Thread.sleep(3000)
+            println("CALC LOADED")
+            Result.FeeCalculatorLoaded(object : FeesCalculator {})
+        }.subscribeOn(Schedulers.io())
+    }
 
+    fun calculate(tip: Int): Result {
         return when (tip) {
             0 -> Result.TipNotEntered
             else -> when (tip) {
@@ -54,9 +52,5 @@ class Processor : ObservableTransformer<Command, Result> {
                 else -> Result.TipRangeExceeded(tip, 100, 1000)
             }
         }
-    }
-
-    fun duration(): Result {
-        return Result.EngagementNotSelected
     }
 }
