@@ -6,6 +6,7 @@ import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestion
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
 import com.example.domain.submitProposal2.fees.FeesResult
+import com.example.domain.submitProposal2.proposeTip.ProposeTip
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
@@ -17,6 +18,7 @@ class LoopbackCommands : ObservableTransformer<UiResult, UiCommand> {
                     is SubmitProposal.Result.ProposalLoaded -> {
                         //hide panel
                         Observable.fromArray(
+                                ProposeTip.Command.DATA(it.itemOpportunity),
                                 CoverLetter.Command.DATA(it.itemOpportunity),
                                 ClarifyingQuestions.Command.INIT(it.itemOpportunity),
                                 DoSubmitProposal.Command.DATA(it.itemOpportunity)
