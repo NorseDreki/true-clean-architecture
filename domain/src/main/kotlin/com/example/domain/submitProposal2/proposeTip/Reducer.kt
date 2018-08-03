@@ -12,19 +12,22 @@ class Reducer : ObservableTransformer<Result, ViewState> {
             upstream.scan(ViewState()) { state, result ->
                 when (result) {
                     Result.TipNotEntered ->
-                            state.copy(tip = 0, isRangeError = false)
+                            state.copy(tip = "", isRangeError = false)
 
                     is Result.TipValid ->
-                        state.copy(tip = result.tip, isRangeError = false)
+                        state.copy(tip = result.tip.toString(), isRangeError = false)
 
                     is Result.TipRangeExceeded ->
-                        state.copy(tip = result.tip, isRangeError = true, minTip = result.min, maxTip = result.max)
+                        state.copy(tip = result.tip.toString(), isRangeError = true, minTip = result.min, maxTip = result.max)
+
+                    is Result.FeeCalculatorLoaded ->
+                            state.copy(isFeeLoading = false)
 
                     is Result.FeeCalculated ->
-                            state.copy(tipWithFee = result.tipWithFee, isFeeLoading = false)
+                            state.copy(tipWithFee = result.tipWithFee.toString(), isFeeLoading = false)
 
                     is Result.FeeCleared ->
-                        state.copy(tipWithFee = 0, isFeeLoading = true)
+                        state.copy(tipWithFee = "")
 
                     //to emit nothing is better
                     else -> state
