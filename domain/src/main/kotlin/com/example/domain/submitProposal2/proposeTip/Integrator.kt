@@ -20,8 +20,11 @@ class Integrator : ObservableTransformer<Result, Result> {
                             it is Result.TipNotEntered ||
                             it is Result.TipRangeExceeded
                     }
+                    .doOnNext { println("FILTERED $it") }
                     .compose(WithMemoized<Result>())
+                    .filter { it.current !is Result.FeeCalculatorLoaded }
                     .map {
+                        println("INTEGRATOR $it")
                         when (it.current) {
                             is Result.TipValid -> {
                                 //calculate
@@ -36,7 +39,7 @@ class Integrator : ObservableTransformer<Result, Result> {
                             is Result.TipRangeExceeded -> {
                                 Result.FeeCleared
                             }
-                            else -> throw IllegalStateException("not expected")
+                            else -> throw IllegalStateException("not expected ${it.current}")
                         }
                     }!!
             /*upstream.scan(State()) { state, result ->

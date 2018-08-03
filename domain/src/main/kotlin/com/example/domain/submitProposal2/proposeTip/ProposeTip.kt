@@ -50,11 +50,11 @@ class ProposeTip : ExtraCommandsComponent<Command, Result, ViewState>() {
 
     data class ViewState(
             val itemDescription: String = "",
-            val tip: Int = 0,
+            val tip: String = "",
             val isRangeError: Boolean = false,
             val minTip: Int = 0,
             val maxTip: Int = 0,
-            val tipWithFee: Int = 0,
+            val tipWithFee: String = "",
             val isFeeLoading: Boolean = true
     ) : UiState
 

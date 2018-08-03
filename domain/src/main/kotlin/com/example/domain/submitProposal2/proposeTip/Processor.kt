@@ -22,6 +22,7 @@ class Processor : ObservableTransformer<Command, Result> {
                                 ).flatMap {
                                     Observable.fromCallable {
                                         Thread.sleep(3000)
+                                        println("CALC LOADED")
                                         Result.FeeCalculatorLoaded(object : FeesCalculator {})
                                     }.subscribeOn(Schedulers.io())
                                 }
@@ -33,6 +34,7 @@ class Processor : ObservableTransformer<Command, Result> {
                             is Command.ForceRecalculateFee -> {
                                 Observable.fromCallable {
                                     Thread.sleep(3000)
+                                    println("CALC LOADED")
                                     Result.FeeCalculatorLoaded(object : FeesCalculator {})
                                 }.subscribeOn(Schedulers.io())
                             }
