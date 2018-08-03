@@ -39,13 +39,14 @@ class WithMemoized<T> : ObservableTransformer<T, Memoized<T>> {
         return upstream.publish { shared ->
             shared.withLatestFrom(
                     shared
-                            .skipWhile { it !is Memoizable }
+                            .filter { it is Memoizable }
                             //.firstOrError()
                             //.cast(DataCommand::class.java)
                             //.toObservable(),
                             ,
 
                     BiFunction<T, T, Memoized<T>> { t1, t2 ->
+                        println("MEMOIZED $t1, $t2")
                         Memoized(t2 as Memoizable, t1)
                     }
             )
