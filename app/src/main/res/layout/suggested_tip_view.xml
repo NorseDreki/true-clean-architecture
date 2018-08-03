@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.upwork.android.mvvmp.suggestedRate.SuggestedRateViewModel"/>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_primary_no_inset"
+        android:orientation="vertical"
+        android:padding="16dp"
+        bind:onClick="@{viewModel.onClicked}"
+        bind:visible="@{viewModel.isVisible}">
+
+        <TextView
+            android:id="@+id/suggestedRateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:fontFamily="sans-serif"
+            android:text="Tip tip"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/suggestedRateInfo"/>
+
+        <ImageButton
+            android:id="@+id/suggestedRateInfo"
+            style="?attr/actionButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_more_info_black_18_dp"
+            app:layout_constraintBottom_toTopOf="@+id/suggestedRateTitle"
+            app:layout_constraintLeft_toRightOf="@+id/suggestedRateTitle"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/suggestedRateTitle"
+            bind:onClick="@{viewModel.onInfoClicked}"
+            bind:tint="@{@color/white}"/>
+
+        <TextView
+            android:id="@+id/suggestedRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{viewModel.displayValue}"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/suggestedRateHr"
+            app:layout_constraintTop_toBottomOf="@+id/suggestedRateTitle"
+            tools:text="$1000"/>
+
+        <TextView
+            android:id="@+id/suggestedRateHr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/find_work_submit_proposal_propose_terms_hr"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/suggestedRate"
+            app:layout_constraintLeft_toRightOf="@+id/suggestedRate"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="/hr"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>
