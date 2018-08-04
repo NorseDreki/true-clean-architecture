@@ -30,6 +30,7 @@
             <include
                 layout="@layout/propose_terms"
                 bind:events="@{events.proposeTip}"
+                bind:suggestedTip="@{viewModel.suggestedTip}"
                 bind:viewModel="@{viewModel.proposeTip}" />
 
             <include

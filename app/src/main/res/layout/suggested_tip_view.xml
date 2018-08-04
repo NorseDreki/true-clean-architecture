@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.upwork.android.mvvmp.suggestedRate.SuggestedRateViewModel"/>
+            type="com.example.domain.submitProposal2.suggestedTip.SuggestedTip.ViewState"/>
 
     </data>
 
@@ -19,7 +19,6 @@
         android:background="@drawable/button_primary_no_inset"
         android:orientation="vertical"
         android:padding="16dp"
-        bind:onClick="@{viewModel.onClicked}"
         bind:visible="@{viewModel.isVisible}">
 
         <TextView
@@ -48,7 +47,6 @@
             app:layout_constraintLeft_toRightOf="@+id/suggestedRateTitle"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/suggestedRateTitle"
-            bind:onClick="@{viewModel.onInfoClicked}"
             bind:tint="@{@color/white}"/>
 
         <TextView
@@ -56,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{viewModel.displayValue}"
+            android:text="@{viewModel.suggestedTip}"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"

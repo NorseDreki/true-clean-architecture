@@ -7,6 +7,7 @@ import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
 import com.example.domain.submitProposal2.fees.FeesResult
 import com.example.domain.submitProposal2.proposeTip.ProposeTip
+import com.example.domain.submitProposal2.suggestedTip.SuggestedTip
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
@@ -46,6 +47,9 @@ class LoopbackCommands : ObservableTransformer<UiResult, UiCommand> {
                     is DoSubmitProposal.Result.Success -> Observable.just(
                             SubmitProposal.Command.RemoveProposal
                     )
+
+                    is ProposeTip.Result.TipValid ->
+                            Observable.just(SuggestedTip.Command.DATA(it.tip))
                     else -> {
                         Observable.empty()
                     }

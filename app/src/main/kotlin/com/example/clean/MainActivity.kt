@@ -13,6 +13,8 @@ import com.example.domain.framework.extraCommand
 import com.example.domain.models.ItemDetails
 import com.example.domain.models.Question
 import com.example.domain.submitProposal.*
+import com.example.domain.submitProposal2.suggestedTip.SuggestedTip
+import com.example.domain.submitProposal2.suggestedTip.UserSuggestion
 import com.google.gson.GsonBuilder
 import com.upwork.android.core.BasicKeyParceler
 import flow.Direction
@@ -42,7 +44,17 @@ class MainActivity : AppCompatActivity() {
         val cq = com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions()
         val dsp = com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal(flowNavigator2, pc)
 
-        val sp = com.example.domain.submitProposal2.SubmitProposal(pt, cl, cq, dsp)
+        val st = SuggestedTip(object : UserSuggestion{
+            override fun getSuggestionForUser(): Int {
+                return 200
+            }
+
+            override fun hasSuggestionAvailable(): Boolean {
+                return true
+            }
+        })
+
+        val sp = com.example.domain.submitProposal2.SubmitProposal(pt, st, cl, cq, dsp)
 
         return sp
     }

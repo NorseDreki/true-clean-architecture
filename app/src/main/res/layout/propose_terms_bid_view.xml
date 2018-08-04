@@ -19,6 +19,10 @@
             type="com.example.domain.submitProposal2.proposeTip.ProposeTip.ViewState"/>
 
         <variable
+            name="suggestedTip"
+            type="com.example.domain.submitProposal2.suggestedTip.SuggestedTip.ViewState"/>
+
+        <variable
             name="events"
             type="com.example.clean.screens2.ProposeTipEvents"/>
 
@@ -63,7 +67,7 @@
                 android:maxEms="4"
                 android:maxLines="1"
                 android:minEms="1"
-                
+
                 android:minHeight="0dp"
                 android:textColor="@color/colorSecondary"
                 android:onTextChanged="@{(text, start, before, count) -> events.onTipUpdated(text)}"
@@ -124,14 +128,14 @@
 
         </LinearLayout>
 
-        <!--<include
-            layout="@layout/suggested_rate_view"
+        <include
+            layout="@layout/suggested_tip_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/bidInfo"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            bind:viewModel="@{viewModel.suggestedRateViewModel}"/>-->
+            bind:viewModel="@{suggestedTip}"
+            android:layout_marginTop="16dp"/>
 
     </android.support.percent.PercentRelativeLayout>
 
