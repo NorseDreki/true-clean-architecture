@@ -5,11 +5,9 @@ import com.example.domain.UiDataCommand
 import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.framework.ExtraCommandsComponent
-import com.example.domain.submitProposal2.proposeTip.Processor
-import com.example.domain.submitProposal2.proposeTip.ProposeTip.*
-import com.example.domain.submitProposal2.proposeTip.Reducer
+import com.example.domain.submitProposal2.suggestedTip.SuggestedTip.*
 
-class SuggestTip : ExtraCommandsComponent<Command, Result, ViewState>() {
+class SuggestedTip(userSuggestion: UserSuggestion) : ExtraCommandsComponent<Command, Result, ViewState>() {
 
     sealed class Command : UiCommand {
         data class DATA(val currentTip: Int) : Command(), UiDataCommand
@@ -32,6 +30,6 @@ class SuggestTip : ExtraCommandsComponent<Command, Result, ViewState>() {
     ) : UiState
 
 
-    override val processor = Processor()
+    override val processor = Processor(userSuggestion)
     override val reducer = Reducer()
 }
