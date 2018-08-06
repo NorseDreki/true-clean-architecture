@@ -5,15 +5,38 @@ import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.framework.ExtraCommandsComponent
 import io.reactivex.Observable
+import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 
-class DummyConfirmation(
-) : ExtraCommandsComponent<DummyConfirmation.Command, DummyConfirmation.Result, DummyConfirmation.ViewState>() {
+class WebBro(
+        val navigator: WebUrlNavigator
+) : ObservableTransformer<WebBro.Command, WebBro.Result> {
+
+    override fun apply(upstream: Observable<Command>): ObservableSource<Result> {
+        return upstream.map {
+            navigator.navigateToUrl((it as Command.DATA).url)
+            Result.Navigated
+        }
+    }
+
+    sealed class Command : UiCommand {
+        data class DATA(val url: String) : Command()
+    }
+
+    sealed class Result : UiResult {
+        object Navigated : Result()
+    }
+}
+
+class WebBrowser(
+        val navigator: WebUrlNavigator
+) : ExtraCommandsComponent<WebBrowser.Command, WebBrowser.Result, WebBrowser.ViewState>() {
+
     val pcProcessor =
             ObservableTransformer<Command, Result> {
                 it.map {
                     when (it) {
-                        is Command.DATA -> Result.DATALoaded(it.itemOpportunity)
+                        is Command.DATA -> Result.DATALoaded("s")
                         Command.Dismiss -> Result.Dismissed
                     }
                 }
@@ -37,7 +60,7 @@ class DummyConfirmation(
 
 
     sealed class Command : UiCommand {
-        data class DATA(val itemOpportunity: String) : Command()
+        data class DATA(val url: String) : Command()
 
         object Dismiss : Command()
     }
