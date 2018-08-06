@@ -1,6 +1,6 @@
 package com.example.clean
 
-import com.example.clean.screens.Screen
+import com.example.clean.screens2.Screen
 import com.example.domain.UiState
 import io.reactivex.Notification
 import io.reactivex.Observable

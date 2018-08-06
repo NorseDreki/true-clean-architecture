@@ -1,6 +1,8 @@
 package com.example.clean.screens
 
 import com.example.clean.R
+import com.example.clean.screens2.ListBindings
+import com.example.clean.screens2.Screen
 import com.example.domain.submitProposal.ProposalConfirmation
 import io.reactivex.Observable
 import io.reactivex.ObservableSource

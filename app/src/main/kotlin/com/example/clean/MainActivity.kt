@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.example.clean.screens.Screen
 import com.example.clean.screens.ToScreen
+import com.example.clean.screens2.Screen
 import com.example.clean.screens2.SubmitProposalScreen
 import com.example.domain.UiState
 import com.example.domain.framework.asStandalone

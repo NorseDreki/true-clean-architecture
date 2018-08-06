@@ -14,7 +14,7 @@
 
         <variable
             name="bindings"
-            type="com.example.clean.screens.ListBindings"/>
+            type="com.example.clean.screens2.ListBindings"/>
 
     </data>
 

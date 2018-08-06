@@ -1,7 +1,6 @@
 package com.example.clean.screens2
 
 import com.example.clean.ObservableProperty
-import com.example.clean.screens.ScreenEvents
 import com.example.domain.framework.extraCommand
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 

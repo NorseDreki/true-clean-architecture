@@ -1,8 +1,8 @@
 package com.example.clean.screens2.dummyConfirmation
 
 import com.example.clean.R
-import com.example.clean.screens.ListBindings
-import com.example.clean.screens.Screen
+import com.example.clean.screens2.ListBindings
+import com.example.clean.screens2.Screen
 import com.example.domain.submitProposal2.doSubmitProposal.proposalConfirmation.DummyConfirmation
 import io.reactivex.Observable
 import io.reactivex.ObservableSource

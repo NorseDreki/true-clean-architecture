@@ -1,8 +1,8 @@
 package com.example.clean
 
 import android.content.Context
-import com.example.clean.screens.Screen
 import com.example.clean.screens2.ProposalConfirmationScreen
+import com.example.clean.screens2.Screen
 import com.example.clean.screens2.dummyConfirmation.DummyConfirmationScreen
 import com.example.domain.UiCommand
 import com.example.domain.UiResult

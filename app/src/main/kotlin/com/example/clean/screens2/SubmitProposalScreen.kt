@@ -2,9 +2,6 @@ package com.example.clean.screens2
 
 import com.example.clean.BR
 import com.example.clean.R
-import com.example.clean.screens.ListBindings
-import com.example.clean.screens.Screen
-import com.example.clean.screens.ScreenEvents
 import com.example.domain.submitProposal2.SubmitProposal
 import com.example.domain.submitProposal2.common.QuestionViewState
 import io.reactivex.Observable
