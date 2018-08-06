@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.example.clean.screens.ToScreen
 import com.example.clean.screens2.Screen
 import com.example.clean.screens2.SubmitProposalScreen
 import com.example.domain.UiState
@@ -12,7 +11,7 @@ import com.example.domain.framework.asStandalone
 import com.example.domain.framework.extraCommand
 import com.example.domain.models.ItemDetails
 import com.example.domain.models.Question
-import com.example.domain.submitProposal.*
+import com.example.domain.submitProposal.SubmitProposal
 import com.example.domain.submitProposal2.suggestedTip.SuggestedTip
 import com.example.domain.submitProposal2.suggestedTip.UserSuggestion
 import com.google.gson.GsonBuilder
@@ -25,12 +24,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var sp: SubmitProposal
-
-    private lateinit var cl: CoverLetter
-
-    lateinit var toScreen: ToScreen
 
     private lateinit var sp2: com.example.domain.submitProposal2.SubmitProposal
 
@@ -64,15 +57,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.basic_activity_frame)
 
-        val flowNavigator = FlowNavigator(this)
+        //val flowNavigator = FlowNavigator(this)
        // val flowNavigator2 = FlowNavigator2(this)
-
-        cl = CoverLetter()
-        val cq = ClarifyingQuestions()
-        val dsp = DoSubmitProposal(flowNavigator, ProposalConfirmation())
-        sp = SubmitProposal(cl, cq, dsp)
-        toScreen = ToScreen(sp)
-
 
 
         val questions = listOf(
