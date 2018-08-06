@@ -11,14 +11,12 @@ import com.example.domain.framework.asStandalone
 import com.example.domain.framework.extraCommand
 import com.example.domain.models.ItemDetails
 import com.example.domain.models.Question
-import com.example.domain.submitProposal.SubmitProposal
 import com.example.domain.submitProposal2.suggestedTip.SuggestedTip
 import com.example.domain.submitProposal2.suggestedTip.UserSuggestion
 import com.google.gson.GsonBuilder
 import com.upwork.android.core.BasicKeyParceler
 import flow.Direction
 import flow.Flow
-import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -69,9 +67,6 @@ class MainActivity : AppCompatActivity() {
 
 
         val itemDetails = ItemDetails("1234", true, questions)
-
-        val cmd2 =
-                Observable.just<SubmitProposal.Command>(SubmitProposal.Command.DATA(itemDetails))
 
         /*sp.process(cmd2).materialize().subscribe {
             println("MAT: $it")

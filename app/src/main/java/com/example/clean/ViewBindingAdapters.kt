@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.example.domain.submitProposal.DialogState
+import com.example.domain.submitProposal2.common.DialogState
 import io.reactivex.subjects.Subject
 
 
