@@ -13,15 +13,15 @@ val paAnsweredProcessor =
                             is Result.QuestionsLoaded -> {
                                 state.copy(result.questions.size, mutableSetOf())
                             }
-                            is Result.NoQuestionsRequired -> {
+                            is Result.NotRequired -> {
                                 Processor.AllQuestionsAnswered()
                                 //state.copy(0, mutableSetOf())
                             }
-                            is Result.ValidAnswer -> {
-                                state.copy(answeredQuestions = state.answeredQuestions.apply { add(result.id) })
+                            is Result.AnswerValid -> {
+                                state.copy(answeredQuestions = state.answeredQuestions.apply { add(result.questionId) })
                             }
-                            is Result.EmptyAnswer -> {
-                                state.copy(answeredQuestions = state.answeredQuestions.apply { remove(result.id) })
+                            is Result.AnswerEmpty -> {
+                                state.copy(answeredQuestions = state.answeredQuestions.apply { remove(result.questionId) })
                             }
                         //else -> throw IllegalStateException("sdf")
                             is Result.AllQuestionsAnswered -> TODO()

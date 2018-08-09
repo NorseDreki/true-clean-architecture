@@ -14,26 +14,26 @@ class Reducer : ObservableTransformer<Result, ViewState> {
                 when (result) {
                     is Result.QuestionsLoaded ->
                         ViewState(
-                                result.questions.map {
+                                items = result.questions.map {
                                     QuestionViewState(it.id, it.question, null)
                                 }
                         )
-                    is Result.ValidAnswer ->
+                    is Result.AnswerValid ->
                         ViewState(
                                 //state.items.find { it.id == result.id }.answer!! = result.answer
-                                state.items.map {
-                                    if (it.id == result.id) {
+                                items = state.items.map {
+                                    if (it.id == result.questionId) {
                                         QuestionViewState(it.id, it.question, result.answer)
                                     } else {
                                         it
                                     }
                                 }
                         )
-                    is Result.EmptyAnswer ->
+                    is Result.AnswerEmpty ->
                         ViewState(
                                 //state.items.find { it.id == result.id }.answer!! = result.answer
-                                state.items.map {
-                                    if (it.id == result.id) {
+                                items = state.items.map {
+                                    if (it.id == result.questionId) {
                                         QuestionViewState(it.id, it.question, null)
                                     } else {
                                         it

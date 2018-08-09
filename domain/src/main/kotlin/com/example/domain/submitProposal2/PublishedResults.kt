@@ -15,8 +15,8 @@ class PublishedResults : ObservableTransformer<UiResult, SubmitProposal.Result> 
             when (it) {
                 CoverLetter.Result.Empty,
                 is CoverLetter.Result.Valid,
-                is ClarifyingQuestions.Result.ValidAnswer,
-                is ClarifyingQuestions.Result.EmptyAnswer
+                is ClarifyingQuestions.Result.AnswerValid,
+                is ClarifyingQuestions.Result.AnswerEmpty
                     /*is ProposeTerms.Result.BidValid,
                     ProposeTerms.Result.BidEmpty*/ ->//,
                     //is ProposeTerms.Result.EngagementSelected ->

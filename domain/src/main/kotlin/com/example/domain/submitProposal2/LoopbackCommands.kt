@@ -21,7 +21,7 @@ class LoopbackCommands : ObservableTransformer<UiResult, UiCommand> {
                         Observable.fromArray(
                                 ProposeTip.Command.DATA(it.itemOpportunity),
                                 CoverLetter.Command.START(it.itemOpportunity),
-                                ClarifyingQuestions.Command.INIT(it.itemOpportunity),
+                                ClarifyingQuestions.Command.START(it.itemOpportunity),
                                 DoSubmitProposal.Command.DATA(it.itemOpportunity)
                         )
                         //AnchoredPanel.Command.Expand

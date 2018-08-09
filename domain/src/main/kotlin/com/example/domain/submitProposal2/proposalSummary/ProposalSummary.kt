@@ -45,7 +45,7 @@ val psReducer =
                                 coverLetter = "",
                                 isCoverLetterValid = false
                         )
-                    ClarifyingQuestions.Result.NoQuestionsRequired -> {
+                    ClarifyingQuestions.Result.NotRequired -> {
                         s.copy(
                                 hasQuestions = false
                         )
@@ -59,11 +59,11 @@ val psReducer =
                                 totalQuestions = result.questions.size
                         )
                     }
-                    is ClarifyingQuestions.Result.ValidAnswer -> {
+                    is ClarifyingQuestions.Result.AnswerValid -> {
                         val count = s.answeredQuestions + 1
                         s.copy(
                                 questions = s.questions.map {
-                                    if (it.id == result.id)
+                                    if (it.id == result.questionId)
                                         QuestionViewState(it.id, it.question, result.answer)
                                     else
                                         it
@@ -72,11 +72,11 @@ val psReducer =
                                 areQuestionsValid = count == s.totalQuestions
                         )
                     }
-                    is ClarifyingQuestions.Result.EmptyAnswer -> {
+                    is ClarifyingQuestions.Result.AnswerEmpty -> {
                         val count = s.answeredQuestions - 1
                         s.copy(
                                 questions = s.questions.map {
-                                    if (it.id == result.id)
+                                    if (it.id == result.questionId)
                                         QuestionViewState(it.id, it.question, null)
                                     else
                                         it

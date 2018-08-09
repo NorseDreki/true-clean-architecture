@@ -37,7 +37,7 @@ val storageSaver =
         ObservableTransformer<UiResult, UiResult> {
             it.flatMap {
                 when(it) {
-                    is ClarifyingQuestions.Result.ValidAnswer -> {
+                    is ClarifyingQuestions.Result.AnswerValid -> {
                         try {
 //                            repo!!.updateCoverLetter("234", "324")
                             Observable.empty<UiResult>()

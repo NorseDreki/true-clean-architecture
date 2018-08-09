@@ -1,5 +1,6 @@
 package com.example.domain.submitProposal2.clarifyingQuestions
 
+import com.example.domain.StartCommand
 import com.example.domain.UiCommand
 import com.example.domain.UiResult
 import com.example.domain.UiState
@@ -12,24 +13,27 @@ import com.example.domain.submitProposal2.common.QuestionViewState
 class ClarifyingQuestions : ExtraCommandsComponent<Command, Result, ViewState>() {
 
     sealed class Command : UiCommand {
-        data class INIT(val itemOpportunity: ItemOpportunity) : Command()
+        data class START(val itemOpportunity: ItemOpportunity) : Command(), StartCommand
 
-        data class UpdateAnswer(val id: String, val answer: String) : Command()
+        data class UpdateAnswer(val questionId: String, val answer: String) : Command()
     }
 
     sealed class Result : UiResult {
-        data class QuestionsLoaded(val questions: List<Question>) : Result()
-        object NoQuestionsRequired : Result()
+        object NotRequired : Result()
 
-        data class ValidAnswer(val id: String, val answer: String) : Result()
-        data class EmptyAnswer(val id: String) : Result()
+        data class QuestionsLoaded(val questions: List<Question>) : Result()
+
+        data class AnswerValid(val questionId: String, val answer: String) : Result()
+        data class AnswerEmpty(val questionId: String) : Result()
 
         data class AllQuestionsAnswered(val answered: Boolean) : Result()
     }
 
     data class ViewState(
+            val isVisible: Boolean = true,
             val items: List<QuestionViewState> = listOf()
     ) : UiState
+
 
     override val processor = Processor()
     override val reducer = Reducer()

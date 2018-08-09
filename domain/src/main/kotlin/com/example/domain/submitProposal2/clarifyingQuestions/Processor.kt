@@ -21,7 +21,7 @@ class Processor : ObservableTransformer<Command, Result> {
             ObservableTransformer<Command, Result> { t ->
                 t.flatMap {
                     when (it) {
-                        is Command.INIT -> {
+                        is Command.START -> {
                             val questions = it.itemOpportunity.itemDetails.questions
                             val answers = it.itemOpportunity.proposal.questionAnswers
 
@@ -33,20 +33,20 @@ class Processor : ObservableTransformer<Command, Result> {
                                             .mergeWith(
                                                     Observable
                                                             .fromIterable(answers)
-                                                            .map { Result.ValidAnswer(it.id, it.answer) }
+                                                            .map { Result.AnswerValid(it.id, it.answer) }
                                             )
                                 }
                                 questions != null -> Observable.just(Result.QuestionsLoaded(questions))
-                                else -> Observable.just(Result.NoQuestionsRequired)
+                                else -> Observable.just(Result.NotRequired)
                             }
                         }
                         is Command.UpdateAnswer -> {
                             val validated = it.answer.trim()
 
                             if (validated.isNotEmpty()) {
-                                Observable.just(Result.ValidAnswer(it.id, validated))
+                                Observable.just(Result.AnswerValid(it.questionId, validated))
                             } else {
-                                Observable.just(Result.EmptyAnswer(it.id))
+                                Observable.just(Result.AnswerEmpty(it.questionId))
                             }
                         }
                     }
