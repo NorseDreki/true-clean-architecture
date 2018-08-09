@@ -35,7 +35,7 @@ val submitAllowedProcessor =
                             is CoverLetter.Result.LengthExceeded ->
                                 state.copy(coverLetterValid = false)
 
-                            CoverLetter.Result.NoCoverLetterRequired ->
+                            CoverLetter.Result.NotRequired ->
                                 state.copy(isCoverLetterRequired = false)
 
                             ClarifyingQuestions.Result.NoQuestionsRequired ->

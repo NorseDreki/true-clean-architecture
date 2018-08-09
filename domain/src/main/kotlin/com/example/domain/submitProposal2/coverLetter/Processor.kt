@@ -17,7 +17,7 @@ class Processor : ObservableTransformer<Command, Result> {
                             if (it.itemOpportunity.itemDetails.isCoverLetterRequired) {
                                 result(it.itemOpportunity.proposal.coverLetter)
                             } else {
-                                Result.NoCoverLetterRequired
+                                Result.NotRequired
                             }
                         }
                         is Command.UpdateCoverLetter -> {

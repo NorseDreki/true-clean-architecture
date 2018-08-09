@@ -8,7 +8,6 @@ import com.example.domain.framework.ExtraCommandsComponent
 import com.example.domain.models.ItemOpportunity
 import com.example.domain.submitProposal2.coverLetter.CoverLetter.*
 
-
 class CoverLetter : ExtraCommandsComponent<Command, Result, ViewState>() {
 
     sealed class Command : UiCommand {
@@ -18,21 +17,16 @@ class CoverLetter : ExtraCommandsComponent<Command, Result, ViewState>() {
     }
 
     sealed class Result : UiResult {
-
-        object NoCoverLetterRequired : Result()
-
-        sealed class Status: Result() {
-            object Completed: Status()
-            object NotCompleted : Status()
-        }
+        object NotRequired : Result()
 
         data class Valid(val coverLetter: String) : Result()
-        object Empty : Result()
         data class LengthExceeded(val coverLetter: String, val limit: Int) : Result()
+        object Empty : Result()
     }
 
     data class ViewState(
-            val coverLetter: String = "default",
+            val isVisible: Boolean = true,
+            val coverLetter: String = "",
             val isLengthExceeded: Boolean = false
     ) : UiState
 
