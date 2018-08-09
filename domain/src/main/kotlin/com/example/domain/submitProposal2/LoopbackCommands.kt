@@ -20,7 +20,7 @@ class LoopbackCommands : ObservableTransformer<UiResult, UiCommand> {
                         //hide panel
                         Observable.fromArray(
                                 ProposeTip.Command.DATA(it.itemOpportunity),
-                                CoverLetter.Command.DATA(it.itemOpportunity),
+                                CoverLetter.Command.START(it.itemOpportunity),
                                 ClarifyingQuestions.Command.INIT(it.itemOpportunity),
                                 DoSubmitProposal.Command.DATA(it.itemOpportunity)
                         )

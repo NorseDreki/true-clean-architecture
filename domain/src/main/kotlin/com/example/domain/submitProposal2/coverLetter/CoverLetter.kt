@@ -1,7 +1,7 @@
 package com.example.domain.submitProposal2.coverLetter
 
+import com.example.domain.StartCommand
 import com.example.domain.UiCommand
-import com.example.domain.UiDataCommand
 import com.example.domain.UiResult
 import com.example.domain.UiState
 import com.example.domain.framework.ExtraCommandsComponent
@@ -11,9 +11,9 @@ import com.example.domain.submitProposal2.coverLetter.CoverLetter.*
 class CoverLetter : ExtraCommandsComponent<Command, Result, ViewState>() {
 
     sealed class Command : UiCommand {
-        data class DATA(val itemOpportunity: ItemOpportunity) : Command(), UiDataCommand
+        data class START(val itemOpportunity: ItemOpportunity) : Command(), StartCommand
 
-        data class UpdateCoverLetter(val coverLetter: String) : Command()
+        data class Update(val coverLetter: String) : Command()
     }
 
     sealed class Result : UiResult {
@@ -31,6 +31,6 @@ class CoverLetter : ExtraCommandsComponent<Command, Result, ViewState>() {
     ) : UiState
 
 
-    override val processor = Processor()
+    override val processor = CoverLetterProcessor()
     override val reducer = Reducer()
 }

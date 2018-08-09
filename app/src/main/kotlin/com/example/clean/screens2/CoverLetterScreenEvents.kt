@@ -12,7 +12,7 @@ class CoverLetterScreenEvents(val coverLetter: CoverLetter) : ScreenEvents {
         println("init CLE")
         onTextChanged.observe().subscribe {
             println("00000000 change $it");
-            coverLetter.extraCommand(CoverLetter.Command.UpdateCoverLetter(it))
+            coverLetter.extraCommand(CoverLetter.Command.Update(it))
         }
     }
 }

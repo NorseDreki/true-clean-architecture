@@ -1,40 +1,37 @@
 package com.example.domain.submitProposal2.coverLetter
 
+import com.example.domain.Processor
 import com.example.domain.submitProposal2.coverLetter.CoverLetter.Command
 import com.example.domain.submitProposal2.coverLetter.CoverLetter.Result
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 import java.util.concurrent.TimeUnit
 
-class Processor : ObservableTransformer<Command, Result> {
+class CoverLetterProcessor : Processor<Command, Result> {
 
     override fun apply(upstream: Observable<Command>) =
         upstream
                 .debounce(3, TimeUnit.SECONDS)
                 .map {
                     when (it) {
-                        is Command.DATA -> {
+                        is Command.START -> {
                             if (it.itemOpportunity.itemDetails.isCoverLetterRequired) {
-                                result(it.itemOpportunity.proposal.coverLetter)
+                                validate(it.itemOpportunity.proposal.coverLetter)
                             } else {
                                 Result.NotRequired
                             }
                         }
-                        is Command.UpdateCoverLetter -> {
-                            println("UPDATECOVERLETTER")
-                            result(it.coverLetter)
+                        is Command.Update -> {
+                            validate(it.coverLetter)
                         }
                     }
                 }!!
 
-    private fun result(coverLetter: String): Result {
-        //save cover letter to submit proposal storage?
-
+    private fun validate(coverLetter: String): Result {
         val validated = coverLetter.trim()
+        val limit = 5000
 
-        val maxLength = 5000
         return when {
-            validated.length > maxLength -> Result.LengthExceeded(validated, maxLength)
+            validated.length > limit -> Result.LengthExceeded(validated, limit)
             validated.isNotEmpty() -> Result.Valid(validated)
             else -> Result.Empty
         }

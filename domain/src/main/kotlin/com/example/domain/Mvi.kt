@@ -20,6 +20,7 @@ interface UiEvent
 
 interface UiCommand
 interface UiDataCommand
+interface StartCommand
 interface UiResult
 
 interface UiState /*{
@@ -28,6 +29,9 @@ interface UiState /*{
 }*/
 
 interface Actor<C : UiCommand, R : UiResult> : ObservableTransformer<C, R>
+
+
+interface Processor<C : UiCommand, R : UiResult> : ObservableTransformer<C, R>
 
 
 interface UiActor<C : UiCommand, R : UiResult> {
