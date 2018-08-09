@@ -32,5 +32,5 @@ class CoverLetter : ExtraCommandsComponent<Command, Result, ViewState>() {
 
 
     override val processor = CoverLetterProcessor()
-    override val reducer = Reducer()
+    override val reducer = CoverLetterReducer()
 }

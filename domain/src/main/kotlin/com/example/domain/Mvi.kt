@@ -32,6 +32,7 @@ interface Actor<C : UiCommand, R : UiResult> : ObservableTransformer<C, R>
 
 
 interface Processor<C : UiCommand, R : UiResult> : ObservableTransformer<C, R>
+interface Reducer<R : UiResult, S : UiState> : ObservableTransformer<R, S>
 
 
 interface UiActor<C : UiCommand, R : UiResult> {
