@@ -26,15 +26,15 @@ class ClarifyingQuestions : ExtraCommandsComponent<Command, Result, ViewState>()
         data class AnswerValid(val questionId: String, val answer: String) : Result()
         data class AnswerEmpty(val questionId: String) : Result()
 
-        data class AllQuestionsAnswered(val answered: Boolean) : Result()
+        data class AnsweredQuestionsCount(val answeredCount: Int, val totalCount: Int) : Result()
     }
 
     data class ViewState(
             val isVisible: Boolean = true,
-            val items: List<QuestionViewState> = listOf()
+            val questions: List<QuestionViewState> = listOf()
     ) : UiState
 
 
-    override val processor = Processor()
-    override val reducer = Reducer()
+    override val processor = ClarifyingQuestionsProcessor()
+    override val reducer = ClarifyingQuestionsReducer()
 }

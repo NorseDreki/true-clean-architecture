@@ -41,8 +41,8 @@ val submitAllowedProcessor =
                             ClarifyingQuestions.Result.NotRequired ->
                                 state.copy(areQuestionsRequired = false)
 
-                            is ClarifyingQuestions.Result.AllQuestionsAnswered ->
-                                state.copy(questionsValid = result.answered)
+                            is ClarifyingQuestions.Result.AnsweredQuestionsCount ->
+                                state.copy(questionsValid = result.answeredCount == result.totalCount)
 
 /*
                             is ProposeTerms.Result.Validation.OK ->

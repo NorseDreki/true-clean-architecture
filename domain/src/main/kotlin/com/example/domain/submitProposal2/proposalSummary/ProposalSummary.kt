@@ -6,6 +6,8 @@ import com.example.domain.common.JobTypeViewState
 import com.example.domain.submitProposal2.SubmitProposal
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.common.QuestionViewState
+import com.example.domain.submitProposal2.common.toViewState
+import com.example.domain.submitProposal2.common.updateAnswer
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import io.reactivex.ObservableTransformer
 
@@ -53,38 +55,25 @@ val psReducer =
                     is ClarifyingQuestions.Result.QuestionsLoaded -> {
                         s.copy(
                                 hasQuestions = true,
-                                questions = result.questions.map {
-                                    QuestionViewState(it.id, it.question, null)
-                                },
-                                totalQuestions = result.questions.size
+                                questions = result.questions.toViewState()
                         )
                     }
                     is ClarifyingQuestions.Result.AnswerValid -> {
                         val count = s.answeredQuestions + 1
                         s.copy(
-                                questions = s.questions.map {
-                                    if (it.id == result.questionId)
-                                        QuestionViewState(it.id, it.question, result.answer)
-                                    else
-                                        it
-                                },
-                                answeredQuestions = if (count > s.totalQuestions) s.totalQuestions else count,
-                                areQuestionsValid = count == s.totalQuestions
+                                questions = state.questions.updateAnswer(result.questionId, result.answer)
                         )
                     }
                     is ClarifyingQuestions.Result.AnswerEmpty -> {
-                        val count = s.answeredQuestions - 1
                         s.copy(
-                                questions = s.questions.map {
-                                    if (it.id == result.questionId)
-                                        QuestionViewState(it.id, it.question, null)
-                                    else
-                                        it
-                                },
-                                answeredQuestions = count,
-                                areQuestionsValid = false
+                                questions = state.questions.updateAnswer(result.questionId, "")
                         )
                     }
+                    is ClarifyingQuestions.Result.AnsweredQuestionsCount -> s.copy(
+                            answeredQuestions = result.answeredCount,
+                            totalQuestions = result.totalCount,
+                            areQuestionsValid = result.answeredCount == result.totalCount
+                    )
                     else -> {
                         s
                     }
