@@ -1,5 +1,6 @@
 package com.example.domain.submitProposal2
 
+import com.example.domain.Loopback
 import com.example.domain.UiCommand
 import com.example.domain.UiResult
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
@@ -9,9 +10,8 @@ import com.example.domain.submitProposal2.fees.FeesResult
 import com.example.domain.submitProposal2.proposeTip.ProposeTip
 import com.example.domain.submitProposal2.suggestedTip.SuggestedTip
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 
-class LoopbackCommands : ObservableTransformer<UiResult, UiCommand> {
+class SubmitProposalLoopback : Loopback<UiResult, UiCommand> {
 
     override fun apply(upstream: Observable<UiResult>) =
             upstream.flatMap {

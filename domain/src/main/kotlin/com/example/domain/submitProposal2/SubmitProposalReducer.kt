@@ -12,7 +12,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 
-class Reducer(
+class SubmitProposalReducer(
         val proposeTipReducer: ObservableTransformer<ProposeTip.Result, ProposeTip.ViewState>,
         val suggestedTipReducer: ObservableTransformer<SuggestedTip.Result, SuggestedTip.ViewState>,
         val asReducer: ObservableTransformer<CoverLetter.Result, CoverLetter.ViewState>,

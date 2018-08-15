@@ -30,8 +30,8 @@ class SubmitProposal(
     val cqe = clarifyingQuestions.asEmbedded()
     val dsp = doSubmitProposal.asEmbedded()
 
-    override val processor = Processor(pre.asActor, ste.asActor, cle.asActor, cqe.asActor, dsp.asActor)
-    override val reducer = Reducer(pre.asReducer, ste.asReducer, cle.asReducer, cqe.asReducer, dsp.asReducer)
+    override val processor = SubmitProposalProcessor(pre.asActor, ste.asActor, cle.asActor, cqe.asActor, dsp.asActor)
+    override val reducer = SubmitProposalReducer(pre.asReducer, ste.asReducer, cle.asReducer, cqe.asReducer, dsp.asReducer)
 
     sealed class Command : UiCommand {
 

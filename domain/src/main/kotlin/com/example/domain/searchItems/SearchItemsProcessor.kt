@@ -10,7 +10,7 @@ import com.example.domain.searchItems.searchResults.SearchResults
 import com.example.domain.searchItems.searchResults.SearchResultsProcessor
 import com.example.domain.searchItems.searchSuggestions.SearchSuggestions
 import com.example.domain.searchItems.searchSuggestions.SearchSuggestionsProcessor
-import com.example.domain.submitProposal2.LoopbackCommands
+import com.example.domain.submitProposal2.SubmitProposalLoopback
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
@@ -37,5 +37,5 @@ class SearchItemsProcessor(
 
     override fun apply(upstream: Observable<SearchItems.Command>) =
         upstream
-                .compose(WithLoopback(inner, LoopbackCommands()))!!
+                .compose(WithLoopback(inner, SubmitProposalLoopback()))!!
 }

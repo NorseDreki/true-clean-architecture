@@ -9,11 +9,13 @@ import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestion
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
 import com.example.domain.submitProposal2.proposeTip.ProposeTip
+import com.example.domain.submitProposal2.storage.StorageLoaderProcessor
+import com.example.domain.submitProposal2.storage.StorageSaverThunk
 import com.example.domain.submitProposal2.suggestedTip.SuggestedTip
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
-class Processor(
+class SubmitProposalProcessor(
         val proposeTip: ObservableTransformer<ProposeTip.Command, ProposeTip.Result>,
         val suggestedTip: ObservableTransformer<SuggestedTip.Command, SuggestedTip.Result>,
         val asActor: ObservableTransformer<CoverLetter.Command, CoverLetter.Result>,
@@ -26,7 +28,7 @@ class Processor(
             ObservableTransformer<UiCommand, UiResult> {
                 it
                         .compose(WithProcessors(
-                                SubmitProposal.Command::class.java as Class<Any> to storageLoader as ObservableTransformer<Any, UiResult>,
+                                SubmitProposal.Command::class.java as Class<Any> to StorageLoaderProcessor() as ObservableTransformer<Any, UiResult>,
                                 SubmitProposal.Command.ToNextStep::class.java as Class<Any> to navigationProcessor as ObservableTransformer<Any, UiResult>,
                                 ProposeTip.Command::class.java as Class<Any> to proposeTip as ObservableTransformer<Any, UiResult>,
                                 SuggestedTip.Command::class.java as Class<Any> to suggestedTip as ObservableTransformer<Any, UiResult>,
@@ -35,16 +37,16 @@ class Processor(
                                 DoSubmitProposal.Command::class.java as Class<Any> to asActor2 as ObservableTransformer<Any, UiResult>
                         ))
                         .compose(WithResults<UiResult>(
-                                submitAllowedProcessor as ObservableTransformer<UiResult, UiResult>,
-                                storageSaver
+                                SubmitAllowedThunk() as ObservableTransformer<UiResult, UiResult>,
+                                StorageSaverThunk()
                         ))
                         .compose(WithResults<UiResult>(
-                                PublishedResults() as ObservableTransformer<UiResult, UiResult>
+                                SubmitProposalResultsThunk() as ObservableTransformer<UiResult, UiResult>
                         ))
             }
 
 
     override fun apply(upstream: Observable<SubmitProposal.Command>) =
         upstream
-                .compose(WithLoopback(inner, LoopbackCommands()))!!
+                .compose(WithLoopback(inner, SubmitProposalLoopback()))!!
 }
