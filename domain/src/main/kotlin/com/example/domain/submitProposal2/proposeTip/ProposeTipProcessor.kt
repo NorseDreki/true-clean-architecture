@@ -6,6 +6,7 @@ import com.example.domain.submitProposal2.fees.FeesCalculator
 import com.example.domain.submitProposal2.proposeTip.ProposeTip.Command
 import com.example.domain.submitProposal2.proposeTip.ProposeTip.Command.*
 import com.example.domain.submitProposal2.proposeTip.ProposeTip.Result
+import com.example.domain.submitProposal2.proposeTip.ProposeTip.Result.*
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.schedulers.Schedulers
@@ -15,7 +16,7 @@ class ProposeTipProcessor : Processor<Command, Result> {
     override fun apply(upstream: Observable<Command>) =
             upstream
                     .compose(processor)
-                    .compose(WithResults(Integrator()))!!
+                    .compose(WithResults(TotalCalculationThunk()))!!
 
     val processor =
             ObservableTransformer<Command, Result> {
@@ -23,7 +24,7 @@ class ProposeTipProcessor : Processor<Command, Result> {
                     when (it) {
                         is START -> {
                             Observable.fromArray(
-                                    Result.ItemGreetingLoaded("greeting"),
+                                    ItemGreetingLoaded("greeting"),
                                     calculate(it.itemOpportunity.proposal.bid)
                             ).flatMap {
                                 calculatorLoaded()
@@ -43,18 +44,18 @@ class ProposeTipProcessor : Processor<Command, Result> {
     private fun calculatorLoaded() =
         Observable.fromCallable {
             Thread.sleep(3000)
-            Result.FeeCalculatorLoaded(object : FeesCalculator {})
+            FeeCalculatorLoaded(object : FeesCalculator {})
         }.subscribeOn(Schedulers.io())
 
     private fun calculate(tip: Int) =
         when (tip) {
-            0 -> Result.TipNotEntered
+            0 -> TipNotEntered
             else -> when (tip) {
                 in 101..999 -> {
                     val fee = tip / 10
-                    Result.TipValid(tip)
+                    TipValid(tip)
                 }
-                else -> Result.TipRangeExceeded(tip, 100, 1000)
+                else -> TipRangeExceeded(tip, 100, 1000)
             }
         }
 }

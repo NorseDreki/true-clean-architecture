@@ -1,11 +1,12 @@
 package com.example.domain.submitProposal2.proposeTip
 
+import com.example.domain.Thunk
 import com.example.domain.framework.WithMemoized
 import com.example.domain.submitProposal2.proposeTip.ProposeTip.Result
+import com.example.domain.submitProposal2.proposeTip.ProposeTip.Result.*
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 
-class Integrator : ObservableTransformer<Result, Result> {
+class TotalCalculationThunk : Thunk<Result, Result> {
 
     override fun apply(upstream: Observable<Result>) =
             upstream
@@ -14,24 +15,21 @@ class Integrator : ObservableTransformer<Result, Result> {
                             it is Result.TipNotEntered ||
                             it is Result.TipRangeExceeded
                     }
-                    .doOnNext { println("FILTERED $it") }
                     .compose(WithMemoized<Result>())
-                    .filter { it.current !is Result.FeeCalculatorLoaded }
+                    .filter { it.current !is FeeCalculatorLoaded }
                     .map {
-                        println("INTEGRATOR $it")
                         when (it.current) {
-                            is Result.TipValid -> {
-                                //calculate
+                            is TipValid -> {
                                 val calculator
-                                        = (it.memo as Result.FeeCalculatorLoaded).feeCalculator
+                                        = (it.memo as FeeCalculatorLoaded).feeCalculator
 
-                                Result.TotalCalculated(it.current.tip + 123)
+                                TotalCalculated(it.current.tip + 123)
                             }
-                            is Result.TipNotEntered -> {
-                                Result.TotalCleared
+                            TipNotEntered -> {
+                                TotalCleared
                             }
-                            is Result.TipRangeExceeded -> {
-                                Result.TotalCleared
+                            is TipRangeExceeded -> {
+                                TotalCleared
                             }
                             else -> throw IllegalStateException("not expected ${it.current}")
                         }
