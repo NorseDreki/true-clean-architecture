@@ -34,6 +34,7 @@ interface Actor<C : UiCommand, R : UiResult> : ObservableTransformer<C, R>
 interface Processor<C : UiCommand, R : UiResult> : ObservableTransformer<C, R>
 interface Reducer<R : UiResult, S : UiState> : ObservableTransformer<R, S>
 interface Thunk<R1 : UiResult, R2 : UiResult> : ObservableTransformer<R1, R2>
+interface Loopback<R : UiResult, C : UiCommand> : ObservableTransformer<R, C>
 
 
 interface UiActor<C : UiCommand, R : UiResult> {
