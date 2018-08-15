@@ -49,7 +49,7 @@ class LoopbackCommands : ObservableTransformer<UiResult, UiCommand> {
                     )
 
                     is ProposeTip.Result.TipValid ->
-                            Observable.just(SuggestedTip.Command.DATA(it.tip))
+                            Observable.just(SuggestedTip.Command.START(it.tip))
                     else -> {
                         Observable.empty()
                     }

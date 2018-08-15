@@ -1,31 +1,34 @@
 package com.example.domain.submitProposal2.suggestedTip
 
+import com.example.domain.Processor
 import com.example.domain.submitProposal2.suggestedTip.SuggestedTip.Command
+import com.example.domain.submitProposal2.suggestedTip.SuggestedTip.Command.*
 import com.example.domain.submitProposal2.suggestedTip.SuggestedTip.Result
+import com.example.domain.submitProposal2.suggestedTip.SuggestedTip.Result.*
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 
-
-class Processor(val userSuggestion: UserSuggestion) : ObservableTransformer<Command, Result> {
+class SuggestedTipProcessor(
+        val userSuggestion: UserSuggestion
+) : Processor<Command, Result> {
 
     override fun apply(upstream: Observable<Command>) =
             upstream
                     .flatMap {
                         when (it) {
-                            is Command.DATA -> {
+                            is START -> {
                                 val result = if (userSuggestion.hasSuggestionAvailable()) {
-                                    Result.SuggestionLoaded(userSuggestion.getSuggestionForUser())
+                                    SuggestionLoaded(userSuggestion.getSuggestionForUser())
                                 } else {
-                                    Result.SuggestionNotAvailable
+                                    SuggestionNotAvailable
                                 }
 
                                 Observable.just(result)
 
                             }
-                            Command.AcceptSugestion -> {
-                                Observable.just(Result.SuggestionAccepted)
+                            AcceptSugestion -> {
+                                Observable.just(SuggestionAccepted)
                             }
-                            is Command.LearnMore -> {
+                            LearnMore -> {
                                 //navigation side effect
 
                                 Observable.empty()
