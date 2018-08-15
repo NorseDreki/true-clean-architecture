@@ -5,6 +5,7 @@ import com.example.domain.framework.WithResults
 import com.example.domain.models.AnsweredQuestion
 import com.example.domain.models.Question
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions.Command
+import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions.Command.UpdateAnswer
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions.Result
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
@@ -33,7 +34,7 @@ class ClarifyingQuestionsProcessor : Processor<Command, Result> {
                                     Observable.just(Result.NotRequired)
                             }
                         }
-                        is Command.UpdateAnswer -> {
+                        is UpdateAnswer -> {
                             validate(it)
                         }
                     }
@@ -51,7 +52,7 @@ class ClarifyingQuestionsProcessor : Processor<Command, Result> {
                 )
     }
 
-    private fun validate(it: Command.UpdateAnswer): Observable<Result> {
+    private fun validate(it: UpdateAnswer): Observable<Result> {
         val validated = it.answer.trim()
 
         return if (validated.isNotEmpty()) {

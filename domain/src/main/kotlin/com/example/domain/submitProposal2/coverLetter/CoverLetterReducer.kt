@@ -26,5 +26,6 @@ class CoverLetterReducer : Reducer<Result, ViewState> {
                             isLengthExceeded = false
                     )
                 }
-            }!!
+            }
+                    .distinctUntilChanged()!!
 }

@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/find_work_submit_proposal_propose_terms_client_sees"
                 android:textColor="@color/gray4"
-                bind:visible="@{!viewModel.isRangeError}"
+                bind:visible="@{!viewModel.isTipRangeError}"
                 android:textSize="12sp"/>
                 <!--bind:visible="@{!viewModel.errorBid}"/>-->
 
@@ -121,7 +121,7 @@
                 android:text="@{@string/find_work_submit_proposal_propose_terms_error(viewModel.minTip, viewModel.maxTip)}"
                 android:textColor="@color/error"
                 android:textSize="12sp"
-                bind:visible="@{viewModel.isRangeError}"
+                bind:visible="@{viewModel.isTipRangeError}"
                 tools:text="error"/>
             <!--android:text="@{@string/find_work_submit_proposal_propose_terms_error(viewModel.minBidLimit, viewModel.maxBidLimit)}"-->
             <!--bind:visible="@{viewModel.errorBid}"-->
