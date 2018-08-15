@@ -1,17 +1,16 @@
 package com.example.domain.submitProposal2
 
+import com.example.domain.Thunk
 import com.example.domain.UiResult
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
-import io.reactivex.ObservableTransformer
 
-class PublishedResults : ObservableTransformer<UiResult, SubmitProposal.Result> {
+class SubmitProposalResultsThunk : Thunk<UiResult, SubmitProposal.Result> {
 
-    override fun apply(upstream: Observable<UiResult>): ObservableSource<SubmitProposal.Result> {
-        return upstream.flatMap {
+    override fun apply(upstream: Observable<UiResult>) =
+        upstream.flatMap {
             when (it) {
                 CoverLetter.Result.Empty,
                 is CoverLetter.Result.Valid,
@@ -24,7 +23,6 @@ class PublishedResults : ObservableTransformer<UiResult, SubmitProposal.Result> 
                     Observable.just(SubmitProposal.Result.ProposalUpdated)
 
                 is DoSubmitProposal.Result.Success -> {
-                    println("SUCC RES")
                     Observable.just(SubmitProposal.Result.ProposalSent)
                 }
 
@@ -33,6 +31,5 @@ class PublishedResults : ObservableTransformer<UiResult, SubmitProposal.Result> 
 
                 else -> Observable.empty()
             }
-        }
-    }
+        }!!
 }

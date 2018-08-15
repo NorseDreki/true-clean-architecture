@@ -1,27 +1,28 @@
 package com.example.domain.submitProposal2
 
+import com.example.domain.Thunk
 import com.example.domain.UiResult
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
-import io.reactivex.ObservableTransformer
+import io.reactivex.Observable
 
 sealed class SubmitAllowedResult : UiResult {
     object Enabled : SubmitAllowedResult()
     object Disabled : SubmitAllowedResult()
 }
 
-data class SubmitAllowedData(
-        val isCoverLetterRequired: Boolean = true,
-        val areQuestionsRequired: Boolean = true,
-        val coverLetterValid: Boolean = false,
-        //val attachmentsValid: Boolean = false,
-        val questionsValid: Boolean = false,
-        val proposeTermsValid: Boolean = false
-)
+class SubmitAllowedThunk : Thunk<UiResult, SubmitAllowedResult> {
 
-val submitAllowedProcessor =
-        ObservableTransformer<UiResult, SubmitAllowedResult> {
-            it
+    data class SubmitAllowedData(
+            val isCoverLetterRequired: Boolean = true,
+            val areQuestionsRequired: Boolean = true,
+            val coverLetterValid: Boolean = false,
+            val questionsValid: Boolean = false,
+            val proposeTipValid: Boolean = false
+    )
+
+    override fun apply(upstream: Observable<UiResult>) =
+            upstream
                     .scan(SubmitAllowedData()) { state, result ->
                         println("----------> SUBM ALL UIRES $result")
                         when (result) {
@@ -29,7 +30,7 @@ val submitAllowedProcessor =
                             is CoverLetter.Result.Valid ->
                                 state.copy(coverLetterValid = true)
 
-                            is CoverLetter.Result.Empty ->
+                            CoverLetter.Result.Empty ->
                                 state.copy(coverLetterValid = false)
 
                             is CoverLetter.Result.LengthExceeded ->
@@ -44,24 +45,15 @@ val submitAllowedProcessor =
                             is ClarifyingQuestions.Result.AnsweredQuestionsCount ->
                                 state.copy(questionsValid = result.answeredCount == result.totalCount)
 
-/*
-                            is ProposeTerms.Result.Validation.OK ->
-                                    state.copy(proposeTermsValid = true)
-
-                            is ProposeTerms.Result.Validation.Failed ->
-                                    state.copy(proposeTermsValid = false)
-*/
-
                             else -> state
                         }
                     }
-                    //.distinctUntilChanged()
                     .map {
                         with (it) {
                             if ((!isCoverLetterRequired || coverLetterValid)
                                     && (!areQuestionsRequired || questionsValid)
                                     //negate
-                                    && !proposeTermsValid) {
+                                    && !proposeTipValid) {
                                 SubmitAllowedResult.Enabled
                             } else {
                                 SubmitAllowedResult.Disabled
@@ -72,5 +64,5 @@ val submitAllowedProcessor =
                     .distinctUntilChanged()
                     //.startWith(SubmitAllowedResult.Disabled)
 
-                    .doOnNext { println("! ----------> $it") }
-        }
+                    .doOnNext { println("! ----------> $it") }!!
+}
