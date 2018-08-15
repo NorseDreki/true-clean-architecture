@@ -24,9 +24,11 @@ class Processor(
                         when (command) {
                             is Command.ToggleSubmitEnabled ->
                                 Observable.just(Result.SubmitEnabled(command.enabled))
+
                             Command.DoSubmit -> {
                                 doSubmit(proposal)
                             }
+
                             is Command.DATA -> Observable.empty()
                         }
                     }!!

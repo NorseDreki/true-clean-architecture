@@ -7,8 +7,8 @@ import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
 class Reducer : ObservableTransformer<Result, ViewState> {
-    override fun apply(upstream: Observable<Result>) =
 
+    override fun apply(upstream: Observable<Result>) =
             upstream.scan(ViewState()) { state, result ->
                 when (result) {
                     is Result.SubmitEnabled -> {

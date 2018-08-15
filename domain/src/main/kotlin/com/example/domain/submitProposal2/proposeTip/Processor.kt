@@ -14,7 +14,7 @@ class Processor : ObservableTransformer<Command, Result> {
             upstream
                     .flatMap {
                         when (it) {
-                            is Command.DATA -> {
+                            is Command.START -> {
                                 Observable.fromArray(
                                         Result.ItemGreetingLoaded("greeting"),
                                         calculate(it.itemOpportunity.proposal.bid)
@@ -26,7 +26,7 @@ class Processor : ObservableTransformer<Command, Result> {
                             is Command.UpdateTip -> {
                                 Observable.just(calculate(it.tip))
                             }
-                            is Command.ForceRecalculateFee -> {
+                            is Command.ForceRecalculateTotal -> {
                                 calculatorLoaded()
                             }
                         }

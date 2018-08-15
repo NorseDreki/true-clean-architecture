@@ -25,13 +25,13 @@ class Integrator : ObservableTransformer<Result, Result> {
                                 val calculator
                                         = (it.memo as Result.FeeCalculatorLoaded).feeCalculator
 
-                                Result.FeeCalculated(it.current.tip + 123)
+                                Result.TotalCalculated(it.current.tip + 123)
                             }
                             is Result.TipNotEntered -> {
-                                Result.FeeCleared
+                                Result.TotalCleared
                             }
                             is Result.TipRangeExceeded -> {
-                                Result.FeeCleared
+                                Result.TotalCleared
                             }
                             else -> throw IllegalStateException("not expected ${it.current}")
                         }

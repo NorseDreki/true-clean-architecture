@@ -13,49 +13,34 @@ import com.example.domain.submitProposal2.proposeTip.ProposeTip.*
 class ProposeTip : ExtraCommandsComponent<Command, Result, ViewState>() {
 
     sealed class Command : UiCommand {
-        data class DATA(val itemOpportunity: ItemOpportunity) : Command(), UiDataCommand
+        data class START(val itemOpportunity: ItemOpportunity) : Command(), UiDataCommand
 
-        object ForceRecalculateFee : Command()
+        object ForceRecalculateTotal : Command()
 
-        //from UI
         data class UpdateTip(val tip: Int) : Command()
     }
 
     sealed class Result : UiResult {
-
-        sealed class Validation : Result() {
-            object OK : Validation()
-            object Failed : Validation()
-        }
-
         data class ItemGreetingLoaded(val message: String) : Result()
-        data class EngagementsLoaded(val message: String) : Result()
 
         data class TipValid(val tip: Int) : Result()
         object TipNotEntered : Result()
         data class TipRangeExceeded(val tip: Int, val min: Int, val max: Int) : Result()
 
-        data class FeeCalculated(val tipWithFee: Int) : Result()
-        object FeeCleared : Result()
+        data class TotalCalculated(val total: Int) : Result()
+        object TotalCleared : Result()
 
         data class FeeCalculatorLoaded(val feeCalculator: FeesCalculator) : Result(), Memoizable
-
-
-        //calculate connects
-        data class EngagementSelected(val engagement: String): Result()
-        object EngagementNotSelected: Result()
-
-        object EngagementNotRequired: Result()
     }
 
     data class ViewState(
-            val itemDescription: String = "",
+            val itemGreeting: String = "",
             val tip: String = "",
-            val isRangeError: Boolean = false,
+            val isTipRangeError: Boolean = false,
             val minTip: Int = 0,
             val maxTip: Int = 0,
-            val tipWithFee: String = "",
-            val isFeeLoading: Boolean = true
+            val total: String = "",
+            val isTotalCalculationPending: Boolean = true
     ) : UiState
 
 
