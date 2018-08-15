@@ -44,6 +44,6 @@ class ProposeTip : ExtraCommandsComponent<Command, Result, ViewState>() {
     ) : UiState
 
 
-    override val processor = Processor()
+    override val processor = ProposeTipProcessor()
     override val reducer = ProposeTipReducer()
 }
