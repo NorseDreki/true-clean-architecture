@@ -4,8 +4,8 @@ import com.example.domain.UiResult
 import com.example.domain.submitProposal2.clarifyingQuestions.ClarifyingQuestions
 import com.example.domain.submitProposal2.coverLetter.CoverLetter
 import com.example.domain.submitProposal2.doSubmitProposal.DoSubmitProposal
+import com.example.domain.submitProposal2.proposalSummary.ProposalSummaryReducer
 import com.example.domain.submitProposal2.proposalSummary.ProposalSummaryViewState
-import com.example.domain.submitProposal2.proposalSummary.psReducer
 import com.example.domain.submitProposal2.proposeTip.ProposeTip
 import com.example.domain.submitProposal2.suggestedTip.SuggestedTip
 import io.reactivex.Observable
@@ -31,7 +31,7 @@ class Reducer(
                                     shared.ofType(CoverLetter.Result::class.java).compose(asReducer).doOnNext { println("render CL: $it") },
                                     shared.ofType(ClarifyingQuestions.Result::class.java).compose(asReducer1).doOnNext { println("render CQ: $it") },
 
-                                    shared.compose(psReducer),
+                                    shared.compose(ProposalSummaryReducer()),
 
                                     shared.ofType(SubmitProposal.Result.NavigatedTo::class.java)
                                             .map {
