@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import com.example.clean.screens2.Screen
+import com.example.clean.framework.Screen
 import flow.Dispatcher
 import flow.Flow
 import flow.Traversal

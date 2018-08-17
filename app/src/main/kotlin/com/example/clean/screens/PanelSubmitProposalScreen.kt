@@ -1,11 +1,13 @@
-package com.example.clean.screens2
+package com.example.clean.screens
 
 import com.example.clean.BR
 import com.example.clean.R
 import com.example.clean.framework.ListBindings
 import com.example.clean.framework.Screen
 import com.example.clean.framework.ScreenEvents
+import com.example.clean.screens2.*
 import com.example.domain.submitProposal2.SubmitProposal
+import com.example.domain.submitProposal2.anchorablePanelSubmitProposal.PanelSubmitProposalViewState
 import com.example.domain.submitProposal2.common.QuestionViewState
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
@@ -13,14 +15,14 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 import me.tatarka.bindingcollectionadapter2.ItemBinding
 
-data class SubmitProposalScreen(
-        override val state: SubmitProposal.ViewState,
+data class PanelSubmitProposalScreen(
+        override val state: PanelSubmitProposalViewState,
         override val events: Events,
         override val listBindings: ListBindings
 ) : Screen {
 
     override val layout: Int
-        get() = R.layout.submit_proposal_linear_view_content
+        get() = R.layout.submit_proposal_home
 
 
     data class Bindings(

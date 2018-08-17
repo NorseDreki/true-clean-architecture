@@ -1,4 +1,4 @@
-package com.example.clean.screens2
+package com.example.clean.framework
 
 import com.example.domain.UiState
 
