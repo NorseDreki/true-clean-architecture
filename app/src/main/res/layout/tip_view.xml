@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="me.tatarka.bindingcollectionadapter2.LayoutManagers" />
+
+        <variable
+            name="viewModel"
+            type="com.example.domain.submitProposal2.anchorablePanelSubmitProposal.TipViewState" />
+
+        <variable
+            name="events"
+            type="com.example.clean.screens2.ProposeTipEvents" />
+
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray1">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="1dp">
+
+            <android.support.percent.PercentRelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/windowBackgroundColor"
+                android:clipToPadding="false"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp">
+
+                <!--<include
+                    android:id="@+id/bidView"
+                    layout="@layout/propose_terms_bid_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-16dp"
+                    android:layout_marginRight="-16dp"
+                    android:paddingTop="8dp"
+                    bind:events="@{events}"
+                    bind:suggestedTip="@{suggestedTip}"
+                    bind:viewModel="@{viewModel}" />-->
+                <!--bind:isHourly="@{viewModel.isHourly}"
+                bind:viewModel="@{viewModel.bid}" />-->
+
+                <android.support.v4.widget.Space
+                    android:id="@+id/bidSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/bidView" />
+                <!--bind:visible="@{!viewModel.bid.suggestedRateViewModel.isVisible}" />-->
+
+                <!--<include
+                    layout="@layout/propose_terms_earn_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/bidSpace"
+                    android:layout_marginTop="16dp"
+                    bind:viewModel="@{viewModel.earn}"
+                    bind:visible="@{viewModel.isHourly}" />-->
+
+                <android.support.v4.widget.Space
+                    android:id="@+id/earnSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/propose_terms_large_space"
+                    android:layout_below="@id/bidView" />
+
+                <!--
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignBottom="@+id/connectsCaption"
+                                    android:layout_below="@id/earnSpace"
+                                    android:layout_marginBottom="-16dp"
+                                    android:layout_marginLeft="-16dp"
+                                    android:layout_marginRight="-16dp"
+                                    android:background="@color/gray0" />
+                -->
+
+                <ImageView
+                    android:id="@+id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/earnSpace"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginLeft="-16dp"
+                    android:layout_marginRight="-16dp"
+                    android:src="@drawable/list_divider" />
+
+                <TextView
+                    android:id="@+id/earnCaption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/line"
+                    android:layout_marginBottom="24dp"
+                    android:text="@string/find_work_submit_proposal_propose_terms_freelancer_earns"
+                    android:textColor="@color/gray4" />
+                <!--bind:visible="@{!viewModel.isHourly}" />-->
+
+                <!--<ImageButton
+                    style="?attr/actionButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/earnCaption"
+                    android:layout_alignTop="@+id/earnCaption"
+                    android:layout_toRightOf="@+id/earnCaption"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_more_info_black_18_dp"
+                    bind:onClick="@{viewModel.onEarnInfoClicked}"
+                    bind:tint="@{@color/colorSecondary}"
+                    bind:visible="@{!viewModel.isHourly &amp;&amp; viewModel.isEarnInfoAvailable}" />-->
+
+                <ViewFlipper
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:measureAllChildren="true"
+                    android:gravity="right"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/earnCaption"
+                    android:layout_marginLeft="32dp"
+                    android:layout_toRightOf="@+id/earnCaption"
+                    bind:displayedChild="@{viewModel.proposeTip.isTotalCalculationPending ? 1 : 0}">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="start"
+                        android:singleLine="true"
+                        android:text="@{viewModel.proposeTip.total}"
+                        android:textColor="@color/gray4"
+                        tools:text="$1080.00" />
+
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </ViewFlipper>
+
+                <!--
+                                <TextView
+                                    android:id="@+id/connectsCaption"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/feesList"
+                                    android:paddingBottom="24dp"
+                                    android:text='@{String.format(@string/find_work_submit_proposal_propose_terms_connects, viewModel.availableConnects)}'
+                                    android:textColor="@color/gray4"
+                                    tools:text="Required Connects (58 available)" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignTop="@+id/connectsCaption"
+                                    android:text="@{String.valueOf(viewModel.requiredConnects)}"
+                                    android:textColor="@color/gray4"
+                                    tools:text="2" />
+                -->
+
+            </android.support.percent.PercentRelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </ScrollView>
+
+</layout>

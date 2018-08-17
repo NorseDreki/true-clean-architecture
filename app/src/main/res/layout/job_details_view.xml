@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.example.domain.submitProposal2.anchorablePanel.PanelState"/>
+
+        <variable
+            name="viewModel"
+            type="com.example.domain.submitProposal2.anchorablePanelSubmitProposal.PanelSubmitProposalViewState"/>
+
+    </data>
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        app:anchorPoint="@{viewModel.anchorablePanel.panelState == PanelState.ANCHORED ? 0.8f : 1.0f}"
+        app:umanoOverlay="true"
+        app:umanoPanelHeight="?attr/actionBarSize"
+        app:umanoShadowHeight="4dp">
+        <!--bind:panelState="@{viewModel.submitProposal.panelState}">-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_primary_no_inset"
+                android:text="@string/find_work_job_details_submit_action"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+        <!--<include
+            layout="@layout/submit_proposal_view_content"
+            bind:viewModel="@{viewModel.submitProposal}"/>-->
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+</layout>

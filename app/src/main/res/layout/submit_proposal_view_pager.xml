@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.domain.submitProposal2.anchorablePanelSubmitProposal.SubmitProposalPages"/>
+
+        <variable
+            name="events"
+            type="com.example.clean.screens2.SubmitProposalScreen.Events"/>
+
+        <variable
+            name="bindings"
+            type="com.example.clean.screens2.SubmitProposalScreen.Bindings"/>
+
+    </data>
+
+    <!-- Putting ViewFlipper in a dedicated layout is a workaround for Android data binding bug -->
+
+    <ViewFlipper
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:measureAllChildren="true"
+        bind:displayedChild="@{viewModel.index}">
+
+        <!--<include
+            layout="@layout/cover_letter"
+            bind:viewModel="@{viewModel.coverLetter}"
+            bind:events="@{events.coverLetter}"/>
+
+        <include
+            layout="@layout/clarifying_questions"
+            bind:viewModel="@{viewModel.clarifyingQuestions}"
+            bind:bindings="@{bindings.clarifyingQuestions}"
+            bind:events="@{events.clarifyingQuestions}"/>
+
+        <include
+            layout="@layout/proposal_summary_steps"
+            bind:viewModel="@{viewModel.proposalSummary}"
+            bind:bindings="@{bindings.proposalSummary}"
+            bind:events="@{events.proposalSummaryEvents}"/>
+
+        <include
+            layout="@layout/do_submit_proposal"
+            bind:viewModel="@{viewModel.doSubmitProposal}"
+            bind:events="@{events.doSubmitProposal}"/>-->
+
+    </ViewFlipper>
+
+</layout>
