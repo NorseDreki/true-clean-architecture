@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="me.tatarka.bindingcollectionadapter2.LayoutManagers"/>
+
+        <variable
+            name="viewModel"
+            type="com.example.domain.submitProposal2.anchorablePanelSubmitProposal.ReviewViewState"/>
+
+        <!--
+                <variable
+                    name="events"
+                    type="com.example.clean.screens2.ProposalSummaryEventHandler"/>
+
+                <variable
+                    name="bindings"
+                    type="com.example.clean.screens2.SubmitProposalScreen.Bindings.ProposalSummary"/>
+        -->
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        bind:visible="@{viewModel.proposalSummary.hasQuestions}">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:src="@drawable/list_divider"/>
+
+        <ImageView
+            android:id="@+id/questionsCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@{viewModel.proposalSummary.areQuestionsValid ? @drawable/ic_check_circle_black_32dp : @drawable/ic_check_circle_outline_black_32dp}"
+            bind:tint="@{viewModel.proposalSummary.areQuestionsValid ? @color/colorSecondary : @color/gray2}"
+            bind:visible="@{viewModel.proposalSummary.hasQuestions}"
+            tools:src="@drawable/ic_check_circle_black_32dp"/>
+
+        <TextView
+            android:id="@+id/questionsHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/questionsCheck"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/questionsCheck"
+            android:text="@string/find_work_submit_proposal_summary_questions_caption"
+            android:textColor="@color/gray5"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/questionsSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/questionsHeader"
+            android:layout_below="@+id/questionsHeader"
+            android:layout_marginTop="4dp"
+            android:text="@{@string/find_work_submit_proposal_summary_questions(viewModel.proposalSummary.answeredQuestions, viewModel.proposalSummary.totalQuestions)}"
+            android:textColor="@{viewModel.proposalSummary.areQuestionsValid ? @color/gray4 : @color/error}"
+            android:textSize="12sp"
+            tools:text="2 out of 3 answered"
+            tools:textColor="@color/error"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/questionsSubtitle"
+            android:layout_below="@+id/questionsSubtitle"
+            android:layout_marginTop="8dp"
+            android:overScrollMode="never"
+
+            bind:items="@{viewModel.proposalSummary.questions}"
+            bind:layoutManager="@{LayoutManagers.linear()}"
+            tools:layout_height="100dp"/>
+
+        <!--bind:itemBinding="@{bindings.questionBinding}"-->
+
+    </RelativeLayout>
+
+</layout>

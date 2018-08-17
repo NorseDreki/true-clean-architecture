@@ -8,13 +8,13 @@
             name="viewModel"
             type="com.example.domain.submitProposal2.anchorablePanelSubmitProposal.SubmitProposalPages"/>
 
-        <variable
+        <!--<variable
             name="events"
             type="com.example.clean.screens2.SubmitProposalScreen.Events"/>
 
         <variable
             name="bindings"
-            type="com.example.clean.screens2.SubmitProposalScreen.Bindings"/>
+            type="com.example.clean.screens2.SubmitProposalScreen.Bindings"/>-->
 
     </data>
 

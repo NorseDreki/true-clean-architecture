@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="me.tatarka.bindingcollectionadapter2.LayoutManagers"/>
+
+        <variable
+            name="viewModel"
+            type="com.example.domain.submitProposal2.anchorablePanelSubmitProposal.ReviewViewState"/>
+
+        <!--
+                <variable
+                    name="events"
+                    type="com.example.clean.screens2.ProposalSummaryEventHandler"/>
+
+                <variable
+                    name="bindings"
+                    type="com.example.clean.screens2.SubmitProposalScreen.Bindings.ProposalSummary"/>
+        -->
+
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/coverLetter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        bind:visible="@{viewModel.proposalSummary.hasCoverLetter}">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:src="@drawable/list_divider"/>
+
+        <ImageView
+            android:id="@+id/coverLetterCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@{viewModel.proposalSummary.isCoverLetterValid ? @drawable/ic_check_circle_black_32dp : @drawable/ic_check_circle_outline_black_32dp}"
+            bind:tint="@{viewModel.proposalSummary.isCoverLetterValid ? @color/colorSecondary : @color/gray2}"
+            bind:visible="@{viewModel.proposalSummary.hasCoverLetter}"
+            tools:src="@drawable/ic_check_circle_black_32dp"/>
+
+        <TextView
+            android:id="@+id/coverLetterHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/coverLetterCheck"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/coverLetterCheck"
+            android:text="@string/find_work_submit_proposal_summary_cover_letter_caption"
+            android:textColor="@color/gray5"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/coverLetterContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/coverLetterHeader"
+            android:layout_below="@+id/coverLetterHeader"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="@{viewModel.proposalSummary.isCoverLetterValid ? viewModel.proposalSummary.coverLetter : @string/find_work_submit_proposal_summary_cover_letter_error}"
+            android:textColor="@{viewModel.proposalSummary.isCoverLetterValid ? @color/gray4 : @color/error}"
+            android:textSize="12sp"
+            tools:text="Curabitur blandit tempus porttitor. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec sed odio dui entum venenatis https://www.dropbox.com/s/tt49evf8y8jdlzh/%D0%A1%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82%202016-02-28%2015.13.39.png?dl=0"/>
+
+    </RelativeLayout>
+
+</layout>
