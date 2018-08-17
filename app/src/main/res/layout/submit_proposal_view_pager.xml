@@ -8,13 +8,13 @@
             name="viewModel"
             type="com.example.domain.submitProposal2.anchorablePanelSubmitProposal.SubmitProposalPages"/>
 
-        <!--<variable
+        <variable
             name="events"
             type="com.example.clean.screens2.SubmitProposalScreen.Events"/>
 
         <variable
             name="bindings"
-            type="com.example.clean.screens2.SubmitProposalScreen.Bindings"/>-->
+            type="com.example.clean.screens2.SubmitProposalScreen.Bindings"/>
 
     </data>
 
@@ -26,7 +26,7 @@
         android:measureAllChildren="true"
         bind:displayedChild="@{viewModel.index}">
 
-        <!--<include
+        <include
             layout="@layout/cover_letter"
             bind:viewModel="@{viewModel.coverLetter}"
             bind:events="@{events.coverLetter}"/>
@@ -38,15 +38,8 @@
             bind:events="@{events.clarifyingQuestions}"/>
 
         <include
-            layout="@layout/proposal_summary_steps"
-            bind:viewModel="@{viewModel.proposalSummary}"
-            bind:bindings="@{bindings.proposalSummary}"
-            bind:events="@{events.proposalSummaryEvents}"/>
-
-        <include
-            layout="@layout/do_submit_proposal"
-            bind:viewModel="@{viewModel.doSubmitProposal}"
-            bind:events="@{events.doSubmitProposal}"/>-->
+            layout="@layout/submit_proposal_review"
+            bind:viewModel="@{viewModel.review}"/>
 
     </ViewFlipper>
 

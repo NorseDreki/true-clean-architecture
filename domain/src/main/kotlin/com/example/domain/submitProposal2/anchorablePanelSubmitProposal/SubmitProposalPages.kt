@@ -8,5 +8,5 @@ data class SubmitProposalPages(
         val tipViewState: TipViewState,
         val coverLetter: CoverLetter.ViewState,
         val clarifyingQuestions: ClarifyingQuestions.ViewState,
-        val reviewViewState: ReviewViewState
+        val review: ReviewViewState
 )
