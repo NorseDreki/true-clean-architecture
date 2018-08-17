@@ -1,5 +1,6 @@
 package com.example.domain.submitProposal2
 
+/*
 val spa: SubmitProposalAnalytics? = null
 val psa: ProposalSummaryAnalytics? = null
 
@@ -26,3 +27,4 @@ val analyticsProc =
             }
         }
     }
+*/
